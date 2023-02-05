@@ -6,5 +6,7 @@ StarZ Launcher / Injector is a custom Minecraft Bedrock Edition Launcher for any
 # Notes
 Please consider that the version switcher is not working for the moment but will possibly in the future.
 
+**Only works with 1.19.51 (unsure)**
+
 
 
