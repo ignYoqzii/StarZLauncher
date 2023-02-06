@@ -16,6 +16,7 @@ public partial class MainWindow
     public static Process? Minecraft;
     private static readonly ChangelogWindow ChangelogWindow = new();
     private static readonly CreditWindow CreditWindow = new();
+    private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
 
     public MainWindow()
@@ -110,16 +111,32 @@ public partial class MainWindow
     private void ChangelogButton_OnClick(object sender, RoutedEventArgs e)
     {
         ChangelogWindow.Show();
-        DiscordPresence.DiscordClient.UpdateState("Reading the changelog");
+        DiscordPresence.DiscordClient.UpdateState("Reading the launcher's news");
     }
 
     private void CreditButton_OnClick(object sender, RoutedEventArgs e)
     {
         CreditWindow.Show();
-        DiscordPresence.DiscordClient.UpdateState("Reading the credits");
+        DiscordPresence.DiscordClient.UpdateState("Reading the launcher's credits");
+    }
+
+    private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        SettingsWindow.Show();
+        DiscordPresence.DiscordClient.UpdateState("In the launcher's settings");
     }
 
     private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/9NjfDnjUrC");
+
+    private void YouTubeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.youtube.com/channel/UCbN3FxySrPSeUMVe5ISraWw");
+
+    private void OnixIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/onixclient");
+
+    private void LatiteIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/latite");
+
+    private void LuconiaIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/luconia");
+
+    private void DownloadIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://github.com/ignYoqzii/StarZLauncher");
 
     private static void OnClosing(object sender, CancelEventArgs e) => e.Cancel = true;
 }

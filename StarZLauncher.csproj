@@ -11,10 +11,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Discord Icon.png" />
-      <None Remove="Background.png" />
-      <None Remove="starztext.png" />
-      <None Remove="starz.png" />
+      <None Remove="Images/Discord Icon.png" />
+      <None Remove="Images/Background.png" />
+      <None Remove="Images/starztext.png" />
+      <None Remove="Images/starz.png" />
+      <None Remove="Images/YouTube Icon.png" />
+	  <None Remove="Images/Minecraft1.19.png" />
+	  <None Remove="Images/Minecraft1.18.png" />
+	  <None Remove="Images/OnixIcon.png" />
+	  <None Remove="Images/LatiteIcon.png" />
+	  <None Remove="Images/LuconiaIcon.png" />
+	  <None Remove="Images/DownloadIcon.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -22,10 +29,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Resource Include="Discord Icon.png" />
-      <Resource Include="Background.png" />
-      <Resource Include="starztext.png" />
-      <Resource Include="starz.png" />
+      <Resource Include="Images/Discord Icon.png" />
+      <Resource Include="Images/Background.png" />
+      <Resource Include="Images/starztext.png" />
+      <Resource Include="Images/starz.png" />
+      <Resource Include="Images/YouTube Icon.png" />
+	  <Resource Include="Images/Minecraft1.19.png" />
+	  <Resource Include="Images/Minecraft1.18.png" />
+	  <Resource Include="Images/OnixIcon.png" />
+	  <Resource Include="Images/LatiteIcon.png" />
+	  <Resource Include="Images/LuconiaIcon.png" />
+	  <Resource Include="Images/DownloadIcon.png" />
     </ItemGroup>
 
     <ItemGroup>

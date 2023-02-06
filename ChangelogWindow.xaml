@@ -135,6 +135,6 @@
             Height="326"
             VerticalAlignment="Center"
             Width="516"
-            Source="/Background.png" RenderTransformOrigin="0.495,0.433"/>
+            Source="/Images/Background.png" RenderTransformOrigin="0.495,0.433"/>
     </Grid>
 </Window>

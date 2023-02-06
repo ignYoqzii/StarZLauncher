@@ -14,34 +14,47 @@
     <!-- region Control Templates & Styles -->
     <Window.Resources>
 
-        <ControlTemplate TargetType="Button" x:Key="DefaultButton">
-            <Border Name="RootElement" BorderThickness="1">
-
-                <Grid>
-                    <Grid.Background>
+        <ControlTemplate x:Key="DefaultButton" TargetType="Button">
+            <Border Name="RootElement">
+                <Border
+                    BorderBrush="AliceBlue"
+                    BorderThickness="0,0,0,0"
+                    CornerRadius="10">
+                    <Border.Background>
                         <SolidColorBrush x:Name="ButtonBackground" Color="#55AAFF" />
-                    </Grid.Background>
-                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="4,5,4,4" />
-                </Grid>
+                    </Border.Background>
+                    <ContentPresenter
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                </Border>
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="CommonStates">
                         <VisualState x:Name="Normal">
                             <Storyboard>
-                                <ColorAnimation Storyboard.TargetName="ButtonBackground"
-                                                Storyboard.TargetProperty="Color" To="#55AAFF" SpeedRatio="8" />
+                                <ColorAnimation
+                                    SpeedRatio="8"
+                                    Storyboard.TargetName="ButtonBackground"
+                                    Storyboard.TargetProperty="Color"
+                                    To="#55AAFF" />
                             </Storyboard>
                         </VisualState>
                         <VisualState x:Name="MouseOver">
                             <Storyboard>
-                                <ColorAnimation Storyboard.TargetName="ButtonBackground"
-                                                Storyboard.TargetProperty="Color" To="#77BBFF" SpeedRatio="8" />
+                                <ColorAnimation
+                                    SpeedRatio="8"
+                                    Storyboard.TargetName="ButtonBackground"
+                                    Storyboard.TargetProperty="Color"
+                                    To="#77BBFF" />
                             </Storyboard>
                         </VisualState>
                         <VisualState x:Name="Pressed">
                             <Storyboard>
-                                <ColorAnimation Storyboard.TargetName="ButtonBackground"
-                                                Storyboard.TargetProperty="Color" To="#80BFFF" SpeedRatio="8" />
+                                <ColorAnimation
+                                    SpeedRatio="8"
+                                    Storyboard.TargetName="ButtonBackground"
+                                    Storyboard.TargetProperty="Color"
+                                    To="#80BFFF" />
                             </Storyboard>
                         </VisualState>
                     </VisualStateGroup>
@@ -307,10 +320,10 @@
             MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown" />
         <ComboBox
             x:Name="VersionSelectionComboBox"
-            HorizontalAlignment="Center"
-            Margin="0,280,0,0"
+            HorizontalAlignment="Left"
+            Margin="40,229,0,0"
             VerticalAlignment="Top"
-            Width="128"
+            Width="212"
             SelectedIndex="0"
             Cursor="Hand">
             <ComboBoxItem
@@ -339,9 +352,9 @@
             Foreground="AliceBlue"
             FontFamily="Segoe UI"
             Template="{StaticResource DefaultButton}"
-            Height="68"
-            Margin="205,0,205,0"
-            VerticalAlignment="Center"
+            Height="50"
+            Margin="38,102,99,0"
+            VerticalAlignment="Top"
             Click="LaunchButton_OnLeftClick"
             MouseRightButtonDown="LaunchButton_OnRightClick"/>
         <Label
@@ -349,76 +362,68 @@
             FontSize="10px"
             Content="Status: Idle"
             Foreground="AliceBlue"
-            HorizontalAlignment="Center"
-            Margin="0,387,0,0"
+            HorizontalAlignment="Left"
+            Margin="0,395,0,0"
             VerticalAlignment="Top"
             Width="601"/>
         <Label
             Content="Click on the launch button to select and inject your client DLL"
             Foreground="AliceBlue"
             FontWeight="Light"
-            HorizontalAlignment="Center"
-            Margin="0,249,0,0"
+            HorizontalAlignment="Left"
+            Margin="123,162,0,0"
             VerticalAlignment="Top"/>
         <Button
             x:Name="CreditButton"
+            Template="{StaticResource DefaultButton}"
             Content="Credits"
             FontWeight="Medium"
-            FontSize="15px"
+            FontSize="13px"
             Cursor="Hand"
             Foreground="AliceBlue"
             FontFamily="Segoe UI"
-            Template="{StaticResource DefaultButton}"
-            Height="34"
-            Margin="531,376,11,0"
+            Height="38"
+            Margin="564,132,4,0"
             VerticalAlignment="Top"
             Click="CreditButton_OnClick" />
         <Label
             Content="Select Minecraft version to inject (Not working!)"
             Foreground="AliceBlue"
             FontWeight="Light"
-            HorizontalAlignment="Center"
-            Margin="0,307,0,0"
+            HorizontalAlignment="Left"
+            Margin="22,256,0,0"
             VerticalAlignment="Top"/>
-        <Image
-            x:Name="LatiteIcon"
-            HorizontalAlignment="Center"
-            Height="67"
-            Margin="0,90,0,0"
-            VerticalAlignment="Top"
-            Width="71"
-            Source="/starz.png"/>
         <Button
-            x:Name="ChangelogButton"
-            Content="Changelog"
+            x:Name="NewsButton"
+            Template="{StaticResource DefaultButton}"
+            Content="News"
             FontWeight="Medium"
-            FontSize="15px"
+            FontSize="13px"
             Cursor="Hand"
             Foreground="AliceBlue"
             FontFamily="Segoe UI"
-            Template="{StaticResource DefaultButton}"
-            Height="34"
-            Margin="432,376,94,0"
+            Height="38"
+            Margin="564,83,4,0"
             VerticalAlignment="Top"
             Click="ChangelogButton_OnClick" />
         <Image
             x:Name="DiscordIcon"
             HorizontalAlignment="Left"
-            Height="34"
-            Margin="397,382,0,0"
+            Height="31"
+            Margin="572,383,0,0"
             VerticalAlignment="Top"
-            Width="30"
-            Source="/Discord Icon.png"
+            Width="35"
+            Source="/Images/Discord Icon.png"
             Cursor="Hand"
             MouseLeftButtonDown="DiscordIcon_MouseLeftButtonDown"/>
         <Image
-            x:Name="LatiteIcon_Copy"
+            x:Name="StarZIcon_Copy"
             HorizontalAlignment="Left"
             Height="52"
             Margin="10,5,0,0"
             VerticalAlignment="Top"
             Width="66"
-            Source="/starz.png"/>
+            Source="/Images/starz.png"/>
         <Image
             Panel.ZIndex="-1"
             x:Name="BackgroundImage"
@@ -426,7 +431,7 @@
             Height="420"
             VerticalAlignment="Center"
             Width="636"
-            Source="/Background.png"/>
+            Source="/Images/Background.png" RenderTransformOrigin="0.493,0.495"/>
         <Image
             Panel.ZIndex="0"
             x:Name="StarZText"
@@ -434,6 +439,161 @@
             Height="28"
             VerticalAlignment="Top"
             Width="329"
-            Source="/starztext.png" Margin="79,17,0,0"/>
+            Source="/Images/starztext.png" Margin="79,17,0,0"/>
+        <Rectangle
+            Panel.ZIndex="-1"
+            x:Name="WindowSideBar"
+            Height="62"
+            Opacity="0.7"
+            Fill="Black"
+            Stroke="#55AAFF"
+            StrokeThickness="0.5"
+            VerticalAlignment="Top"
+            MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown" Margin="410,210,-148,0" RenderTransformOrigin="0.5,0.5" >
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Image
+            x:Name="YouTubeIcon"
+            HorizontalAlignment="Left"
+            Height="45"
+            Margin="564,335,0,0"
+            VerticalAlignment="Top"
+            Width="50"
+            Source="/Images/YouTube Icon.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="YouTubeIcon_MouseLeftButtonDown"/>
+        <Button
+            x:Name="SettingsButton"
+            Template="{StaticResource DefaultButton}"
+            Content="Settings"
+            FontWeight="Medium"
+            FontSize="13px"
+            Cursor="Hand"
+            Foreground="AliceBlue"
+            FontFamily="Segoe UI"
+            Height="38"
+            Margin="564,183,4,0"
+            VerticalAlignment="Top"
+            Click="SettingsButton_OnClick" />
+        <Rectangle
+            Panel.ZIndex="-1"
+            x:Name="Background"
+            HorizontalAlignment="Left"
+            Height="124"
+            Width="539"
+            RadiusX="20"
+            RadiusY="20"
+            Opacity="0.4"
+            Fill="Black"
+            Stroke="#55AAFF"
+            StrokeThickness="0.5"
+            VerticalAlignment="Top"
+            MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown" Margin="10,83,0,0" />
+        <Rectangle
+            Panel.ZIndex="-1"
+            x:Name="Background2"
+            HorizontalAlignment="Left"
+            Height="183"
+            Width="270"
+            RadiusX="20"
+            RadiusY="20"
+            Opacity="0.4"
+            Fill="Black"
+            Stroke="#55AAFF"
+            StrokeThickness="0.5"
+            VerticalAlignment="Top"
+            MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown" Margin="10,212,0,0" />
+        <Image
+            x:Name="MinecraftImage"
+            HorizontalAlignment="Left"
+            Height="62"
+            Margin="28,304,0,0"
+            VerticalAlignment="Top"
+            Width="113"
+            Source="/Images/Minecraft1.19.png"/>
+        <Image
+            x:Name="MinecraftImage2"
+            HorizontalAlignment="Left"
+            Height="62"
+            Margin="152,304,0,0"
+            VerticalAlignment="Top"
+            Width="114"
+            Source="/Images/Minecraft1.18.png"/>
+        <Image
+            x:Name="LuconiaIcon"
+            HorizontalAlignment="Left"
+            Height="50"
+            Margin="310,310,0,0"
+            VerticalAlignment="Top"
+            Width="71"
+            Source="/Images/LuconiaIcon.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="LuconiaIcon_MouseLeftButtonDown" RenderTransformOrigin="0.451,0.922"/>
+        <Image
+            x:Name="OnixIcon"
+            HorizontalAlignment="Left"
+            Height="51"
+            Margin="392,310,0,0"
+            VerticalAlignment="Top"
+            Width="53"
+            Source="/Images/OnixIcon.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="OnixIcon_MouseLeftButtonDown" RenderTransformOrigin="0.528,0.5"/>
+        <Image
+            x:Name="LatiteIcon"
+            HorizontalAlignment="Left"
+            Height="50"
+            Margin="478,310,0,0"
+            VerticalAlignment="Top"
+            Width="60"
+            Source="/Images/LatiteIcon.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="LatiteIcon_MouseLeftButtonDown"/>
+        <Label
+            Content="DLL Clients"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            FontSize="30px"
+            HorizontalAlignment="Left"
+            Margin="335,232,0,0"
+            VerticalAlignment="Top"/>
+        <Rectangle
+            Panel.ZIndex="-1"
+            x:Name="Background2_Copy"
+            HorizontalAlignment="Left"
+            Height="183"
+            Width="264"
+            RadiusX="20"
+            RadiusY="20"
+            Opacity="0.4"
+            Fill="Black"
+            Stroke="#55AAFF"
+            StrokeThickness="0.5"
+            VerticalAlignment="Top"
+            MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown" Margin="285,212,0,0" />
+        <Label
+            Content="Discord links"
+            Foreground="AliceBlue"
+            FontWeight="Light"
+            HorizontalAlignment="Left"
+            Margin="382,277,0,0"
+            VerticalAlignment="Top"/>
+        <Image
+            x:Name="DownloadIcon"
+            HorizontalAlignment="Left"
+            Height="36"
+            Margin="451,14,0,0"
+            VerticalAlignment="Top"
+            Width="33"
+            Source="/Images/DownloadIcon.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="DownloadIcon_MouseLeftButtonDown" RenderTransformOrigin="0.528,0.5"/>
     </Grid>
 </Window>
