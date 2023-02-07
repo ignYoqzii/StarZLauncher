@@ -10,5 +10,7 @@ Please consider that the version switcher is not working for the moment but will
 
 **May only works for 1.19.51 ! (You can test it)**
 
+**You can use this launcher to create your own (like a template), but my name should appear in your credits =)**
+
 
 
