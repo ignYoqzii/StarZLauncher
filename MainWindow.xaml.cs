@@ -145,10 +145,8 @@ public partial class MainWindow
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        DoubleAnimation animation = new DoubleAnimation();
-        animation.From = 0;
-        animation.To = 1;
-        animation.Duration = new Duration(TimeSpan.FromSeconds(2));
+        DoubleAnimation animation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromSeconds(2)));
+        animation.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
         this.BeginAnimation(Window.OpacityProperty, animation);
     }
 
