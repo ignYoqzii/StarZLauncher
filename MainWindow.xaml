@@ -10,7 +10,7 @@
         Title="StarZ Launcher"
         Height="420"
         Width="620"
-        Background="#181818">
+        Background="Transparent" Opacity="0" Loaded="Window_Loaded">
     <!-- region Control Templates & Styles -->
     <Window.Resources>
 
@@ -152,6 +152,17 @@
                 </VisualStateManager.VisualStateGroups>
             </Border>
         </ControlTemplate>
+
+        <Storyboard x:Key="OpenWindow">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Window.Opacity)" Duration="0:0:2">
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <ExponentialEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
 
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
@@ -299,7 +310,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
     </Window.Resources>
     <!-- endregion -->
     <Grid>

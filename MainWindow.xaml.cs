@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using StarZLauncher.Utils;
 using Microsoft.Win32;
+using System.Windows.Media.Animation;
 
 namespace StarZLauncher;
 
@@ -141,6 +142,15 @@ public partial class MainWindow
     private void MC19Icon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://feedback.minecraft.net/hc/en-us/articles/11394437843341-Minecraft-1-19-51-Bedrock-");
 
     private void MC18Icon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://feedback.minecraft.net/hc/en-us/sections/360001185332-Beta-and-Preview-Information-and-Changelogs");
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        DoubleAnimation animation = new DoubleAnimation();
+        animation.From = 0;
+        animation.To = 1;
+        animation.Duration = new Duration(TimeSpan.FromSeconds(2));
+        this.BeginAnimation(Window.OpacityProperty, animation);
+    }
 
     private static void OnClosing(object sender, CancelEventArgs e) => e.Cancel = true;
 }
