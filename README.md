@@ -10,7 +10,7 @@ Please consider that the version selector is not working for the moment but will
 
 Design based on Feather Launcher from Java Edition. (Started from nothing, no template)
 
-**May only works for 1.19.51 ! (You can test it)**
+Works with any Minecraft version as long as your dll supports it.
 
 **You can use this launcher to create your own (like a template), but my name should appear in your credits =)**
 
