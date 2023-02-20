@@ -43,7 +43,7 @@ namespace StarZLauncher
 
         private void WindowToolbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => DragMove();
 
-        private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/Discord.txt?token=GHSAT0AAAAAAB6MIQ3XTE73B2RMYM6V2JRGY7BTRLQ");
+        private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/ScR9MGbRSY");
 
         private void YouTubeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.youtube.com/channel/UCbN3FxySrPSeUMVe5ISraWw");
 
