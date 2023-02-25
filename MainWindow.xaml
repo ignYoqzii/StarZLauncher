@@ -1,4 +1,4 @@
-﻿<Window x:Class="StarZLauncher.MainWindow"
+<Window x:Class="StarZLauncher.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -229,6 +229,7 @@
             VerticalAlignment="Top"
             Width="66"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="16,29,0,0"/>
         <Image
             Panel.ZIndex="-2"
@@ -236,6 +237,7 @@
             HorizontalAlignment="Center"
             Height="738"
             VerticalAlignment="Center"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="1240"
             Source="/Images/Background.png" RenderTransformOrigin="0.325,0.462"/>
         <Image
@@ -245,6 +247,7 @@
             Height="46"
             VerticalAlignment="Top"
             Width="279"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Source="/Images/starztext.png" Margin="115,10,0,0"/>
         <Rectangle
             Panel.ZIndex="-2"
@@ -295,7 +298,8 @@
             Source="/Images/LuconiaIcon.png"
             Cursor="Hand"
             MouseLeftButtonDown="LuconiaIcon_MouseLeftButtonDown"
-            RenderTransformOrigin="0.5, 0.5">
+            RenderTransformOrigin="0.5, 0.5"
+            RenderOptions.BitmapScalingMode="HighQuality">
             <Image.RenderTransform>
                 <ScaleTransform x:Name="ImageTransform3" />
             </Image.RenderTransform>
@@ -343,6 +347,7 @@
             Width="51"
             Source="/Images/OnixIcon.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="OnixIcon_MouseLeftButtonDown"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -392,6 +397,7 @@
             Width="60"
             Source="/Images/LatiteIcon.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="LatiteIcon_MouseLeftButtonDown"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -601,6 +607,7 @@
             Width="56"
             Source="/Images/Discord Icon.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="DiscordIcon_MouseLeftButtonDown"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -660,6 +667,7 @@
             VerticalAlignment="Top"
             Width="42"
             Source="/Images/X.png"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Cursor="Hand"
             MouseLeftButtonDown="CloseButton_Click"
                    RenderTransformOrigin="0.5, 0.5">
@@ -721,6 +729,7 @@
             Width="46"
             Source="/Images/-.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="MinimizeButton_Click"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -793,6 +802,7 @@
             Width="95"
             Source="/Images/YouTube Icon.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="YouTubeIcon_MouseLeftButtonDown"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -853,6 +863,7 @@
             Width="68"
             Source="/Images/DownloadIcon.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="DownloadIcon_MouseLeftButtonDown"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -913,6 +924,7 @@
             Width="36"
             Source="/Images/Settings.png"
             Cursor="Hand"
+            RenderOptions.BitmapScalingMode="HighQuality"
             MouseLeftButtonDown="SettingsButton_OnClick"
                    RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
@@ -976,7 +988,8 @@
             Width="426"
             Source="/Images/Minecraft1.19.png"
             Cursor="Hand"
-            RenderTransformOrigin="0.5, 0.5">
+            RenderTransformOrigin="0.5, 0.5"
+            RenderOptions.BitmapScalingMode="HighQuality">
             <Image.RenderTransform>
                 <ScaleTransform x:Name="ImageTransform13" />
             </Image.RenderTransform>
@@ -1113,6 +1126,7 @@
             Width="48"
             Source="/Images/about.png"
             MouseLeftButtonDown="CreditButton_OnClick"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Cursor="Hand"
             RenderTransformOrigin="0.5, 0.5">
             <Image.RenderTransform>
