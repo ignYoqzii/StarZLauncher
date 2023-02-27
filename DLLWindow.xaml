@@ -87,12 +87,14 @@
             HorizontalAlignment="Left"
             Height="38"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="44"
             Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="22,12,0,0"/>
         <Image
             Panel.ZIndex="0"
             x:Name="StarZText"
             HorizontalAlignment="Left"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Height="28"
             VerticalAlignment="Top"
             Width="213"
@@ -104,6 +106,7 @@
             Height="34"
             Margin="995,16,0,0"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="41"
             Source="/Images/-.png"
             Cursor="Hand"
@@ -164,6 +167,7 @@
             Height="30"
             Margin="920,18,0,0"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="29"
             Source="/Images/Settings.png"
             Cursor="Hand"
@@ -224,6 +228,7 @@
             Height="34"
             Margin="1044,16,0,0"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="34"
             Source="/Images/X.png"
             Cursor="Hand"
@@ -292,6 +297,7 @@
             Height="84"
             Margin="41,538,0,0"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="83"
             Source="/Images/play.png"
             Cursor="Hand"
@@ -389,8 +395,7 @@
             FontWeight="Bold"
             HorizontalAlignment="Left"
             Margin="76,232,0,0"
-            VerticalAlignment="Top"
-            MouseLeftButtonDown="Latite_MouseLeftButtonDown"/>
+            VerticalAlignment="Top"/>
         <Label
             Content="Luconia Client"
             FontSize="30px"
@@ -399,8 +404,7 @@
             FontWeight="Bold"
             HorizontalAlignment="Left"
             Margin="76,350,0,0"
-            VerticalAlignment="Top"
-            MouseLeftButtonDown="Luconia_MouseLeftButtonDown"/>
+            VerticalAlignment="Top"/>
         <Button 
             Height="26" 
             x:Name="Latite" 
@@ -430,6 +434,7 @@
             HorizontalAlignment="Left"
             Height="38"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="44"
             Source="/Images/OnixIcon.png" RenderTransformOrigin="0.5,0.5" Margin="247,130,0,0"/>
         <Image
@@ -437,11 +442,13 @@
             HorizontalAlignment="Left"
             Height="38"
             VerticalAlignment="Top"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Width="44"
             Source="/Images/LatiteIcon.png" RenderTransformOrigin="0.5,0.5" Margin="261,238,0,0"/>
         <Image
             x:Name="StarZIcon_Copy2"
             HorizontalAlignment="Left"
+            RenderOptions.BitmapScalingMode="HighQuality"
             Height="38"
             VerticalAlignment="Top"
             Width="44"
