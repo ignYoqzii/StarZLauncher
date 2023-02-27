@@ -16,17 +16,21 @@
       <None Remove="Images/starztext.png" />
       <None Remove="Images/starz.png" />
       <None Remove="Images/YouTube Icon.png" />
-	  <None Remove="Images/Minecraft1.19.png" />
-	  <None Remove="Images/Minecraft1.18.png" />
-	  <None Remove="Images/OnixIcon.png" />
-	  <None Remove="Images/LatiteIcon.png" />
-	  <None Remove="Images/LuconiaIcon.png" />
-	  <None Remove="Images/DownloadIcon.png" />
-	  <None Remove="Images/X.png" />
-	  <None Remove="Images/-.png" />
-        <None Remove="Images/Settings.png" />
-        <None Remove="Images/about.png" />
-        <None Remove="Images/play.png" />
+	<None Remove="Images/OnixIcon.png" />
+	<None Remove="Images/LatiteIcon.png" />
+	<None Remove="Images/LuconiaIcon.png" />
+	<None Remove="Images/DownloadIcon.png" />
+	<None Remove="Images/X.png" />
+	<None Remove="Images/-.png" />
+      <None Remove="Images/Settings.png" />
+      <None Remove="Images/about.png" />
+      <None Remove="Images/play.png" />
+      <None Remove="Images/Twitch.png" />
+      <None Remove="Images/Github.png" />
+      <None Remove="Images/DLL.png" />
+      <None Remove="Images/Script.png" />
+		<None Remove="Images/DragnDrop.png" />
+		<None Remove="Images/AlternateImage.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -39,17 +43,21 @@
       <Resource Include="Images/starztext.png" />
       <Resource Include="Images/starz.png" />
       <Resource Include="Images/YouTube Icon.png" />
-	  <Resource Include="Images/Minecraft1.19.png" />
-	  <Resource Include="Images/Minecraft1.18.png" />
-	  <Resource Include="Images/OnixIcon.png" />
-	  <Resource Include="Images/LatiteIcon.png" />
-	  <Resource Include="Images/LuconiaIcon.png" />
-	  <Resource Include="Images/DownloadIcon.png" />
-	  <Resource Include="Images/X.png" />
-	  <Resource Include="Images/-.png" />
-        <Resource Include="Images/Settings.png" />
-        <Resource Include="Images/about.png" />
-        <Resource Include="Images/play.png" />
+	<Resource Include="Images/OnixIcon.png" />
+	<Resource Include="Images/LatiteIcon.png" />
+	<Resource Include="Images/LuconiaIcon.png" />
+	<Resource Include="Images/DownloadIcon.png" />
+	<Resource Include="Images/X.png" />
+	<Resource Include="Images/-.png" />
+      <Resource Include="Images/Settings.png" />
+      <Resource Include="Images/about.png" />
+      <Resource Include="Images/play.png" />
+      <Resource Include="Images/Twitch.png" />
+      <Resource Include="Images/Github.png" />
+      <Resource Include="Images/DLL.png" />
+      <Resource Include="Images/Script.png" />
+		<Resource Include="Images/DragnDrop.png" />
+		<Resource Include="Images/AlternateImage.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -61,6 +69,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="Accessibility" />
+      <Reference Include="System.IO.Compression" />
       <Reference Include="System.Windows.Forms" />
     </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿<Window x:Class="StarZLauncher.SettingsWindow"
+﻿<Window x:Class="StarZLauncher.ScriptsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,14 +8,13 @@
         ResizeMode="NoResize"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="StarZ Launcher Settings"
+        Title="StarZ Launcher Scripts / Mods"
         Height="650"
         Width="1100"
         AllowsTransparency="True"
         Background="Transparent"
         Loaded="Window_Loaded">
     <Window.Resources>
-
         <ControlTemplate x:Key="Buttons" TargetType="Button">
             <Border Name="RootElement" RenderTransformOrigin="0.5,0.5">
                 <Border BorderBrush="AliceBlue" BorderThickness="0,0,0,0" CornerRadius="10">
@@ -83,20 +82,6 @@
             CornerRadius="0,0,20,20" Margin="0,510,0,0">
             <!-- Add any content you want here -->
         </Border>
-        <Border x:Name="WindowToolbar_Copy4" HorizontalAlignment="Center"
-            Height="366" Width="1032" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
-            BorderThickness="0.5" VerticalAlignment="Top"
-            CornerRadius="20,20,20,20" Margin="0,106,0,0">
-            <!-- Add any content you want here -->
-        </Border>
-        <Label
-            Content="Change the launcher's background image"
-            FontSize="20px"
-            Foreground="AliceBlue"
-            FontWeight="Bold"
-            HorizontalAlignment="Left"
-            Margin="71,116,0,0"
-            VerticalAlignment="Top"/>
         <Image
             x:Name="StarZIcon"
             HorizontalAlignment="Left"
@@ -173,6 +158,66 @@
             </Image.Triggers>
         </Image>
         <Image
+            x:Name="SettingsButton"
+            HorizontalAlignment="Left"
+            Opacity="0.8"
+            Height="30"
+            Margin="920,18,0,0"
+            VerticalAlignment="Top"
+            Width="29"
+            Source="/Images/Settings.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="SettingsButton_OnClick"
+            RenderTransformOrigin="0.5, 0.5">
+            <Image.RenderTransform>
+                <ScaleTransform x:Name="ImageTransform12" />
+            </Image.RenderTransform>
+            <Image.Triggers>
+                <EventTrigger RoutedEvent="Image.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform12"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform12"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="SettingsButton"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Image.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform12"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform12"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="SettingsButton"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Image.Triggers>
+        </Image>
+        <Image
             x:Name="CloseButton"
             HorizontalAlignment="Left"
             Opacity="0.8"
@@ -233,12 +278,12 @@
             </Image.Triggers>
         </Image>
         <Label
-            Content="Settings"
+            Content="Scripts / Mods"
             FontSize="50px"
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="866,542,0,0"
+            Margin="711,542,0,0"
             VerticalAlignment="Top"/>
         <Image
             x:Name="PlayButton"
@@ -308,17 +353,91 @@
             HorizontalAlignment="Left"
             Margin="152,548,0,0"
             VerticalAlignment="Top"/>
+        <Border x:Name="WindowToolbar_Copy2" HorizontalAlignment="Left"
+            Height="366" Width="479" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
+            BorderThickness="0.5" VerticalAlignment="Top"
+            CornerRadius="20,20,20,20" Margin="578,99,0,0">
+            <!-- Add any content you want here -->
+        </Border>
+        <Image
+            x:Name="DragnDropIcon"
+            Panel.ZIndex="1"
+            HorizontalAlignment="Left"
+            Opacity="0.5"
+            Height="101"
+            Margin="229,181,0,0"
+            VerticalAlignment="Top"
+            Width="103"
+            Source="/Images/DragnDrop.png"/>
+        <Label
+            Content="Shader Installer"
+            FontSize="20px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="739,117,0,0"
+            VerticalAlignment="Top"/>
+        <Label
+            Content="In developpment..."
+            FontSize="15px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="746,252,0,0"
+            VerticalAlignment="Top"/>
         <Button 
                 Height="26" 
-                x:Name="ChangeImage" 
-                Content="Change image" 
+                x:Name="BrowseButton"
+            Panel.ZIndex="3"
+                Content="Textures Packs Folder" 
                 FontWeight="Bold" 
                 FontSize="10px" 
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
-                VerticalAlignment="Top" Click="Button_Click" 
-                Margin="76,158,934,0"/>
+                VerticalAlignment="Top"
+                Margin="326,429,658,0"
+                Click="TexturePackButton_OnLeftClick"/>
+        <Button 
+                Height="26"
+            Panel.ZIndex="3"
+                x:Name="Online" 
+                Content="Get Scripts" 
+                FontWeight="Bold" 
+                FontSize="10px" 
+                Cursor="Hand" 
+                Foreground="AliceBlue" 
+                FontFamily="Segoe UI" 
+                Template="{StaticResource Buttons}" 
+                VerticalAlignment="Top"
+                Margin="447,429,591,0"
+                Click="GetScriptsButton_OnLeftClick"/>
+        <Border x:Name="DragZone" HorizontalAlignment="Left"
+                Height="366" Width="479" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
+                BorderThickness="0.5" VerticalAlignment="Top"
+                CornerRadius="20,20,20,20" Margin="41,99,0,0" Panel.ZIndex="2">
+        </Border>
+        <Label
+            Content="Drag &amp; Drop"
+            FontSize="20px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="215,282,0,0"
+            VerticalAlignment="Top"/>
+        <Label
+            Content="Supports: LUA, MCPACK, ZIP"
+            FontSize="10px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="208,324,0,0"
+            VerticalAlignment="Top"/>
+
     </Grid>
 </Window>
