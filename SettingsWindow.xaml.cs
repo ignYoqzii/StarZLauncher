@@ -1,9 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using StarZLauncher.Classes;
 using System.IO;
 using System.Windows.Media.Imaging;
-using System.Windows.Controls;
 using System;
 using Microsoft.Win32;
 
@@ -12,7 +10,6 @@ namespace StarZLauncher
 {
     public partial class SettingsWindow
     {
-        public SettingsWindow settingsWindow;
         public SettingsWindow()
         {
             InitializeComponent();
@@ -85,49 +82,26 @@ namespace StarZLauncher
                 bitmapImage.UriSource = new Uri(newImagePath);
                 bitmapImage.EndInit();
                 BackgroundImage.Source = bitmapImage;
+                foreach (System.Windows.Window window in Application.Current.Windows)
+                {
+                    // Check if the window is a MainWindow or a subclass of MainWindow
+                    if (window is MainWindow || window.GetType().IsSubclassOf(typeof(MainWindow)))
+                    {
+                        // Call the SetBackgroundImage method on the MainWindow instance
+                        ((MainWindow)window).SetBackgroundImage();
+                    }
+                }
             }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            Hide();
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
-        }
-
-        public MainWindow mainWindow;
-        private void PlayButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            // Check if the main window is null, and create a new one if it is
-            if (mainWindow == null)
-            {
-                mainWindow = new MainWindow();
-
-                // Set the WindowStartupLocation property of the new window to Manual
-                mainWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-
-                // Set the Top and Left properties of the new window to the same values as the current window
-                mainWindow.Top = this.Top;
-                mainWindow.Left = this.Left;
-
-                // Hide the current window when the new window is shown
-                mainWindow.ContentRendered += (s, args) =>
-                {
-                    Hide();
-                };
-            }
-
-            // Show the main window
-            mainWindow.Show();
-
-            // Update the Discord Rich Presence state
-            if (MainWindow.IsMinecraftRunning)
-                DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
-            else
-                DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher");
         }
         private void WindowToolbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

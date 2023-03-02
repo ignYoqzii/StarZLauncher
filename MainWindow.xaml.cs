@@ -13,19 +13,27 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using StarZLauncher.Classes;
 using System.Linq;
+using System.IO.Compression;
+using System.Windows.Media;
 
 namespace StarZLauncher;
 
 public partial class MainWindow
 {
     public static Process? Minecraft;
-    public MainWindow mainWindow;
+    private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
+    private string starzScriptsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher\StarZ Scripts\";
+    private string resourcePacksFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\";
+    private const string LatestVersionUrl = "https://raw.githubusercontent.com/Imrglop/Latite-Releases/main/latest_version.txt";
+    private const string DownloadBaseUrl = "https://github.com/Imrglop/Latite-Releases/releases/download/{0}/Latite.{1}.dll";
 
     public MainWindow()
     {
         InitializeComponent();
+        SettingsWindow.Closing += OnClosing;
+        InitializeDragDrop();
     }
 
     private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -41,7 +49,7 @@ public partial class MainWindow
     {
         DragMove();
     }
-
+    //Play Section (Main Menu)
     //Only run Minecraft without DLLs
     private void LaunchButton_OnLeftClick(object sender, RoutedEventArgs e)
     {
@@ -104,62 +112,19 @@ public partial class MainWindow
         IsMinecraftRunning = false;
     }
 
-    public AboutWindow aboutWindow;
-
-    private void CreditButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        // Check if the about window is null, and create a new one if it is
-        if (aboutWindow == null)
-        {
-            aboutWindow = new AboutWindow();
-
-            // Set the WindowStartupLocation property of the new window to Manual
-            aboutWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-
-            // Set the Top and Left properties of the new window to the same values as the current window
-            aboutWindow.Top = this.Top;
-            aboutWindow.Left = this.Left;
-
-            // Hide the current window when the new window is shown
-            aboutWindow.ContentRendered += (s, args) =>
-            {
-                Hide();
-            };
-        }
-
-        // Show the about window
-        aboutWindow.Show();
-
-        // Update the Discord Rich Presence state
-        if (MainWindow.IsMinecraftRunning)
-            DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
-        else
-            DiscordRichPresenceManager.DiscordClient.UpdateState("Reading the launcher's credits");
-    }
-    public SettingsWindow settingsWindow;
     private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
     {
-        // Check if the settings window is null, and create a new one if it is
-        if (settingsWindow == null)
         {
-            settingsWindow = new SettingsWindow();
-
             // Set the WindowStartupLocation property of the new window to Manual
-            settingsWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+            SettingsWindow.WindowStartupLocation = WindowStartupLocation.Manual;
 
             // Set the Top and Left properties of the new window to the same values as the current window
-            settingsWindow.Top = this.Top;
-            settingsWindow.Left = this.Left;
-
-            // Hide the current window when the new window is shown
-            settingsWindow.ContentRendered += (s, args) =>
-            {
-                Hide();
-            };
+            SettingsWindow.Top = this.Top;
+            SettingsWindow.Left = this.Left;
         }
 
         // Show the settings window
-        settingsWindow.Show();
+        SettingsWindow.Show();
 
         // Update the Discord Rich Presence state
         if (MainWindow.IsMinecraftRunning)
@@ -167,69 +132,6 @@ public partial class MainWindow
         else
             DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's settings");
     }
-    public ScriptsWindow scriptsWindow;
-    private void ScriptsButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        // Check if the scripts window is null, and create a new one if it is
-        if (scriptsWindow == null)
-        {
-            scriptsWindow = new ScriptsWindow();
-
-            // Set the WindowStartupLocation property of the new window to Manual
-            scriptsWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-
-            // Set the Top and Left properties of the new window to the same values as the current window
-            scriptsWindow.Top = this.Top;
-            scriptsWindow.Left = this.Left;
-
-            // Hide the current window when the new window is shown
-            scriptsWindow.ContentRendered += (s, args) =>
-            {
-                Hide();
-            };
-        }
-
-        // Show the scripts window
-        scriptsWindow.Show();
-
-        // Update the Discord Rich Presence state
-        if (MainWindow.IsMinecraftRunning)
-            DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
-        else
-            DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's Scripts / Mods");
-    }
-    public DLLWindow dllWindow;
-    private void DLLButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        // Check if the dll window is null, and create a new one if it is
-        if (dllWindow == null)
-        {
-            dllWindow = new DLLWindow();
-
-            // Set the WindowStartupLocation property of the new window to Manual
-            dllWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-
-            // Set the Top and Left properties of the new window to the same values as the current window
-            dllWindow.Top = this.Top;
-            dllWindow.Left = this.Left;
-
-            // Hide the current window when the new window is shown
-            dllWindow.ContentRendered += (s, args) =>
-            {
-                Hide();
-            };
-        }
-
-        // Show the dll window
-        dllWindow.Show();
-
-        // Update the Discord Rich Presence state
-        if (MainWindow.IsMinecraftRunning)
-            DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
-        else
-            DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's DLLs");
-    }
-
 
     private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/ScR9MGbRSY");
 
@@ -245,7 +147,7 @@ public partial class MainWindow
 
     //Window animation everytime it is shown
 
-    private void SetBackgroundImage()
+    public void SetBackgroundImage()
     {
         // Get file path
         string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Background.txt");
@@ -413,5 +315,195 @@ public partial class MainWindow
             }
         }
     }
+
+    //Scripts / Mods Section
+    private void GetScriptsButton_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://github.com/bernarddesfosse/OnixClient_Scripts");
+
+    //Open the resourcepacks folder
+    private void TexturePackButton_OnLeftClick(object sender, RoutedEventArgs e)
+    {
+        string minecraftFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs";
+
+        if (Directory.Exists(minecraftFolderPath))
+        {
+            Process.Start(minecraftFolderPath);
+        }
+        else
+        {
+            MessageBox.Show("Error while opening a folder ; is Minecraft installed?");
+        }
+    }
+    private void InitializeDragDrop()
+    {
+        DragZone.AllowDrop = true;
+        DragZone.DragEnter += DragZone_DragEnter;
+        DragZone.DragLeave += DragZone_DragLeave;
+        DragZone.Drop += DragZone_Drop;
+    }
+
+    private void DragZone_DragEnter(object sender, DragEventArgs e)
+    {
+        if (IsLuaFile(e) || IsMcpackOrZipFile(e))
+        {
+            DragZone.BorderThickness = new Thickness(2);
+            DragZone.BorderBrush = Brushes.White;
+        }
+    }
+
+    private void DragZone_DragLeave(object sender, DragEventArgs e)
+    {
+        DragZone.BorderThickness = new Thickness(0.5);
+        DragZone.BorderBrush = new SolidColorBrush(Color.FromRgb(85, 170, 255));
+    }
+
+    private void DragZone_Drop(object sender, DragEventArgs e)
+    {
+        if (IsLuaFile(e))
+        {
+            MoveLuaFile(e);
+        }
+        else if (IsMcpackOrZipFile(e))
+        {
+            ExtractMcpackOrZipFile(e);
+        }
+
+        DragZone.BorderThickness = new Thickness(0.5);
+        DragZone.BorderBrush = new SolidColorBrush(Color.FromRgb(85, 170, 255));
+    }
+
+    private bool IsLuaFile(DragEventArgs e)
+    {
+        return e.Data.GetDataPresent(DataFormats.FileDrop) &&
+               IsFileOfType(((string[])e.Data.GetData(DataFormats.FileDrop))[0], ".lua");
+    }
+
+    private bool IsMcpackOrZipFile(DragEventArgs e)
+    {
+        return e.Data.GetDataPresent(DataFormats.FileDrop) &&
+               (IsFileOfType(((string[])e.Data.GetData(DataFormats.FileDrop))[0], ".mcpack") ||
+                IsFileOfType(((string[])e.Data.GetData(DataFormats.FileDrop))[0], ".zip"));
+    }
+
+    private bool IsFileOfType(string filePath, string extension)
+    {
+        return Path.GetExtension(filePath).Equals(extension, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void MoveLuaFile(DragEventArgs e)
+    {
+        string filePath = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+        if (!Directory.Exists(starzScriptsFolder))
+        {
+            Directory.CreateDirectory(starzScriptsFolder);
+        }
+        File.Move(filePath, starzScriptsFolder + Path.GetFileName(filePath));
+    }
+
+    private void ExtractMcpackOrZipFile(DragEventArgs e)
+    {
+        string filePath = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+        string extractPath = resourcePacksFolder + Path.GetFileNameWithoutExtension(filePath);
+
+        try
+        {
+            if (Directory.Exists(extractPath))
+            {
+                Directory.Delete(extractPath, true);
+            }
+
+            if (IsMcpackFile(filePath))
+            {
+                ZipFile.ExtractToDirectory(filePath, extractPath);
+            }
+            else if (IsZipFile(filePath))
+            {
+                ZipFile.ExtractToDirectory(filePath, extractPath);
+            }
+
+            // Delete the file after extraction is complete
+            File.Delete(filePath);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error extracting file: " + ex.Message);
+        }
+    }
+
+    private bool IsMcpackFile(string filePath)
+    {
+        string extension = Path.GetExtension(filePath);
+        return extension.Equals(".mcpack", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsZipFile(string filePath)
+    {
+        string extension = Path.GetExtension(filePath);
+        return extension.Equals(".zip", StringComparison.OrdinalIgnoreCase);
+    }
+
+    //DLLs Section
+    // Download Latite's DLLs and launch Minecraft if checkbox is checked
+    private void DownloadButtonLatite_Click(object sender, RoutedEventArgs e)
+    {
+        Button? button = sender as Button;
+        if (button == null)
+        {
+            return;
+        }
+
+        string minecraftVersion = button.Tag.ToString();
+        string? latestVersion = GetLatestVersion();
+        if (latestVersion == null)
+        {
+            MessageBox.Show("Failed to retrieve latest version information.");
+            return;
+        }
+
+        string downloadUrl = string.Format(DownloadBaseUrl, latestVersion, minecraftVersion);
+
+        using (WebClient webClient = new WebClient())
+        {
+            try
+            {
+                byte[] data = webClient.DownloadData(downloadUrl);
+                string fileName = Path.Combine(DllsFolderPath, $"Latite.{minecraftVersion}.dll");
+                Directory.CreateDirectory(DllsFolderPath);
+                File.WriteAllBytes(fileName, data);
+                MessageBox.Show($"Latite's DLL for Minecraft {minecraftVersion} has been downloaded!");
+
+                // Check if the checkbox is checked
+                if (Checkbox.IsChecked == true)
+                {
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.LaunchButton_OnRightClick(sender, e);
+                }
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show($"Failed to download Latite's DLL for Minecraft {minecraftVersion}. Error: {ex.Message}");
+            }
+        }
+    }
+    private string? GetLatestVersion()
+    {
+        using (WebClient webClient = new WebClient())
+        {
+            try
+            {
+                string latestVersion = webClient.DownloadString(LatestVersionUrl).Trim();
+                return latestVersion;
+            }
+            catch (WebException ex)
+            {
+                Console.WriteLine($"Failed to retrieve latest version information. Error: {ex.Message}");
+                return null;
+            }
+        }
+    }
+    private void Onix_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/onixclient");
+
+    private void Latite_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/latite");
+
+    private void Luconia_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/luconia");
     private static void OnClosing(object sender, CancelEventArgs e) => e.Cancel = true;
 }

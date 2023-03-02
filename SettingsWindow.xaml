@@ -66,15 +66,15 @@
             </Image.Clip>
         </Image>
         <Border x:Name="WindowToolbar_Copy" HorizontalAlignment="Left"
-            Height="65" Width="974" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
+            Height="65" Width="1019" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
             BorderThickness="0.2" VerticalAlignment="Top"
             CornerRadius="20,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
             <!-- Add any content you want here -->
         </Border>
         <Border x:Name="WindowToolbar_Copy3" HorizontalAlignment="Left"
-            Height="65" Width="126" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
+            Height="65" Width="81" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
             BorderThickness="0.2" VerticalAlignment="Top"
-            CornerRadius="0,20,0,0" Margin="974,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
+            CornerRadius="0,20,0,0" Margin="1019,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
             <!-- Add any content you want here -->
         </Border>
         <Border x:Name="WindowToolbar_Copy1" HorizontalAlignment="Center"
@@ -114,67 +114,6 @@
             VerticalAlignment="Top"
             Width="213"
             Source="/Images/starztext.png" Margin="76,17,0,0"/>
-        <Image
-            x:Name="MinimizeButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="34"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Margin="995,16,0,0"
-            VerticalAlignment="Top"
-            Width="41"
-            Source="/Images/-.png"
-            Cursor="Hand"
-            MouseLeftButtonDown="MinimizeButton_Click"
-            RenderTransformOrigin="0.5, 0.5">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform4" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="Image.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="MinimizeButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="Image.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="MinimizeButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
         <Image
             x:Name="CloseButton"
             HorizontalAlignment="Left"
@@ -243,75 +182,6 @@
             FontWeight="Bold"
             HorizontalAlignment="Left"
             Margin="866,542,0,0"
-            VerticalAlignment="Top"/>
-        <Image
-            x:Name="PlayButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="84"
-            Margin="41,538,0,0"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            VerticalAlignment="Top"
-            Width="83"
-            Source="/Images/play.png"
-            Cursor="Hand"
-            MouseLeftButtonDown="PlayButton_OnClick"
-            RenderTransformOrigin="0.5, 0.5">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform6" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="Image.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="PlayButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="Image.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="PlayButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
-        <Label
-            Content="Main Menu"
-            FontSize="40px"
-            Foreground="AliceBlue"
-            FontWeight="DemiBold"
-            HorizontalAlignment="Left"
-            Margin="152,548,0,0"
             VerticalAlignment="Top"/>
         <Button 
                 Height="26" 
