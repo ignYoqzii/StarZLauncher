@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using StarZLauncher.Classes;
-using System.Linq;
-using System.IO.Compression;
-using System.Windows.Media;
 
 namespace StarZLauncher;
 
@@ -24,10 +24,11 @@ public partial class MainWindow
     private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
-    private string starzScriptsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher\StarZ Scripts\";
-    private string resourcePacksFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\";
+    private readonly string starzScriptsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher\StarZ Scripts\";
+    private readonly string resourcePacksFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\";
     private const string LatestVersionUrl = "https://raw.githubusercontent.com/Imrglop/Latite-Releases/main/latest_version.txt";
     private const string DownloadBaseUrl = "https://github.com/Imrglop/Latite-Releases/releases/download/{0}/Latite.{1}.dll";
+
 
     public MainWindow()
     {
@@ -68,7 +69,7 @@ public partial class MainWindow
     //Run Minecraft with a DLL
     public async void LaunchButton_OnRightClick(object sender, RoutedEventArgs e)
     {
-        OpenFileDialog openFileDialog = new OpenFileDialog()
+        OpenFileDialog openFileDialog = new()
         {
             Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
             RestoreDirectory = true,
@@ -165,7 +166,7 @@ public partial class MainWindow
             if (File.Exists(imagePath))
             {
                 // Load image into image control
-                BitmapImage image = new BitmapImage(new Uri(imagePath));
+                BitmapImage image = new(new Uri(imagePath));
                 BackgroundImage.Source = image;
             }
         }
@@ -175,8 +176,10 @@ public partial class MainWindow
     {
         if (isFirstTimeOpened)
         {
-            DoubleAnimation animation = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromSeconds(2)));
-            animation.EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut };
+            DoubleAnimation animation = new(0, 1, new Duration(TimeSpan.FromSeconds(2)))
+            {
+                EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
+            };
             this.BeginAnimation(Window.OpacityProperty, animation);
 
             isFirstTimeOpened = false;
@@ -184,7 +187,7 @@ public partial class MainWindow
         SetBackgroundImage();
     }
 
-    private readonly Dictionary<Button, string> downloads = new Dictionary<Button, string>();
+    private readonly Dictionary<Button, string> downloads = new();
     private bool isDownloading = false;
 
     //To download the appxs
@@ -225,8 +228,10 @@ public partial class MainWindow
 
             using (var webClient = new WebClient())
             {
-                var downloadProgressWindow = new DownloadProgressWindow();
-                downloadProgressWindow.Owner = this; // Set the owner of the progress window to be the main window
+                var downloadProgressWindow = new DownloadProgressWindow
+                {
+                    Owner = this // Set the owner of the progress window to be the main window
+                };
                 downloadProgressWindow.Show();
 
                 webClient.DownloadProgressChanged += (s, e) => downloadProgressWindow.progressBar.Value = e.ProgressPercentage;
@@ -278,13 +283,14 @@ public partial class MainWindow
         if (Directory.Exists(folderPath))
         {
             // Open file explorer to select appx file
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new()
+            {
+                // Set the initial directory to the "StarZ Versions" folder
+                InitialDirectory = folderPath,
 
-            // Set the initial directory to the "StarZ Versions" folder
-            openFileDialog.InitialDirectory = folderPath;
-
-            // Set the file filter to only show appx files
-            openFileDialog.Filter = "Appx Files (*.appx)|*.appx";
+                // Set the file filter to only show appx files
+                Filter = "Appx Files (*.appx)|*.appx"
+            };
 
             // Show the dialog and wait for the user to select a file
             if (openFileDialog.ShowDialog() == true)
@@ -299,10 +305,11 @@ public partial class MainWindow
         else
         {
             // Open file explorer to select appx file
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            // Set the file filter to only show appx files
-            openFileDialog.Filter = "Appx Files (*.appx)|*.appx";
+            OpenFileDialog openFileDialog = new()
+            {
+                // Set the file filter to only show appx files
+                Filter = "Appx Files (*.appx)|*.appx"
+            };
 
             // Show the dialog and wait for the user to select a file
             if (openFileDialog.ShowDialog() == true)
@@ -445,8 +452,7 @@ public partial class MainWindow
     // Download Latite's DLLs and launch Minecraft if checkbox is checked
     private void DownloadButtonLatite_Click(object sender, RoutedEventArgs e)
     {
-        Button? button = sender as Button;
-        if (button == null)
+        if (sender is not Button button)
         {
             return;
         }
@@ -461,43 +467,39 @@ public partial class MainWindow
 
         string downloadUrl = string.Format(DownloadBaseUrl, latestVersion, minecraftVersion);
 
-        using (WebClient webClient = new WebClient())
+        using WebClient webClient = new();
+        try
         {
-            try
-            {
-                byte[] data = webClient.DownloadData(downloadUrl);
-                string fileName = Path.Combine(DllsFolderPath, $"Latite.{minecraftVersion}.dll");
-                Directory.CreateDirectory(DllsFolderPath);
-                File.WriteAllBytes(fileName, data);
-                MessageBox.Show($"Latite's DLL for Minecraft {minecraftVersion} has been downloaded!");
+            byte[] data = webClient.DownloadData(downloadUrl);
+            string fileName = Path.Combine(DllsFolderPath, $"Latite.{minecraftVersion}.dll");
+            Directory.CreateDirectory(DllsFolderPath);
+            File.WriteAllBytes(fileName, data);
+            MessageBox.Show($"Latite's DLL for Minecraft {minecraftVersion} has been downloaded!");
 
-                // Check if the checkbox is checked
-                if (Checkbox.IsChecked == true)
-                {
-                    MainWindow mainWindow = new MainWindow();
-                    mainWindow.LaunchButton_OnRightClick(sender, e);
-                }
-            }
-            catch (WebException ex)
+            // Check if the checkbox is checked
+            if (Checkbox.IsChecked == true)
             {
-                MessageBox.Show($"Failed to download Latite's DLL for Minecraft {minecraftVersion}. Error: {ex.Message}");
+                MainWindow mainWindow = new();
+                mainWindow.LaunchButton_OnRightClick(sender, e);
             }
+        }
+        catch (WebException ex)
+        {
+            MessageBox.Show($"Failed to download Latite's DLL for Minecraft {minecraftVersion}. Error: {ex.Message}");
         }
     }
     private string? GetLatestVersion()
     {
-        using (WebClient webClient = new WebClient())
+        using WebClient webClient = new();
+        try
         {
-            try
-            {
-                string latestVersion = webClient.DownloadString(LatestVersionUrl).Trim();
-                return latestVersion;
-            }
-            catch (WebException ex)
-            {
-                Console.WriteLine($"Failed to retrieve latest version information. Error: {ex.Message}");
-                return null;
-            }
+            string latestVersion = webClient.DownloadString(LatestVersionUrl).Trim();
+            return latestVersion;
+        }
+        catch (WebException ex)
+        {
+            Console.WriteLine($"Failed to retrieve latest version information. Error: {ex.Message}");
+            return null;
         }
     }
     private void Onix_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/onixclient");

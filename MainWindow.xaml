@@ -217,7 +217,7 @@
             Foreground="AliceBlue"
             FontWeight="Light"
             HorizontalAlignment="Left"
-            Margin="30,541,0,0"
+            Margin="29,544,0,0"
             VerticalAlignment="Top" Width="125"/>
         <Button x:Name="downloadButton1_19" BorderThickness="2" Tag="1.19.51.1" Cursor="Hand" Margin="33,569,957,26" Click="DownloadButton_Click">
             <Button.Style>
@@ -543,17 +543,13 @@
                                         <Setter TargetName="TabBackground" Property="Fill" Value="#FFFFFF"/>
                                         <Setter TargetName="TabBackground" Property="Opacity" Value="0.3" />
                                     </Trigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="TabBackground" Property="Fill" Value="#FFFFFF"/>
-                                        <Setter TargetName="TabBackground" Property="Opacity" Value="0.3" />
-                                    </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Margin="25,368,-26,-372">
+            <TabItem Margin="32,364,-56,-379">
                 <TabItem.Header>
                     <Grid Cursor="Hand">
                         <Image
@@ -566,7 +562,7 @@
             Width="38"
             Source="/Images/Play.png"
             Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5" Margin="5,0,0,0">
+                   RenderTransformOrigin="0.5, 0.5" Margin="32,0,0,0">
                             <Image.RenderTransform>
                                 <ScaleTransform x:Name="ImageTransform5" />
                             </Image.RenderTransform>
@@ -622,11 +618,11 @@
                 Opacity="0.8"
                 FontWeight="Bold"
                 HorizontalAlignment="Left"
-                Margin="43,0,0,0"
+                Margin="70,0,0,0"
                 VerticalAlignment="Center"/>
                     </Grid>
                 </TabItem.Header>
-                <Grid Height="397" x:Name="PlayTab" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid Height="397" x:Name="PlayTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096">
                     <Border x:Name="UpdatesBackground" HorizontalAlignment="Left"
                 Height="278" Width="320" Opacity="0.25" BorderBrush="#55AAFF"
                 BorderThickness="0" VerticalAlignment="Top"
@@ -715,6 +711,7 @@
                 FontWeight="Bold" 
                 FontSize="10px" 
                 Cursor="Hand" 
+                        HorizontalAlignment="Left"
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
@@ -725,13 +722,13 @@
                     <EventTrigger RoutedEvent="Selector.Selected">
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation From="990" To="397" Duration="0:0:0.8" Storyboard.TargetName="PlayTab" Storyboard.TargetProperty="Height"/>
+                                <DoubleAnimation From="1805" To="1096" Duration="0:0:0.8" Storyboard.TargetName="PlayTab" Storyboard.TargetProperty="Width"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
                 </TabItem.Triggers>
             </TabItem>
-            <TabItem Margin="55,368,-58,-372">
+            <TabItem Margin="62,364,-71,-379">
                 <TabItem.Header>
                     <Grid Cursor="Hand">
                         <Image
@@ -744,7 +741,7 @@
             Width="38"
             Source="/Images/DLL.png"
             Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5">
+                   RenderTransformOrigin="0.5, 0.5" Margin="10,0,0,0">
                             <Image.RenderTransform>
                                 <ScaleTransform x:Name="ImageTransform2" />
                             </Image.RenderTransform>
@@ -800,7 +797,7 @@
                 Opacity="0.8"
                 FontWeight="Bold"
                 HorizontalAlignment="Left"
-                Margin="38,0,0,0"
+                Margin="48,0,0,0"
                 VerticalAlignment="Center"/>
                     </Grid>
                 </TabItem.Header>
@@ -862,7 +859,8 @@
             FontFamily="Segoe UI" 
             Template="{StaticResource Buttons}" 
             VerticalAlignment="Top"
-            Margin="55,126,957,0"/>
+            Margin="55,126,957,0"
+                        MouseLeftButtonDown="Latite_MouseLeftButtonDown"/>
                     <Button 
             Height="26" 
             x:Name="Luconia" 
@@ -874,7 +872,8 @@
             FontFamily="Segoe UI" 
             Template="{StaticResource Buttons}" 
             VerticalAlignment="Center"
-            Margin="55,0,957,0"/>
+            Margin="55,0,957,0"
+                        MouseLeftButtonDown="Luconia_MouseLeftButtonDown"/>
                     <Button x:Name="downloadButton1_192" BorderThickness="2" Tag="1.19.51" Cursor="Hand" Margin="153,126,886,278" Click="DownloadButtonLatite_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -968,7 +967,7 @@
             VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-            <TabItem Margin="83,368,-86,-372">
+            <TabItem Margin="77,364,-80,-379">
                 <TabItem.Header>
                     <Grid Cursor="Hand">
                         <Image
@@ -1041,7 +1040,7 @@
                 VerticalAlignment="Center" Width="79" Height="24"/>
                     </Grid>
                 </TabItem.Header>
-                <Grid Height="430">
+                <Grid Height="407" x:Name="ScriptTab" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1096">
                     <Border x:Name="DragZone" HorizontalAlignment="Left"
                 Height="277" Width="479" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
                 BorderThickness="0.5" VerticalAlignment="Top"
@@ -1054,27 +1053,29 @@
                 Content="Textures Packs Folder" 
                 FontWeight="Bold" 
                 FontSize="10px" 
+                        HorizontalAlignment="Left"
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="329,240,655,0"
-                Click="TexturePackButton_OnLeftClick"/>
+                Margin="330,240,0,0"
+                Click="TexturePackButton_OnLeftClick" Width="115"/>
                     <Button 
                 Height="26"
             Panel.ZIndex="3"
                 x:Name="Online" 
                 Content="Get Scripts" 
                 FontWeight="Bold" 
-                FontSize="10px" 
+                FontSize="10px"
+                        HorizontalAlignment="Left"
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="446,240,592,0"
-                Click="GetScriptsButton_OnLeftClick"/>
+                Margin="450,240,0,0"
+                Click="GetScriptsButton_OnLeftClick" Width="61"/>
                     <Border x:Name="ShaderBackground" HorizontalAlignment="Left"
             Height="277" Width="479" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
             BorderThickness="0.5" VerticalAlignment="Top"
@@ -1129,8 +1130,17 @@
             Width="103"
             Source="/Images/DragnDrop.png"/>
                 </Grid>
+                <TabItem.Triggers>
+                    <EventTrigger RoutedEvent="Selector.Selected">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation From="973" To="407" Duration="0:0:0.8" Storyboard.TargetName="ScriptTab" Storyboard.TargetProperty="Height"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </TabItem.Triggers>
             </TabItem>
-            <TabItem Margin="120,368,-123,-372">
+            <TabItem Margin="87,364,-108,-379">
                 <TabItem.Header>
                     <Grid Cursor="Hand">
                         <Image
@@ -1143,7 +1153,7 @@
             Width="38"
             Source="/Images/About.png"
             Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5" Margin="4,0,0,0">
+                   RenderTransformOrigin="0.5, 0.5" Margin="24,0,0,0">
                             <Image.RenderTransform>
                                 <ScaleTransform x:Name="ImageTransform6" />
                             </Image.RenderTransform>
@@ -1199,11 +1209,11 @@
                 Opacity="0.8"
                 FontWeight="Bold"
                 HorizontalAlignment="Left"
-                Margin="44,0,0,0"
+                Margin="62,0,0,0"
                 VerticalAlignment="Center" Height="22" Width="40"/>
                     </Grid>
                 </TabItem.Header>
-                <Grid Height="430">
+                <Grid Height="403" x:Name="AboutTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096">
                     <Border x:Name="AdminsBackground" HorizontalAlignment="Left"
                 Height="278" Width="320" Opacity="0.25" BorderBrush="#55AAFF"
                 BorderThickness="0" VerticalAlignment="Top"
@@ -1243,6 +1253,15 @@
             Margin="40,94,0,0"
             VerticalAlignment="Top"/>
                 </Grid>
+                <TabItem.Triggers>
+                    <EventTrigger RoutedEvent="Selector.Selected">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation From="1805" To="1096" Duration="0:0:0.8" Storyboard.TargetName="AboutTab" Storyboard.TargetProperty="Width"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </TabItem.Triggers>
             </TabItem>
         </TabControl>
         <Image
