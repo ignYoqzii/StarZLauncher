@@ -520,9 +520,9 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border BorderThickness="0" BorderBrush="#FFACACAC" CornerRadius="5">
+                                <Border BorderThickness="0.5" BorderBrush="AliceBlue" CornerRadius="10">
                                     <Grid>
-                                        <Rectangle x:Name="TabBackground" Fill="{TemplateBinding Background}" Opacity="0.3" RadiusX="5" RadiusY="5"/>
+                                        <Rectangle x:Name="TabBackground" Fill="{TemplateBinding Background}" Opacity="0.3" RadiusX="10" RadiusY="10" Cursor="Hand"/>
                                         <ContentPresenter ContentSource="Header">
                                             <ContentPresenter.Resources>
                                                 <Style TargetType="StackPanel">
@@ -624,7 +624,7 @@
                 </TabItem.Header>
                 <Grid Height="397" x:Name="PlayTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096">
                     <Border x:Name="UpdatesBackground" HorizontalAlignment="Left"
-                Height="278" Width="320" Opacity="0.25" BorderBrush="#55AAFF"
+                Height="278" Width="320" Opacity="0.1" BorderBrush="#55AAFF"
                 BorderThickness="0" VerticalAlignment="Top"
                 CornerRadius="20,20,20,20" Margin="26,0,0,0" Background="Black">
                         <!-- Add any content you want here -->
@@ -803,7 +803,7 @@
                 </TabItem.Header>
                 <Grid Height="430">
                     <Border x:Name="DLLBackground" HorizontalAlignment="Center"
-            Height="277" Width="1016" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
+            Height="277" Width="1016" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
             BorderThickness="0.5" VerticalAlignment="Top"
             CornerRadius="20,20,20,20">
                         <!-- Add any content you want here -->
@@ -829,7 +829,7 @@
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
                 Margin="55,50,957,0"
-                MouseLeftButtonDown="Onix_MouseLeftButtonDown"/>
+                Click="Onix_OnLeftClick"/>
                     <Label
             Content="Latite Client"
             FontSize="30px"
@@ -860,7 +860,7 @@
             Template="{StaticResource Buttons}" 
             VerticalAlignment="Top"
             Margin="55,126,957,0"
-                        MouseLeftButtonDown="Latite_MouseLeftButtonDown"/>
+                        Click="Latite_OnLeftClick"/>
                     <Button 
             Height="26" 
             x:Name="Luconia" 
@@ -873,7 +873,7 @@
             Template="{StaticResource Buttons}" 
             VerticalAlignment="Center"
             Margin="55,0,957,0"
-                        MouseLeftButtonDown="Luconia_MouseLeftButtonDown"/>
+                        Click="Luconia_OnLeftClick"/>
                     <Button x:Name="downloadButton1_192" BorderThickness="2" Tag="1.19.51" Cursor="Hand" Margin="153,126,886,278" Click="DownloadButtonLatite_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -1042,7 +1042,7 @@
                 </TabItem.Header>
                 <Grid Height="407" x:Name="ScriptTab" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1096">
                     <Border x:Name="DragZone" HorizontalAlignment="Left"
-                Height="277" Width="479" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
+                Height="277" Width="479" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
                 BorderThickness="0.5" VerticalAlignment="Top"
                 CornerRadius="20,20,20,20" Margin="41,0,0,0" Panel.ZIndex="2">
                     </Border>
@@ -1077,7 +1077,7 @@
                 Margin="450,240,0,0"
                 Click="GetScriptsButton_OnLeftClick" Width="61"/>
                     <Border x:Name="ShaderBackground" HorizontalAlignment="Left"
-            Height="277" Width="479" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
+            Height="277" Width="479" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
             BorderThickness="0.5" VerticalAlignment="Top"
             CornerRadius="20,20,20,20" Margin="576,0,0,0">
                         <!-- Add any content you want here -->
@@ -1215,7 +1215,7 @@
                 </TabItem.Header>
                 <Grid Height="403" x:Name="AboutTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096">
                     <Border x:Name="AdminsBackground" HorizontalAlignment="Left"
-                Height="278" Width="320" Opacity="0.25" BorderBrush="#55AAFF"
+                Height="278" Width="320" Opacity="0.1" BorderBrush="#55AAFF"
                 BorderThickness="0" VerticalAlignment="Top"
                 CornerRadius="20,20,20,20" Margin="26,0,0,0" Background="Black">
                         <!-- Add any content you want here -->

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using StarZLauncher.Classes;
 
 
 namespace StarZLauncher
@@ -33,7 +34,7 @@ namespace StarZLauncher
                 if (File.Exists(imagePath))
                 {
                     // Load image into image control
-                    BitmapImage image = new BitmapImage(new Uri(imagePath));
+                    BitmapImage image = new(new Uri(imagePath));
                     BackgroundImage.Source = image;
                 }
             }
@@ -51,11 +52,12 @@ namespace StarZLauncher
             Directory.CreateDirectory(imagesDir);
 
             // Prompt user to select image file
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            OpenFileDialog openFileDialog = new()
+            {
+                Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
-                string oldImageName = BackgroundImage.Source.ToString().Substring(BackgroundImage.Source.ToString().LastIndexOf("/") + 1);
                 string newImageName = Path.GetFileNameWithoutExtension(openFileDialog.FileName) + "_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + Path.GetExtension(openFileDialog.FileName);
                 string newImagePath = Path.Combine(imagesDir, newImageName);
 
@@ -77,7 +79,7 @@ namespace StarZLauncher
                 File.WriteAllText(backgroundFilePath, newImageName);
 
                 // Load new image
-                BitmapImage bitmapImage = new BitmapImage();
+                BitmapImage bitmapImage = new();
                 bitmapImage.BeginInit();
                 bitmapImage.UriSource = new Uri(newImagePath);
                 bitmapImage.EndInit();
@@ -97,6 +99,11 @@ namespace StarZLauncher
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Hide();
+            // Update the Discord Rich Presence state
+            if (MainWindow.IsMinecraftRunning)
+                DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
+            else
+                DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher");
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)

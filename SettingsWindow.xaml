@@ -195,5 +195,7 @@
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top" Click="Button_Click" 
                 Margin="76,158,934,0"/>
+        <Slider x:Name="resolutionSlider" Minimum="0" Maximum="1" Value="0" Width="200"
+        TickPlacement="Both" Ticks="0,1" TickFrequency="1" IsSnapToTickEnabled="True" Margin="450,272,450,325" />
     </Grid>
 </Window>

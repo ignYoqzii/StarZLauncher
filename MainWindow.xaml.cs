@@ -502,10 +502,10 @@ public partial class MainWindow
             return null;
         }
     }
-    private void Onix_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/onixclient");
+    private void Onix_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/onixclient");
 
-    private void Latite_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/latite");
+    private void Latite_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/latite");
 
-    private void Luconia_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/luconia");
+    private void Luconia_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/luconia");
     private static void OnClosing(object sender, CancelEventArgs e) => e.Cancel = true;
 }
