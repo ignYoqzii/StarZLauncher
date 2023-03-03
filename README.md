@@ -3,7 +3,7 @@ StarZ Launcher / Injector is a custom Minecraft Bedrock Edition Launcher for any
 
 A modern looking launcher with many features in future updates !
 
-![Header](https://cdn.discordapp.com/attachments/1031364658994610177/1080943576592166932/StarZ.png)
+![Header](https://cdn.discordapp.com/attachments/1072331008613044274/1081259536184258570/StarZ.png)
 
 # Notes
 Works with any Minecraft version as long as your dll supports it.
