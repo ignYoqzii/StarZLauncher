@@ -21,6 +21,7 @@ namespace StarZLauncher;
 public partial class MainWindow
 {
     public static Process? Minecraft;
+    private bool isRunning = false;
     private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
@@ -195,8 +196,8 @@ public partial class MainWindow
     {
         var downloadButton = (Button)sender;
         var version = (string)downloadButton.Tag;
-        var fileUrl = $"https://github.com/ignYoqzii/StarZLauncher/releases/download/versionsselector/Minecraft-{version}.Appx";
-        var fileName = $"Minecraft-{version}.Appx";
+        var fileUrl = $"https://github.com/ignYoqzii/StarZLauncher/releases/download/versionsselectorv2/StarZXMinecraft-{version}.zip";
+        var fileName = $"StarZXMinecraft-{version}.zip";
         var folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "StarZ Versions");
 
         if (isDownloading || downloads.ContainsValue(fileUrl))
@@ -276,51 +277,94 @@ public partial class MainWindow
     }
 
     //To install the appxs
-    private void InstallButton_Click(object sender, RoutedEventArgs e)
+    private void InstallButton_Click(object sender, EventArgs e)
     {
-        string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "StarZ Versions");
-
-        if (Directory.Exists(folderPath))
+        if (isRunning) // check if installation is already in progress or not
         {
-            // Open file explorer to select appx file
-            OpenFileDialog openFileDialog = new()
-            {
-                // Set the initial directory to the "StarZ Versions" folder
-                InitialDirectory = folderPath,
-
-                // Set the file filter to only show appx files
-                Filter = "Appx Files (*.appx)|*.appx"
-            };
-
-            // Show the dialog and wait for the user to select a file
-            if (openFileDialog.ShowDialog() == true)
-            {
-                // Get the path of the selected file
-                string filePath = openFileDialog.FileName;
-
-                // Start a new process to run the appx file
-                Process.Start(filePath);
-            }
+            return;
         }
-        else
+
+        // show warning message box to the user
+        MessageBoxResult result = MessageBox.Show("Warning: This will uninstall your current Microsoft Store Minecraft version and install a modified version of it. If Minecraft is installed somewhere else on your computer, uninstall it to avoid problems. Backup your files if needed! Also, make sure PowerShell is installed on your computer! Are you sure you want to proceed?", "StarZ X Minecraft", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Cancel)
         {
-            // Open file explorer to select appx file
-            OpenFileDialog openFileDialog = new()
-            {
-                // Set the file filter to only show appx files
-                Filter = "Appx Files (*.appx)|*.appx"
-            };
-
-            // Show the dialog and wait for the user to select a file
-            if (openFileDialog.ShowDialog() == true)
-            {
-                // Get the path of the selected file
-                string filePath = openFileDialog.FileName;
-
-                // Start a new process to run the appx file
-                Process.Start(filePath);
-            }
+            return; // user clicked cancel, so do nothing
         }
+
+        isRunning = true; // set installation in progress flag
+
+        // show file dialog to the user to select the zip file
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "Zip Files|*.zip";
+        openFileDialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "StarZ Versions");
+        bool? _ = openFileDialog.ShowDialog();
+
+        if (!_ == true)
+        {
+            isRunning = false; // reset installation in progress flag
+            return;
+        }
+
+        SetStatusLabelText("Installing... Please wait...", Colors.Yellow);
+        // unregister Minecraft from Microsoft Store
+        string unregistercommand = $"Get-AppxPackage *minecraftUWP* | Remove-AppxPackage";
+        ProcessStartInfo psiunregister = new ProcessStartInfo("powershell.exe", unregistercommand);
+        psiunregister.UseShellExecute = true;
+        psiunregister.Verb = "runas"; // Run PowerShell as administrator
+        Process.Start(psiunregister).WaitForExit();
+
+        string selectedZipFile = openFileDialog.FileName;
+        string extractedFolderPath = Path.Combine(Path.GetDirectoryName(selectedZipFile), "StarZ X Minecraft");
+
+        // delete the existing StarZ X Minecraft folder if it exists (so it uninstall any previous StarZ X Minecraft version)
+        if (Directory.Exists(extractedFolderPath))
+        {
+            Directory.Delete(extractedFolderPath, true);
+        }
+
+        // create a new StarZ X Minecraft folder
+        Directory.CreateDirectory(extractedFolderPath);
+
+        // move the selected zip file to the StarZ X Minecraft folder
+        string newZipFileName = Path.Combine(extractedFolderPath, "StarZXMinecraft.zip");
+        File.Move(selectedZipFile, newZipFileName);
+
+        // extract the zip file
+        ZipFile.ExtractToDirectory(newZipFileName, extractedFolderPath);
+
+        // register the app using Powershell command
+        string manifestPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ` Launcher", "StarZ` Versions", "StarZ` X` Minecraft", "AppxManifest.xml");
+        string registercommand = $"Add-AppxPackage -Path {manifestPath} -Register";
+        SetStatusLabelText("Registering...", Colors.Green);
+
+        ProcessStartInfo psiregister = new ProcessStartInfo("powershell.exe", registercommand);
+        psiregister.UseShellExecute = true;
+        psiregister.Verb = "runas"; // Run PowerShell as administrator
+        Process.Start(psiregister).WaitForExit();
+
+        // reset the label text and color
+        SetStatusLabelText("", Colors.AliceBlue);
+
+        // show success message box to the user
+        MessageBox.Show("StarZ X Minecraft has been installed successfully! It is recommended to launch the game without the launcher first to avoid any bugs...", "StarZ X Minecraft", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        // delete the initial renamed zip file if it still exists
+        if (File.Exists(newZipFileName))
+        {
+            File.Delete(newZipFileName);
+        }
+
+        isRunning = false; // reset installation in progress flag
+    }
+
+    private void SetStatusLabelText(string text, Color color)
+    {
+        Dispatcher.Invoke(() =>
+        {
+            statusLabel.Content = text;
+            statusLabel.Foreground = new SolidColorBrush(color);
+        });
     }
 
     //Scripts / Mods Section
@@ -446,6 +490,158 @@ public partial class MainWindow
     {
         string extension = Path.GetExtension(filePath);
         return extension.Equals(".zip", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void Persona_Click(object sender, RoutedEventArgs e)
+    {
+        string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string destinationPath = Path.Combine(myDocumentsPath, "StarZ Launcher", "StarZ Versions", "StarZ X Minecraft", "data", "skin_packs");
+
+        if (!Directory.Exists(destinationPath))
+        {
+            MessageBox.Show("StarZ X Minecraft is not installed!");
+            return;
+        }
+
+        var dialog = new System.Windows.Forms.FolderBrowserDialog();
+        dialog.Description = "Select persona folder";
+
+        if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            string sourcePath = dialog.SelectedPath;
+            string sourceFolderName = new DirectoryInfo(sourcePath).Name;
+            string destinationFolder = Path.Combine(destinationPath, sourceFolderName);
+
+            if (Directory.Exists(destinationFolder))
+            {
+                Directory.Delete(destinationFolder, true);
+            }
+
+            Directory.Move(sourcePath, destinationFolder);
+            MessageBox.Show("Custom Persona installed successfully!");
+        }
+    }
+
+    private void ShaderInstall_Click(object sender, RoutedEventArgs e)
+    {
+        string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string destinationPath = Path.Combine(myDocumentsPath, "StarZ Launcher", "StarZ Versions", "StarZ X Minecraft", "data", "renderer", "materials");
+        string backupPath = Path.Combine(destinationPath, "Backup");
+
+        // Check if destination directory exists
+        if (!Directory.Exists(destinationPath))
+        {
+            MessageBox.Show("StarZ X Minecraft is not installed!");
+            return;
+        }
+
+        // Create backup directory if it doesn't exist
+        if (!Directory.Exists(backupPath))
+        {
+            Directory.CreateDirectory(backupPath);
+        }
+
+        if (Directory.GetFiles(backupPath).Length > 0)
+        {
+            MessageBox.Show("Shaders are already installed!");
+            return;
+        }
+
+        // Move 4 files to backup directory
+        string[] filesToMove = new string[]
+        {
+        "LegacyCubemap.material.bin",
+        "RenderChunk.material.bin",
+        "Sky.material.bin",
+        "SunMoon.material.bin"
+        };
+        foreach (string file in filesToMove)
+        {
+            string sourceFilePath = Path.Combine(destinationPath, file);
+            string destinationFilePath = Path.Combine(backupPath, file);
+            if (File.Exists(sourceFilePath))
+            {
+                File.Move(sourceFilePath, destinationFilePath);
+            }
+        }
+
+        // Download 4 files
+        string[] filesToDownload = new string[]
+        {
+        "LegacyCubemap.material.bin",
+        "RenderChunk.material.bin",
+        "Sky.material.bin",
+        "SunMoon.material.bin"
+        };
+        foreach (string file in filesToDownload)
+        {
+            string url = $"https://github.com/ignYoqzii/StarZLauncher/releases/download/shadersinstaller/{file}";
+            string destinationFilePath = Path.Combine(destinationPath, file);
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(url, destinationFilePath);
+            }
+        }
+
+        MessageBox.Show("Shaders installed successfully!");
+    }
+
+    private void ShaderRemove_Click(object sender, RoutedEventArgs e)
+    {
+        string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        string destinationPath = Path.Combine(myDocumentsPath, "StarZ Launcher", "StarZ Versions", "StarZ X Minecraft", "data", "renderer", "materials");
+        string backupPath = Path.Combine(destinationPath, "Backup");
+
+        // Check if StarZ X Minecraft is installed
+        if (!Directory.Exists(destinationPath))
+        {
+            MessageBox.Show("StarZ X Minecraft is not installed!");
+            return;
+        }
+
+        // Check if Backup folder exists
+        if (!Directory.Exists(backupPath))
+        {
+            MessageBox.Show("No shaders previously installed.");
+            return;
+        }
+
+        // Delete 4 files from destination folder
+        string[] filesToDelete = new string[]
+        {
+        "LegacyCubemap.material.bin",
+        "RenderChunk.material.bin",
+        "Sky.material.bin",
+        "SunMoon.material.bin"
+        };
+        foreach (string file in filesToDelete)
+        {
+            string filePath = Path.Combine(destinationPath, file);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        // Move 4 files from backup folder to destination folder
+        string[] filesToMove = new string[]
+        {
+        "LegacyCubemap.material.bin",
+        "RenderChunk.material.bin",
+        "Sky.material.bin",
+        "SunMoon.material.bin"
+        };
+        foreach (string file in filesToMove)
+        {
+            string sourceFilePath = Path.Combine(backupPath, file);
+            string destinationFilePath = Path.Combine(destinationPath, file);
+            if (File.Exists(sourceFilePath))
+            {
+                File.Move(sourceFilePath, destinationFilePath);
+            }
+        }
+
+        MessageBox.Show("Shaders removed successfully!");
     }
 
     //DLLs Section

@@ -395,7 +395,7 @@
             Opacity="0.8"
             Height="36"
             RenderOptions.BitmapScalingMode="HighQuality"
-            Margin="493,582,0,0"
+            Margin="493,574,0,0"
             VerticalAlignment="Top"
             Width="30"
             Source="/Images/DownloadIcon.png"
@@ -955,6 +955,33 @@
                         </Button.Style>
                         <TextBlock Text="1.17 DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
                     </Button>
+                    <Button x:Name="downloadButtonlatest" BorderThickness="2" Tag="1.19.63" Cursor="Hand" Margin="338,126,701,278" Click="DownloadButtonLatite_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
+                                                        <GradientStop Color="#FF002238"/>
+                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <TextBlock Text="Latest DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
+                    </Button>
                     <CheckBox x:Name="Checkbox" Content="Launch after downloading" Foreground="AliceBlue" Margin="884,9,52,405"/>
                     <Label
             Content="Disclaimer: Those companies are not in any way related to StarZ Launcher. Only the Discord links are distributed!"
@@ -1076,6 +1103,51 @@
                 VerticalAlignment="Top"
                 Margin="450,240,0,0"
                 Click="GetScriptsButton_OnLeftClick" Width="61"/>
+                    <Button 
+                Height="26"
+            Panel.ZIndex="3"
+                x:Name="Cosmetic" 
+                Content="Select" 
+                FontWeight="Bold" 
+                FontSize="10px"
+                        HorizontalAlignment="Left"
+                Cursor="Hand" 
+                Foreground="AliceBlue" 
+                FontFamily="Segoe UI" 
+                Template="{StaticResource Buttons}" 
+                VerticalAlignment="Top"
+                Margin="734,58,0,0"
+                Click="Persona_Click" Width="61"/>
+                    <Button 
+                Height="26"
+            Panel.ZIndex="3"
+                x:Name="Shader" 
+                Content="Install" 
+                FontWeight="Bold" 
+                FontSize="10px"
+                        HorizontalAlignment="Left"
+                Cursor="Hand" 
+                Foreground="AliceBlue" 
+                FontFamily="Segoe UI" 
+                Template="{StaticResource Buttons}" 
+                VerticalAlignment="Top"
+                Margin="729,113,0,0"
+                Click="ShaderInstall_Click" Width="61"/>
+                    <Button 
+                Height="26"
+            Panel.ZIndex="3"
+                x:Name="ShaderRemove" 
+                Content="Remove" 
+                FontWeight="Bold" 
+                FontSize="10px"
+                        HorizontalAlignment="Left"
+                Cursor="Hand" 
+                Foreground="AliceBlue" 
+                FontFamily="Segoe UI" 
+                Template="{StaticResource Buttons}" 
+                VerticalAlignment="Top"
+                Margin="795,113,0,0"
+                Click="ShaderRemove_Click" Width="61"/>
                     <Border x:Name="ShaderBackground" HorizontalAlignment="Left"
             Height="277" Width="479" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
             BorderThickness="0.5" VerticalAlignment="Top"
@@ -1083,22 +1155,40 @@
                         <!-- Add any content you want here -->
                     </Border>
                     <Label
-            Content="Shader Installer"
+            Content="Mods Installer"
             FontSize="20px"
             Opacity="0.5"
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="739,10,0,0"
+            Margin="743,10,0,0"
             VerticalAlignment="Top"/>
                     <Label
-            Content="In developpment..."
+            Content="Custom Personas"
             FontSize="15px"
             Opacity="0.5"
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="744,159,0,0"
+            Margin="598,54,0,0"
+            VerticalAlignment="Top"/>
+                    <Label
+            Content="Shaders Installer"
+            FontSize="15px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="598,109,0,0"
+            VerticalAlignment="Top"/>
+                    <Label
+            Content="You need to have StarZ X Minecraft installed!"
+            FontSize="10px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="816,253,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="Drag &amp; Drop"
@@ -1495,5 +1585,20 @@
                 </EventTrigger>
             </Image.Triggers>
         </Image>
+        <Label
+                Content=""
+                x:Name="statusLabel"
+                FontSize="10px"
+                Foreground="AliceBlue"
+                Opacity="0.8"
+                FontWeight="Bold"
+                Margin="29,624,764,-3" Width="307"/>
+        <Label
+                Content="Install"
+                FontSize="10px"
+                Foreground="AliceBlue"
+                Opacity="0.75"
+                FontWeight="Bold"
+                Margin="488,596,572,30"/>
     </Grid>
 </Window>
