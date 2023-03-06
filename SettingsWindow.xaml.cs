@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using StarZLauncher.Classes;
+using static StarZLauncher.MainWindow;
 
 
 namespace StarZLauncher
@@ -99,9 +100,10 @@ namespace StarZLauncher
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Hide();
+            string versionNumber = minecraftVersionInfo.VersionNumber;
             // Update the Discord Rich Presence state
             if (MainWindow.IsMinecraftRunning)
-                DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
+                DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft {versionNumber}");
             else
                 DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher");
         }

@@ -22,6 +22,8 @@ public partial class MainWindow
 {
     public static Process? Minecraft;
     private bool isRunning = false;
+    public static readonly MinecraftVersionInfo minecraftVersionInfo = new MinecraftVersionInfo();
+    string versionNumber = minecraftVersionInfo.VersionNumber;
     private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
@@ -129,8 +131,8 @@ public partial class MainWindow
         SettingsWindow.Show();
 
         // Update the Discord Rich Presence state
-        if (MainWindow.IsMinecraftRunning)
-            DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft");
+        if (IsMinecraftRunning)
+            DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft {versionNumber}");
         else
             DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's settings");
     }
