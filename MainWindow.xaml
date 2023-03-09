@@ -66,7 +66,7 @@
         RadiusX="20" RadiusY="20" Height="650" Width="1100" Opacity="0.8"
         Fill="#111111" StrokeThickness="0.2" Stroke="#55AAFF" VerticalAlignment="Center">
             </Rectangle>
-            <Image x:Name ="BackgroundImage" Source="/Images/Background.png" Width="1100" Height="650" Stretch="UniformToFill">
+            <Image x:Name ="BackgroundImage" Source="/Images/ALternateImage.png" Width="1100" Height="650" Stretch="UniformToFill">
                 <Image.Clip>
                     <RectangleGeometry Rect="0, 0, 1100, 650" RadiusX="20" RadiusY="20"/>
                 </Image.Clip>
@@ -170,7 +170,7 @@
                 Opacity="0.8"
                 FontWeight="Bold"
                 HorizontalAlignment="Left"
-                Margin="29,515,0,0"
+                Margin="29,528,0,0"
                 VerticalAlignment="Top"/>
         </Grid>
         <Button 
@@ -217,9 +217,9 @@
             Foreground="AliceBlue"
             FontWeight="Light"
             HorizontalAlignment="Left"
-            Margin="29,544,0,0"
+            Margin="29,558,0,0"
             VerticalAlignment="Top" Width="125"/>
-        <Button x:Name="downloadButton1_19" BorderThickness="2" Tag="1.19.51.1" Cursor="Hand" Margin="33,569,957,26" Click="DownloadButton_Click">
+        <Button x:Name="downloadButton1_19" BorderThickness="2" Tag="1.19.51.1" Cursor="Hand" Margin="32,586,1008,29" Click="DownloadButton_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -244,9 +244,9 @@
                     </Setter>
                 </Style>
             </Button.Style>
-            <TextBlock Text="1.19" Opacity="0.8" Foreground="AliceBlue" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="1.19" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
         </Button>
-        <Button x:Name="downloadButton1_18" BorderThickness="2" Tag="1.18.12.1" Cursor="Hand" Margin="148,569,842,26" Click="DownloadButton_Click">
+        <Button x:Name="downloadButton1_18" BorderThickness="2" Tag="1.18.12.1" Cursor="Hand" Margin="97,586,943,29" Click="DownloadButton_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -271,9 +271,9 @@
                     </Setter>
                 </Style>
             </Button.Style>
-            <TextBlock Text="1.18" Opacity="0.8" Foreground="AliceBlue" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="1.18" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
         </Button>
-        <Button x:Name="downloadButton1_17" BorderThickness="2" Tag="1.17.41.1" Cursor="Hand" Margin="263,569,727,26" Click="DownloadButton_Click">
+        <Button x:Name="downloadButton1_17" BorderThickness="2" Tag="1.17.41.1" Cursor="Hand" Margin="162,586,878,29" Click="DownloadButton_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -298,9 +298,9 @@
                     </Setter>
                 </Style>
             </Button.Style>
-            <TextBlock Text="1.17" Opacity="0.8" Foreground="AliceBlue" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="1.17" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
         </Button>
-        <Button x:Name="downloadButton1_16" BorderThickness="2" Tag="1.16.100.4" Cursor="Hand" Margin="378,569,612,26" Click="DownloadButton_Click">
+        <Button x:Name="downloadButton1_16" BorderThickness="2" Tag="1.16.100.4" Cursor="Hand" Margin="227,586,813,29" Click="DownloadButton_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Template">
@@ -325,7 +325,7 @@
                     </Setter>
                 </Style>
             </Button.Style>
-            <TextBlock Text="1.16" Opacity="0.8" Foreground="AliceBlue" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="1.16" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
         </Button>
         <Image
             x:Name="CloseButton"
@@ -389,67 +389,96 @@
                 </EventTrigger>
             </Image.Triggers>
         </Image>
-        <Image
-            x:Name="DownloadButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="36"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Margin="493,574,0,0"
-            VerticalAlignment="Top"
-            Width="30"
-            Source="/Images/DownloadIcon.png"
-            Cursor="Hand"
-            MouseLeftButtonDown="InstallButton_Click"
-             RenderTransformOrigin="0.5, 0.5">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform11" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="Image.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform11"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform11"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="DownloadButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="Image.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform11"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform11"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="DownloadButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
+        <Grid>
+            <Image
+        x:Name="DownloadButton"
+        HorizontalAlignment="Left"
+        Opacity="0.8"
+        Height="24"
+        RenderOptions.BitmapScalingMode="HighQuality"
+        Margin="293,592,0,0"
+        VerticalAlignment="Top"
+        Width="24"
+        Source="/Images/DownloadIcon.png"
+        Cursor="Hand"
+        MouseLeftButtonDown="InstallButton_Click"
+        RenderTransformOrigin="0.5, 0.5">
+                <Image.RenderTransform>
+                    <ScaleTransform x:Name="ImageTransform11" />
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Image.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleX"
+                            To="1.05"
+                            Duration="0:0:0.2"/>
+                                <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleY"
+                            To="1.05"
+                            Duration="0:0:0.2"/>
+                                <DoubleAnimation
+                            Storyboard.TargetName="DownloadButton"
+                            Storyboard.TargetProperty="Opacity"
+                            To="1"
+                            Duration="0:0:0.2"/>
+                                <DoubleAnimation
+                            Storyboard.TargetName="TextBlock"
+                            Storyboard.TargetProperty="Opacity"
+                            To="0.75"
+                            Duration="0:0:0.2"/>
+                                <ThicknessAnimation Storyboard.TargetName="DownloadButton"
+                                            Storyboard.TargetProperty="Margin"
+                                            To="293,586,0,0"
+                                            Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Image.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleX"
+                            To="1"
+                            Duration="0:0:0.2"/>
+                                <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleY"
+                            To="1"
+                            Duration="0:0:0.2"/>
+                                <DoubleAnimation
+                            Storyboard.TargetName="DownloadButton"
+                            Storyboard.TargetProperty="Opacity"
+                            To="0.8"
+                            Duration="0:0:0.2"/>
+                                <DoubleAnimation
+                            Storyboard.TargetName="TextBlock"
+                            Storyboard.TargetProperty="Opacity"
+                            To="0"
+                            Duration="0:0:0.2"/>
+                                <ThicknessAnimation Storyboard.TargetName="DownloadButton"
+                                            Storyboard.TargetProperty="Margin"
+                                            To="293,592,0,0"
+                                            Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+            <TextBlock
+        x:Name="TextBlock"
+        Text="Install"
+        FontWeight="Bold"
+        Foreground="AliceBlue"
+        FontSize="10"
+        HorizontalAlignment="Left"
+        Margin="291,606,0,0"
+        Opacity="0" Height="13" VerticalAlignment="Top" />
+        </Grid>
         <Image
             x:Name="SettingsButton"
             HorizontalAlignment="Left"
@@ -622,111 +651,7 @@
                 VerticalAlignment="Center"/>
                     </Grid>
                 </TabItem.Header>
-                <Grid Height="397" x:Name="PlayTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096">
-                    <Border x:Name="UpdatesBackground" HorizontalAlignment="Left"
-                Height="278" Width="320" Opacity="0.1" BorderBrush="#55AAFF"
-                BorderThickness="0" VerticalAlignment="Top"
-                CornerRadius="20,20,20,20" Margin="26,0,0,0" Background="Black">
-                        <!-- Add any content you want here -->
-                    </Border>
-                    <Label
-                Content="LATEST UPDATES"
-                FontSize="25px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="38,0,0,0"
-                VerticalAlignment="Top"/>
-                    <Label
-                Content="New complete launcher redesign!"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="86,75,0,0"
-                VerticalAlignment="Top"/>
-                    <Label
-                Content="New contents coming soon + bug fixes"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="86,105,0,0"
-                VerticalAlignment="Top"/>
-                    <Label
-                Content="Launcher News"
-                FontSize="17px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="38,43,0,0"
-                VerticalAlignment="Top" Width="132"/>
-                    <Label
-                Content="Minecraft News"
-                FontSize="17px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="38,144,0,0"
-                VerticalAlignment="Top" Width="137"/>
-                    <Label
-                Content="Latest version supported by StarZ : 1.19.51"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="38,177,0,0"
-                VerticalAlignment="Top"/>
-                    <Border x:Name="WindowToolbar_Copy5" HorizontalAlignment="Left"
-                Height="17" Width="39" Opacity="1" Background="#55AAFF" BorderBrush="#55AAFF"
-                BorderThickness="0" VerticalAlignment="Top"
-                CornerRadius="2,2,2,2" Margin="42,78,0,0">
-                    </Border>
-                    <Label
-                Content="News"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="44,75,0,0"
-                VerticalAlignment="Top"/>
-                    <Border x:Name="WindowToolbar_Copy6" HorizontalAlignment="Left"
-                Height="18" Width="39" Opacity="1" Background="IndianRed" BorderBrush="#55AAFF"
-                BorderThickness="0" VerticalAlignment="Top"
-                CornerRadius="2,2,2,2" Margin="42,108,0,0">
-                        <!-- Add any content you want here -->
-                    </Border>
-                    <Label
-                Content="Soon"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="45,105,0,0"
-                VerticalAlignment="Top"/>
-                    <Button 
-                Height="26" 
-                x:Name="ShowMore" 
-                Content=" Show more  " 
-                FontWeight="Bold" 
-                FontSize="10px" 
-                Cursor="Hand" 
-                        HorizontalAlignment="Left"
-                Foreground="AliceBlue" 
-                FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
-                VerticalAlignment="Top" Click="ShowMoreButton_OnLeftClick" 
-                Margin="38,242,998,0"/>
-                </Grid>
-                <TabItem.Triggers>
-                    <EventTrigger RoutedEvent="Selector.Selected">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation From="1805" To="1096" Duration="0:0:0.8" Storyboard.TargetName="PlayTab" Storyboard.TargetProperty="Width"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </TabItem.Triggers>
+                <Grid Height="397" x:Name="PlayTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096"/>
             </TabItem>
             <TabItem Margin="62,364,-71,-379">
                 <TabItem.Header>
@@ -1362,7 +1287,7 @@
                 Source="/Images/YouTube Icon.png"
                 Cursor="Hand"
                 MouseLeftButtonDown="YouTubeIcon_MouseLeftButtonDown"
-                RenderTransformOrigin="0.5, 0.5" Margin="1017,440,21,170">
+                RenderTransformOrigin="0.5, 0.5" Margin="1012,440,26,170">
             <Image.RenderTransform>
                 <ScaleTransform x:Name="ImageTransform1" />
             </Image.RenderTransform>
@@ -1593,12 +1518,5 @@
                 Opacity="0.8"
                 FontWeight="Bold"
                 Margin="29,624,764,-3" Width="307"/>
-        <Label
-                Content="Install"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                Opacity="0.75"
-                FontWeight="Bold"
-                Margin="488,596,572,30"/>
     </Grid>
 </Window>
