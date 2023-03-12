@@ -200,17 +200,17 @@
             RenderOptions.BitmapScalingMode="HighQuality"
             Height="38"
             VerticalAlignment="Top"
-            Width="44"
-            Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="22,12,0,0"/>
+            Width="39"
+            Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="24,14,0,0"/>
         <Image
             Panel.ZIndex="0"
             x:Name="StarZText"
             HorizontalAlignment="Left"
             RenderOptions.BitmapScalingMode="HighQuality"
-            Height="28"
+            Height="22"
             VerticalAlignment="Top"
             Width="213"
-            Source="/Images/starztext.png" Margin="76,17,0,0"/>
+            Source="/Images/starztext.png" Margin="83,20,0,0"/>
         <Label
             Content="Click a version to download"
             FontSize="10px"
