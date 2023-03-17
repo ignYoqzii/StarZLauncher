@@ -31,6 +31,10 @@
       <None Remove="Images/Script.png" />
 		<None Remove="Images/DragnDrop.png" />
 		<None Remove="Images/AlternateImage.png" />
+		<None Remove="Images/Yoqzii.jpg" />
+		<None Remove="Images/L1me.jpg" />
+		<None Remove="Images/OliiR.jpg" />
+		<None Remove="Images/Change.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -58,6 +62,10 @@
       <Resource Include="Images/Script.png" />
 		<Resource Include="Images/DragnDrop.png" />
 		<Resource Include="Images/AlternateImage.png" />
+		<Resource Include="Images/Yoqzii.jpg" />
+		<Resource Include="Images/L1me.jpg" />
+		<Resource Include="Images/OliiR.jpg" />
+		<Resource Include="Images/Change.png" />
     </ItemGroup>
 
     <ItemGroup>

@@ -19,9 +19,9 @@
             <Border Name="RootElement" RenderTransformOrigin="0.5,0.5">
                 <Border BorderBrush="AliceBlue" BorderThickness="0,0,0,0" CornerRadius="10">
                     <Border.Background>
-                        <LinearGradientBrush EndPoint="-3,0" StartPoint="2,0" SpreadMethod="Pad" MappingMode="RelativeToBoundingBox">
-                            <GradientStop x:Name="GradientStop1" Color="Black" Offset="0"/>
-                            <GradientStop x:Name="GradientStop2" Color="#FF00A0D6" Offset="1"/>
+                        <LinearGradientBrush EndPoint="0,0" StartPoint="0,1" SpreadMethod="Pad" MappingMode="RelativeToBoundingBox">
+                            <GradientStop x:Name="GradientStop1" Color="#FF00171F" Offset="0.203"/>
+                            <GradientStop x:Name="GradientStop2" Color="#FF004F69" Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                     <ContentPresenter Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -38,7 +38,7 @@
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.02" Duration="0:0:0.3"/>
                                 <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.05" Duration="0:0:0.3"/>
-                                <ColorAnimation Storyboard.TargetName="GradientStop1" Storyboard.TargetProperty="Color" To="#333333" Duration="0:0:0.3"/>
+                                <ColorAnimation Storyboard.TargetName="GradientStop1" Storyboard.TargetProperty="Color" To="#FF00171F" Duration="0:0:0.3"/>
                                 <ColorAnimation Storyboard.TargetName="GradientStop2" Storyboard.TargetProperty="Color" To="#FF00BFFF" Duration="0:0:0.3"/>
                             </Storyboard>
                         </VisualState>
@@ -66,134 +66,36 @@
         RadiusX="20" RadiusY="20" Height="650" Width="1100" Opacity="0.8"
         Fill="#111111" StrokeThickness="0.2" Stroke="#55AAFF" VerticalAlignment="Center">
             </Rectangle>
-            <Image x:Name ="BackgroundImage" Source="/Images/ALternateImage.png" Width="1100" Height="650" Stretch="UniformToFill">
+            <Image x:Name ="BackgroundImage" Source="/Images/AlternateImage.png" Width="1100" Height="650" Stretch="UniformToFill" Panel.ZIndex="0">
                 <Image.Clip>
                     <RectangleGeometry Rect="0, 0, 1100, 650" RadiusX="20" RadiusY="20"/>
                 </Image.Clip>
             </Image>
             <Border x:Name="WindowToolbar_Copy" HorizontalAlignment="Left" Panel.ZIndex="3"
-        Height="65" Width="974" Opacity="0.7" Background="#111111" BorderBrush="#55AAFF"
+        Height="78" Width="974" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
         BorderThickness="0.2" VerticalAlignment="Top"
-        CornerRadius="20,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
+        CornerRadius="20,0,0,0">
                 <!-- Add any content you want here -->
             </Border>
             <Border x:Name="WindowToolbar_Copy1" HorizontalAlignment="Center"
-                Height="140" Width="1100" Opacity="0.7"
+                Height="572" Width="1100" Opacity="0.7"
                 BorderThickness="0.5" VerticalAlignment="Top"
-                CornerRadius="0,0,20,20" Margin="0,510,0,0" Background="Black">
+                CornerRadius="0,0,20,20" Margin="0,78,0,0" Background="Black">
                 <Border.BorderBrush>
                     <LinearGradientBrush EndPoint="1,1" StartPoint="0,2">
-                        <GradientStop Color="#FF00A4F9" Offset="0.317"/>
-                        <GradientStop Color="#FF002235" Offset="0.843"/>
+                        <GradientStop Color="AliceBlue" Offset="0.317"/>
+                        <GradientStop Color="#111111" Offset="0.843"/>
                     </LinearGradientBrush>
                 </Border.BorderBrush>
                 <!-- Add any content you want here -->
             </Border>
-            <Border x:Name="WindowToolbar_Copy2" HorizontalAlignment="Center"
-                Height="100" Width="1100" Opacity="0.3" Background="Black" BorderBrush="#55AAFF"
-                BorderThickness="0" VerticalAlignment="Top"
-                CornerRadius="0,0,0,0" Margin="0,410,0,0">
-                <!-- Add any content you want here -->
-            </Border>
             <Border x:Name="WindowToolbar_Copy3" HorizontalAlignment="Left" Panel.ZIndex="3"
-                Height="65" Width="126" Opacity="0.7" Background="#111111" BorderBrush="#55AAFF"
+                Height="78" Width="126" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
                 BorderThickness="0.2" VerticalAlignment="Top"
-                CornerRadius="0,20,0,0" Margin="974,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
+                CornerRadius="0,20,0,0" Margin="974,0,0,0">
                 <!-- Add any content you want here -->
             </Border>
-            <Image
-                x:Name="MinimizeButton"
-                Panel.ZIndex="3"
-                HorizontalAlignment="Left"
-                Opacity="0.8"
-                Height="34"
-                Margin="995,16,0,0"
-                VerticalAlignment="Top"
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Width="41"
-                Source="/Images/-.png"
-                Cursor="Hand"
-                MouseLeftButtonDown="MinimizeButton_Click"
-                RenderTransformOrigin="0.5, 0.5">
-                <Image.RenderTransform>
-                    <ScaleTransform x:Name="ImageTransform4" />
-                </Image.RenderTransform>
-                <Image.Triggers>
-                    <EventTrigger RoutedEvent="Image.MouseEnter">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                        Storyboard.TargetName="MinimizeButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="Image.MouseLeave">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform4"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                        Storyboard.TargetName="MinimizeButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Image.Triggers>
-            </Image>
-            <Label
-                Content="Version Selector"
-                FontSize="20px"
-                Foreground="AliceBlue"
-                Opacity="0.8"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="29,528,0,0"
-                VerticalAlignment="Top"/>
         </Grid>
-        <Button 
-            Height="73" 
-            x:Name="LaunchButton" 
-            Content="LAUNCH" 
-            FontWeight="DemiBold" 
-            FontSize="35px" 
-            Cursor="Hand" 
-            Foreground="AliceBlue" 
-            FontFamily="Segoe UI" 
-            Template="{StaticResource Buttons}" 
-            VerticalAlignment="Top" Click="LaunchButton_OnLeftClick" 
-            MouseRightButtonDown="LaunchButton_OnRightClick" 
-            Margin="745,553,38,0">
-        </Button>
-        <Label
-            Content="Right click on the launch button to select and inject your client DLL"
-            Foreground="AliceBlue"
-            FontWeight="Light"
-            HorizontalAlignment="Left"
-            Margin="730,522,0,0"
-            VerticalAlignment="Top" Width="346"/>
         <Image
             x:Name="StarZIcon"
             HorizontalAlignment="Left"
@@ -201,139 +103,23 @@
             Height="38"
             VerticalAlignment="Top"
             Width="39"
-            Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="24,14,0,0"/>
+            Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="29,20,0,0"/>
         <Image
             Panel.ZIndex="0"
             x:Name="StarZText"
             HorizontalAlignment="Left"
             RenderOptions.BitmapScalingMode="HighQuality"
-            Height="22"
+            Height="19"
             VerticalAlignment="Top"
-            Width="213"
-            Source="/Images/starztext.png" Margin="83,20,0,0"/>
-        <Label
-            Content="Click a version to download"
-            FontSize="10px"
-            Foreground="AliceBlue"
-            FontWeight="Light"
-            HorizontalAlignment="Left"
-            Margin="29,558,0,0"
-            VerticalAlignment="Top" Width="125"/>
-        <Button x:Name="downloadButton1_19" BorderThickness="2" Tag="1.19.51.1" Cursor="Hand" Margin="32,586,1008,29" Click="DownloadButton_Click">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
-                                    <Border.BorderBrush>
-                                        <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                            <GradientStop Color="#FF002238"/>
-                                            <GradientStop Color="#FF009CFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.BorderBrush>
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Opacity" Value="0.7"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-            <TextBlock Text="1.19" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
-        </Button>
-        <Button x:Name="downloadButton1_18" BorderThickness="2" Tag="1.18.12.1" Cursor="Hand" Margin="97,586,943,29" Click="DownloadButton_Click">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
-                                    <Border.BorderBrush>
-                                        <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                            <GradientStop Color="#FF002238"/>
-                                            <GradientStop Color="#FF009CFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.BorderBrush>
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Opacity" Value="0.7"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-            <TextBlock Text="1.18" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
-        </Button>
-        <Button x:Name="downloadButton1_17" BorderThickness="2" Tag="1.17.41.1" Cursor="Hand" Margin="162,586,878,29" Click="DownloadButton_Click">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
-                                    <Border.BorderBrush>
-                                        <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                            <GradientStop Color="#FF002238"/>
-                                            <GradientStop Color="#FF009CFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.BorderBrush>
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Opacity" Value="0.7"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-            <TextBlock Text="1.17" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
-        </Button>
-        <Button x:Name="downloadButton1_16" BorderThickness="2" Tag="1.16.100.4" Cursor="Hand" Margin="227,586,813,29" Click="DownloadButton_Click">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
-                                    <Border.BorderBrush>
-                                        <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                            <GradientStop Color="#FF002238"/>
-                                            <GradientStop Color="#FF009CFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.BorderBrush>
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="border" Property="Opacity" Value="0.7"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-            <TextBlock Text="1.16" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
-        </Button>
+            Width="132"
+            Source="/Images/starztext.png" Margin="81,32,0,0"/>
         <Image
             x:Name="CloseButton"
             Panel.ZIndex="3"
             HorizontalAlignment="Left"
             Opacity="0.8"
             Height="34"
-            Margin="1044,16,0,0"
+            Margin="1046,22,0,0"
             VerticalAlignment="Top"
             RenderOptions.BitmapScalingMode="HighQuality"
             Width="34"
@@ -389,105 +175,16 @@
                 </EventTrigger>
             </Image.Triggers>
         </Image>
-        <Grid>
-            <Image
-        x:Name="DownloadButton"
-        HorizontalAlignment="Left"
-        Opacity="0.8"
-        Height="24"
-        RenderOptions.BitmapScalingMode="HighQuality"
-        Margin="293,592,0,0"
-        VerticalAlignment="Top"
-        Width="24"
-        Source="/Images/DownloadIcon.png"
-        Cursor="Hand"
-        MouseLeftButtonDown="InstallButton_Click"
-        RenderTransformOrigin="0.5, 0.5">
-                <Image.RenderTransform>
-                    <ScaleTransform x:Name="ImageTransform11" />
-                </Image.RenderTransform>
-                <Image.Triggers>
-                    <EventTrigger RoutedEvent="Image.MouseEnter">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                            Storyboard.TargetName="ImageTransform11"
-                            Storyboard.TargetProperty="ScaleX"
-                            To="1.05"
-                            Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                            Storyboard.TargetName="ImageTransform11"
-                            Storyboard.TargetProperty="ScaleY"
-                            To="1.05"
-                            Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                            Storyboard.TargetName="DownloadButton"
-                            Storyboard.TargetProperty="Opacity"
-                            To="1"
-                            Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                            Storyboard.TargetName="TextBlock"
-                            Storyboard.TargetProperty="Opacity"
-                            To="0.75"
-                            Duration="0:0:0.2"/>
-                                <ThicknessAnimation Storyboard.TargetName="DownloadButton"
-                                            Storyboard.TargetProperty="Margin"
-                                            To="293,586,0,0"
-                                            Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                    <EventTrigger RoutedEvent="Image.MouseLeave">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                            Storyboard.TargetName="ImageTransform11"
-                            Storyboard.TargetProperty="ScaleX"
-                            To="1"
-                            Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                            Storyboard.TargetName="ImageTransform11"
-                            Storyboard.TargetProperty="ScaleY"
-                            To="1"
-                            Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                            Storyboard.TargetName="DownloadButton"
-                            Storyboard.TargetProperty="Opacity"
-                            To="0.8"
-                            Duration="0:0:0.2"/>
-                                <DoubleAnimation
-                            Storyboard.TargetName="TextBlock"
-                            Storyboard.TargetProperty="Opacity"
-                            To="0"
-                            Duration="0:0:0.2"/>
-                                <ThicknessAnimation Storyboard.TargetName="DownloadButton"
-                                            Storyboard.TargetProperty="Margin"
-                                            To="293,592,0,0"
-                                            Duration="0:0:0.2"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Image.Triggers>
-            </Image>
-            <TextBlock
-        x:Name="TextBlock"
-        Text="Install"
-        FontWeight="Bold"
-        Foreground="AliceBlue"
-        FontSize="10"
-        HorizontalAlignment="Left"
-        Margin="291,606,0,0"
-        Opacity="0" Height="13" VerticalAlignment="Top" />
-        </Grid>
         <Image
             x:Name="SettingsButton"
+            Panel.ZIndex="3"
             HorizontalAlignment="Left"
             Opacity="0.8"
             Height="30"
-            Margin="920,18,0,0"
+            Margin="919,24,0,0"
             VerticalAlignment="Top"
             RenderOptions.BitmapScalingMode="HighQuality"
-            Width="29"
+            Width="30"
             Source="/Images/Settings.png"
             Cursor="Hand"
             MouseLeftButtonDown="SettingsButton_OnClick"
@@ -540,37 +237,102 @@
                 </EventTrigger>
             </Image.Triggers>
         </Image>
-        <TabControl Background="Transparent" BorderThickness="0" Margin="0,66,0,133" RenderTransformOrigin="0.5, 0.5">
+        <Image
+                x:Name="MinimizeButton"
+                Panel.ZIndex="3"
+                HorizontalAlignment="Left"
+                Opacity="0.8"
+                Height="34"
+                Margin="994,22,0,0"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Width="40"
+                Source="/Images/-.png"
+                Cursor="Hand"
+                MouseLeftButtonDown="MinimizeButton_Click"
+                RenderTransformOrigin="0.5, 0.5">
+            <Image.RenderTransform>
+                <ScaleTransform x:Name="ImageTransform4" />
+            </Image.RenderTransform>
+            <Image.Triggers>
+                <EventTrigger RoutedEvent="Image.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform4"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform4"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="MinimizeButton"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Image.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform4"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform4"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                            <DoubleAnimation
+                        Storyboard.TargetName="MinimizeButton"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Image.Triggers>
+        </Image>
+        <Label
+                Content=""
+                x:Name="statusLabel"
+                FontSize="10px"
+                Foreground="AliceBlue"
+                Opacity="0.8"
+                FontWeight="Bold"
+                Margin="29,624,764,-3" Width="307"/>
+        <Rectangle Fill="AliceBlue" Height="1" Width="69" Opacity="0.7" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="262,39,0,0" />
+        <Rectangle Fill="AliceBlue" Height="1" Width="68" Opacity="0.7" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="766,40,0,0" />
+        <TabControl Background="Transparent" BorderBrush="Transparent" Margin="0,-44,0,-3">
             <TabControl.Resources>
-                <!-- Define the styles for the selected and mouseover states -->
                 <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Padding" Value="10"/>
+                    <Setter Property="Foreground" Value="#FFFFFFFF" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Opacity" Value="0.7" />
                     <Setter Property="Template">
                         <Setter.Value>
-                            <ControlTemplate TargetType="TabItem">
-                                <Border BorderThickness="0.5" BorderBrush="AliceBlue" CornerRadius="10">
-                                    <Grid>
-                                        <Rectangle x:Name="TabBackground" Fill="{TemplateBinding Background}" Opacity="0.3" RadiusX="10" RadiusY="10" Cursor="Hand"/>
-                                        <ContentPresenter ContentSource="Header">
-                                            <ContentPresenter.Resources>
-                                                <Style TargetType="StackPanel">
-                                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                                </Style>
-                                                <Style TargetType="Image">
-                                                    <Setter Property="Width" Value="32"/>
-                                                    <Setter Property="Height" Value="32"/>
-                                                    <Setter Property="Margin" Value="0,0,5,0"/>
-                                                    <Setter Property="HorizontalAlignment" Value="Left"/>
-                                                </Style>
-                                            </ContentPresenter.Resources>
-                                        </ContentPresenter>
-                                    </Grid>
-                                </Border>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                <Grid Cursor="Hand">
+                                    <ContentPresenter ContentSource="Header" Opacity="{TemplateBinding Opacity}" />
+                                    <Rectangle x:Name="SelectedTab" Width="30" Height="2" VerticalAlignment="Bottom" Visibility="Collapsed" >
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush EndPoint="0,2" StartPoint="1,0">
+                                                <GradientStop Color="#FF01364E" Offset="0.297"/>
+                                                <GradientStop Color="#FF00B3FF" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="TabBackground" Property="Fill" Value="#FFFFFF"/>
-                                        <Setter TargetName="TabBackground" Property="Opacity" Value="0.3" />
+                                        <Setter TargetName="SelectedTab" Property="Visibility" Value="Visible" />
+                                        <Setter Property="Opacity" Value="1" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -578,169 +340,341 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Margin="32,364,-56,-379">
-                <TabItem.Header>
-                    <Grid Cursor="Hand">
-                        <Image
-            x:Name="PlayButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="38"
-            VerticalAlignment="Center"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Width="38"
-            Source="/Images/Play.png"
-            Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5" Margin="32,0,0,0">
-                            <Image.RenderTransform>
-                                <ScaleTransform x:Name="ImageTransform5" />
-                            </Image.RenderTransform>
-                            <Image.Triggers>
-                                <EventTrigger RoutedEvent="Image.MouseEnter">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform2"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform5"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="PlayButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="Image.MouseLeave">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform5"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform5"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="PlayButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Image.Triggers>
-                        </Image>
-                        <Label
-                Content="Play"
-                FontSize="10px"
+            <TabItem Header="Main Menu" Margin="358,72,-362,-75">
+                <Grid Height="671" x:Name="MainMenu" Opacity="0.5">
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="MainMenu"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0.5" To="1" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                    <Button
+                        Height="58" 
+                        x:Name="LaunchButton" 
+                        Content="LAUNCH" 
+                        FontWeight="DemiBold" 
+                        FontSize="30px"
+                        Cursor="Hand" 
+                        Foreground="AliceBlue" 
+                        FontFamily="Inter" 
+                        Template="{StaticResource Buttons}" 
+                        VerticalAlignment="Top" Click="LaunchButton_OnLeftClick" 
+                        MouseRightButtonDown="LaunchButton_OnRightClick" 
+                        Margin="788,590,19,0">
+                    </Button>
+                    <Label
+                Content="Version Selector"
+                FontSize="20px"
+                Panel.ZIndex="3"
                 Foreground="AliceBlue"
                 Opacity="0.8"
                 FontWeight="Bold"
                 HorizontalAlignment="Left"
-                Margin="70,0,0,0"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Top" Margin="782,128,0,0"/>
+                    <Label
+            Content="Click a version to download"
+            Panel.ZIndex="3"
+            FontSize="10px"
+            Foreground="AliceBlue"
+            FontWeight="Light"
+            HorizontalAlignment="Left"
+            Margin="782,154,0,0"
+            VerticalAlignment="Top" Width="126"/>
+                    <Label Content="StarZ X Minecraft 1.19.51" FontSize="15px" Foreground="AliceBlue" FontWeight="Bold" Margin="782,182,49,455" Panel.ZIndex="3" Opacity="0.7"/>
+                    <Label Content="StarZ X Minecraft 1.18.12" FontSize="15px" Foreground="AliceBlue" FontWeight="Bold" Margin="782,265,49,372" Panel.ZIndex="3" Opacity="0.7"/>
+                    <Label Content="StarZ X Minecraft 1.17.41" FontSize="15px" Foreground="AliceBlue" FontWeight="Bold" Margin="782,351,49,286" Panel.ZIndex="3" Opacity="0.7"/>
+                    <Label Content="StarZ X Minecraft 1.16.100" FontSize="15px" Foreground="AliceBlue" FontWeight="Bold" Margin="782,438,49,199" Panel.ZIndex="3" Opacity="0.7"/>
+                    <Grid>
+                        <TextBlock
+        x:Name="TextBlock"
+        Text="Install"
+        FontWeight="Bold"
+        Foreground="AliceBlue"
+        FontSize="10"
+        HorizontalAlignment="Left"
+        Margin="1044,155,0,0"
+        Opacity="0" Height="13" VerticalAlignment="Top" />
                     </Grid>
-                </TabItem.Header>
-                <Grid Height="397" x:Name="PlayTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096"/>
+                    <Grid x:Name="PanelA" Margin="26,128,337,128" Panel.ZIndex="4">
+                        <Image Source="Images/Yoqzii.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="128,136,532,208" />
+                        <Image Source="Images/OliiR.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="329,136,330,208" />
+                        <Image Source="Images/L1me.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="530,136,130,208" />
+                        <Label Content="StarZ Admins" FontSize="30px" FontFamily="Inter" Foreground="AliceBlue" Opacity="0.7" Margin="262,10,263,349"/>
+                        <Label Content="ignYoqzii#8974" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="86,231,490,145"/>
+                        <Label Content="zL1me#6995" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="502,231,101,145"/>
+                        <Label Content="OliiR#5677" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="308,231,309,145"/>
+                        <Rectangle Fill="Gray" Height="89" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,326,0,0" RadiusX="10" RadiusY="10"/>
+                        <Rectangle Fill="Transparent" Stroke="AliceBlue" StrokeThickness="1" Height="415" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="10" RadiusY="10"/>
+                        <Rectangle Fill="AliceBlue" Height="2" Width="684" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,370,0,0" />
+                    </Grid>
+                    <Grid x:Name="PanelB" Margin="26,128,337,128" Panel.ZIndex="5" Visibility="Collapsed">
+                        <Label Content="Latest Updates" Foreground="AliceBlue" Opacity="0.7" FontSize="30px" Margin="254,10,254,352"/>
+                    </Grid>
+                    <Image Panel.ZIndex="4" Cursor="Hand" Opacity="0.7" Source="Images/Change.png" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TogglePanels_Click" Margin="728,135,343,513" />
+                    <Rectangle Fill="#111111" Height="415" Width="296" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="779,0,0,0" RadiusX="10" RadiusY="10" Stroke="AliceBlue" StrokeThickness="0.5"/>
+                    <Rectangle Fill="#111111" Height="54" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,128,0,0" RadiusX="10" RadiusY="10"/>
+                    <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,265,0,0"/>
+                    <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,438,0,0"/>
+                    <Rectangle Fill="#111111" Height="415" Width="731" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="26,0,0,0" RadiusX="10" RadiusY="10"/>
+                    <Rectangle Fill="AliceBlue" Height="2" Width="731" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,617,0,0"/>
+                    <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
+                    <Button x:Name="downloadButton1_19" BorderThickness="2" Tag="1.19.51.1" Cursor="Hand" Margin="788,216,187,420" Click="DownloadButton_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
+                                                        <GradientStop Color="#FF002238"/>
+                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <TextBlock Text="Download" Opacity="0.8" Foreground="AliceBlue" FontSize="15" FontWeight="Bold"/>
+                    </Button>
+                    <Button x:Name="downloadButton1_18" BorderThickness="2" Tag="1.18.12.1" Cursor="Hand" Margin="788,299,187,337" Click="DownloadButton_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
+                                                        <GradientStop Color="#FF002238"/>
+                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <TextBlock Text="Download" Opacity="0.8" Foreground="AliceBlue" FontSize="15" FontWeight="Bold"/>
+                    </Button>
+                    <Button x:Name="downloadButton1_17" BorderThickness="2" Tag="1.17.41.1" Cursor="Hand" Margin="788,385,188,251" Click="DownloadButton_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
+                                                        <GradientStop Color="#FF002238"/>
+                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <TextBlock Text="Download" Opacity="0.8" Foreground="AliceBlue" FontSize="15" FontWeight="Bold"/>
+                    </Button>
+                    <Button x:Name="downloadButton1_16" BorderThickness="2" Tag="1.16.100.4" Cursor="Hand" Margin="788,472,187,163" Click="DownloadButton_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border x:Name="border" CornerRadius="1" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent">
+                                                <Border.BorderBrush>
+                                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
+                                                        <GradientStop Color="#FF002238"/>
+                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.BorderBrush>
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.7"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                        <TextBlock Text="Download" Opacity="0.8" Foreground="AliceBlue" FontSize="15" FontWeight="Bold"/>
+                    </Button>
+                    <Label
+            Content="Right click to inject your client DLL"
+            Foreground="AliceBlue"
+            FontWeight="Light"
+            HorizontalAlignment="Left"
+            Margin="899,554,0,0"
+            VerticalAlignment="Top" Width="195"/>
+                    <Image
+        x:Name="DownloadButton"
+        HorizontalAlignment="Left"
+        Opacity="0.8"
+        Height="24"
+        RenderOptions.BitmapScalingMode="HighQuality"
+        Margin="1046,142,0,0"
+        VerticalAlignment="Top"
+        Width="24"
+        Source="/Images/DownloadIcon.png"
+        Cursor="Hand"
+        MouseLeftButtonDown="InstallButton_Click"
+        RenderTransformOrigin="0.5, 0.5">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform11" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleX"
+                            To="1.05"
+                            Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleY"
+                            To="1.05"
+                            Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="DownloadButton"
+                            Storyboard.TargetProperty="Opacity"
+                            To="1"
+                            Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="TextBlock"
+                            Storyboard.TargetProperty="Opacity"
+                            To="0.9"
+                            Duration="0:0:0.2"/>
+                                        <ThicknessAnimation Storyboard.TargetName="DownloadButton"
+                                            Storyboard.TargetProperty="Margin"
+                                            To="1046,136,0,0"
+                                            Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleX"
+                            To="1"
+                            Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="ImageTransform11"
+                            Storyboard.TargetProperty="ScaleY"
+                            To="1"
+                            Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="DownloadButton"
+                            Storyboard.TargetProperty="Opacity"
+                            To="0.8"
+                            Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                            Storyboard.TargetName="TextBlock"
+                            Storyboard.TargetProperty="Opacity"
+                            To="0"
+                            Duration="0:0:0.2"/>
+                                        <ThicknessAnimation Storyboard.TargetName="DownloadButton"
+                                            Storyboard.TargetProperty="Margin"
+                                            To="1046,142,0,0"
+                                            Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                </Grid>
             </TabItem>
-            <TabItem Margin="62,364,-71,-379">
-                <TabItem.Header>
-                    <Grid Cursor="Hand">
-                        <Image
-            x:Name="DLLButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="38"
-            VerticalAlignment="Center"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Width="38"
-            Source="/Images/DLL.png"
-            Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5" Margin="10,0,0,0">
-                            <Image.RenderTransform>
-                                <ScaleTransform x:Name="ImageTransform2" />
-                            </Image.RenderTransform>
-                            <Image.Triggers>
-                                <EventTrigger RoutedEvent="Image.MouseEnter">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform2"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform2"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="DLLButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="Image.MouseLeave">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform2"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform2"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="DLLButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Image.Triggers>
-                        </Image>
-                        <Label
-                Content="DLLs Clients"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                Opacity="0.8"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="48,0,0,0"
-                VerticalAlignment="Center"/>
-                    </Grid>
-                </TabItem.Header>
-                <Grid Height="430">
-                    <Border x:Name="DLLBackground" HorizontalAlignment="Center"
-            Height="277" Width="1016" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
-            BorderThickness="0.5" VerticalAlignment="Top"
-            CornerRadius="20,20,20,20">
-                        <!-- Add any content you want here -->
-                    </Border>
+            <TabItem Header="DLLs Clients" Margin="390,72,-390,-75">
+                <Grid x:Name="DLLsClients" Opacity="0.5">
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="DLLsClients"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0.5" To="1" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                    <ScrollViewer Margin="574,181,28,156" Panel.ZIndex="4" Background="Transparent">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                            <Grid>
+                                                <Border Background="AliceBlue" Opacity="0.07" CornerRadius="5"/>
+                                                <Track Grid.Row="0" IsDirectionReversed="True" Margin="0,0,0,0" Name="PART_Track" Visibility="Visible">
+                                                    <Track.Thumb>
+                                                        <Thumb Background="White" BorderBrush="Gray" BorderThickness="1" Height="30" Width="15" />
+                                                    </Track.Thumb>
+                                                </Track>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ScrollViewer.Resources>
+                        <ListBox x:Name="DllList" Margin="10" Background="Transparent" BorderThickness="0.1" d:ItemsSource="{d:SampleData ItemCount=5}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding}" FontSize="20" Margin="0 0 10 0" Foreground="AliceBlue" Opacity="0.7"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                    <Button Content="Edit" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" Margin="1008,130,41,517" Click="EditButton_Click" Width="45"/>
+                    <Button Content="Delete" Cursor="Hand" Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" Click="DeleteButton_Click" Width="65" Margin="938,130,91,517"/>
+                    <Rectangle Fill="#111111" Height="423" Width="520" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Margin="27,122,0,0" Stroke="AliceBlue" StrokeThickness="0.5"/>
+                    <Rectangle Fill="#111111" Height="423" Width="492" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Margin="574,122,0,0" Stroke="AliceBlue" StrokeThickness="0.5"/>
+                    <Rectangle Fill="AliceBlue" Height="2" Width="1038" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,599,0,0"/>
+                    <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
                     <Label
             Content="Onix Client"
-            FontSize="30px"
+            FontSize="20px"
             Opacity="0.7"
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="55,0,0,0"
+            Margin="36,188,0,0"
             VerticalAlignment="Top"/>
                     <Button 
                 Height="26" 
@@ -753,25 +687,25 @@
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="55,50,957,0"
+                Margin="446,193,566,0"
                 Click="Onix_OnLeftClick"/>
                     <Label
             Content="Latite Client"
-            FontSize="30px"
+            FontSize="20px"
             Opacity="0.7"
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="55,76,0,0"
+            Margin="36,276,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="Luconia Client"
-            FontSize="30px"
+            FontSize="20px"
             Opacity="0.7"
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="55,152,0,0"
+            Margin="36,370,0,0"
             VerticalAlignment="Top"/>
                     <Button 
             Height="26" 
@@ -784,7 +718,7 @@
             FontFamily="Segoe UI" 
             Template="{StaticResource Buttons}" 
             VerticalAlignment="Top"
-            Margin="55,126,957,0"
+            Margin="446,265,566,0"
                         Click="Latite_OnLeftClick"/>
                     <Button 
             Height="26" 
@@ -796,10 +730,10 @@
             Foreground="AliceBlue" 
             FontFamily="Segoe UI" 
             Template="{StaticResource Buttons}" 
-            VerticalAlignment="Center"
-            Margin="55,0,957,0"
+            VerticalAlignment="Top"
+            Margin="446,378,566,0"
                         Click="Luconia_OnLeftClick"/>
-                    <Button x:Name="downloadButton1_192" BorderThickness="2" Tag="1.19.51" Cursor="Hand" Margin="153,126,886,278" Click="DownloadButtonLatite_Click">
+                    <Button x:Name="downloadButton1_192" BorderThickness="2" Tag="1.19.51" VerticalAlignment="Top" Cursor="Hand" Margin="355,297,684,0" Click="DownloadButtonLatite_Click" Height="32">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -826,7 +760,7 @@
                         </Button.Style>
                         <TextBlock Text="1.19 DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
                     </Button>
-                    <Button x:Name="downloadButton1_182" BorderThickness="2" Tag="1.18.12" Cursor="Hand" Margin="215,126,825,278" Click="DownloadButtonLatite_Click">
+                    <Button x:Name="downloadButton1_182" BorderThickness="2" Tag="1.18.12" VerticalAlignment="Top" Cursor="Hand" Margin="415,297,625,0" Click="DownloadButtonLatite_Click" Height="32">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -853,7 +787,7 @@
                         </Button.Style>
                         <TextBlock Text="1.18 DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
                     </Button>
-                    <Button x:Name="downloadButton1_172" BorderThickness="2" Tag="1.17.41" Cursor="Hand" Margin="276,126,763,278" Click="DownloadButtonLatite_Click">
+                    <Button x:Name="downloadButton1_172" BorderThickness="2" Tag="1.17.41" VerticalAlignment="Top" Cursor="Hand" Margin="474,297,566,0" Click="DownloadButtonLatite_Click" Height="32">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -880,7 +814,7 @@
                         </Button.Style>
                         <TextBlock Text="1.17 DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
                     </Button>
-                    <Button x:Name="downloadButtonlatest" BorderThickness="2" Tag="1.19.63" Cursor="Hand" Margin="338,126,701,278" Click="DownloadButtonLatite_Click">
+                    <Button x:Name="downloadButtonlatest" BorderThickness="2" Tag="1.19.63" VerticalAlignment="Top" Cursor="Hand" Margin="290,297,744,0" Click="DownloadButtonLatite_Click" Height="32">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -907,7 +841,7 @@
                         </Button.Style>
                         <TextBlock Text="Latest DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
                     </Button>
-                    <CheckBox x:Name="Checkbox" Content="Launch after downloading" Foreground="AliceBlue" Margin="884,9,52,405"/>
+                    <CheckBox x:Name="Checkbox" Content="Launch after downloading" Opacity="0.7"  Foreground="AliceBlue" Margin="379,519,557,137"/>
                     <Label
             Content="Disclaimer: Those companies are not in any way related to StarZ Launcher. Only the Discord links are distributed!"
             FontSize="10px"
@@ -915,88 +849,59 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="505,245,0,0"
+            Margin="545,640,0,0"
             VerticalAlignment="Top"/>
+                    <Label
+                        Content="Currently Installed"
+                        FontSize="20px"
+                        Opacity="0.7"
+                        Foreground="AliceBlue"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Left"
+                        Margin="584,122,0,0"
+                        VerticalAlignment="Top"/>
+                    <Label
+                        Content="Select a file to edit it"
+                        FontSize="10px"
+                        Opacity="0.7"
+                        Foreground="AliceBlue"
+                        HorizontalAlignment="Left"
+                        Margin="586,152,0,0"
+                        VerticalAlignment="Top"/>
+                    <Label
+                        Content="Featured Clients"
+                        FontSize="20px"
+                        Opacity="0.7"
+                        Foreground="AliceBlue"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Left"
+                        Margin="36,122,0,0"
+                        VerticalAlignment="Top"/>
+                    <Rectangle Fill="#111111" Height="72" Width="520" Opacity="0.2" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,172,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
+                    <Rectangle Fill="#111111" Height="72" Width="520" Opacity="0.2" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,355,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
                 </Grid>
             </TabItem>
-            <TabItem Margin="77,364,-80,-379">
-                <TabItem.Header>
-                    <Grid Cursor="Hand">
-                        <Image
-            x:Name="ScriptButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="38"
-            VerticalAlignment="Center"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Width="38"
-            Source="/Images/Script.png"
-            Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5" Margin="4,0,0,0">
-                            <Image.RenderTransform>
-                                <ScaleTransform x:Name="ImageTransform3" />
-                            </Image.RenderTransform>
-                            <Image.Triggers>
-                                <EventTrigger RoutedEvent="Image.MouseEnter">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform3"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform3"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ScriptButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="Image.MouseLeave">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform3"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform3"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ScriptButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Image.Triggers>
-                        </Image>
-                        <Label
-                Content="Scripts / Mods"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                Opacity="0.8"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="42,0,0,0"
-                VerticalAlignment="Center" Width="79" Height="24"/>
-                    </Grid>
-                </TabItem.Header>
-                <Grid Height="407" x:Name="ScriptTab" HorizontalAlignment="Center" VerticalAlignment="Center" Width="1096">
+            <TabItem Header="Mods Manager" Margin="421,72,-421,-75">
+                <Grid Margin="10,0,0,0" x:Name="ModsManager" Opacity="0.5">
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="ModsManager"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0.5" To="1" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                    <Rectangle Fill="#111111" Height="86" Width="479" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="575,365,0,0"/>
+                    <Rectangle Fill="#111111" Height="86" Width="479" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="575,187,0,0"/>
+                    <Rectangle Fill="AliceBlue" Height="2" Width="1038" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,599,0,0"/>
+                    <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
                     <Border x:Name="DragZone" HorizontalAlignment="Left"
-                Height="277" Width="479" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
+                Height="392" Width="492" Opacity="0.25" Background="#111111" BorderBrush="AliceBlue"
                 BorderThickness="0.5" VerticalAlignment="Top"
-                CornerRadius="20,20,20,20" Margin="41,0,0,0" Panel.ZIndex="2">
+                CornerRadius="20,20,20,20" Margin="26,138,0,0" Panel.ZIndex="2">
                     </Border>
                     <Button 
                 Height="26" 
@@ -1011,7 +916,7 @@
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="330,240,0,0"
+                Margin="328,493,0,0"
                 Click="TexturePackButton_OnLeftClick" Width="115"/>
                     <Button 
                 Height="26"
@@ -1026,7 +931,7 @@
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="450,240,0,0"
+                Margin="448,493,0,0"
                 Click="GetScriptsButton_OnLeftClick" Width="61"/>
                     <Button 
                 Height="26"
@@ -1041,8 +946,8 @@
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="734,58,0,0"
-                Click="Persona_Click" Width="61"/>
+                Margin="978,217,0,0"
+                Click="Persona_Click" Width="60"/>
                     <Button 
                 Height="26"
             Panel.ZIndex="3"
@@ -1056,7 +961,7 @@
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="729,113,0,0"
+                Margin="911,395,0,0"
                 Click="ShaderInstall_Click" Width="61"/>
                     <Button 
                 Height="26"
@@ -1071,12 +976,12 @@
                 FontFamily="Segoe UI" 
                 Template="{StaticResource Buttons}" 
                 VerticalAlignment="Top"
-                Margin="795,113,0,0"
+                Margin="977,395,0,0"
                 Click="ShaderRemove_Click" Width="61"/>
                     <Border x:Name="ShaderBackground" HorizontalAlignment="Left"
-            Height="277" Width="479" Opacity="0.25" Background="Black" BorderBrush="#55AAFF"
+            Height="392" Width="479" Opacity="0.2" Background="#111111" BorderBrush="AliceBlue"
             BorderThickness="0.5" VerticalAlignment="Top"
-            CornerRadius="20,20,20,20" Margin="576,0,0,0">
+            CornerRadius="20,20,20,20" Margin="575,138,0,0">
                         <!-- Add any content you want here -->
                     </Border>
                     <Label
@@ -1086,7 +991,7 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="743,10,0,0"
+            Margin="589,144,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="Custom Personas"
@@ -1095,7 +1000,16 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="598,54,0,0"
+            Margin="589,212,0,0"
+            VerticalAlignment="Top"/>
+                    <Label
+            Content="Coming Soon..."
+            FontSize="15px"
+            Opacity="0.5"
+            Foreground="AliceBlue"
+            FontWeight="Bold"
+            HorizontalAlignment="Left"
+            Margin="589,299,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="Shaders Installer"
@@ -1104,7 +1018,7 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="598,109,0,0"
+            Margin="589,393,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="You need to have StarZ X Minecraft installed!"
@@ -1113,7 +1027,7 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="816,253,0,0"
+            Margin="822,503,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="Drag &amp; Drop"
@@ -1122,7 +1036,7 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="215,51,0,0"
+            Margin="206,233,0,0"
             VerticalAlignment="Top"/>
                     <Label
             Content="Supports: LUA, MCPACK, ZIP"
@@ -1131,7 +1045,7 @@
             Foreground="AliceBlue"
             FontWeight="Bold"
             HorizontalAlignment="Left"
-            Margin="208,189,0,0"
+            Margin="199,371,0,0"
             VerticalAlignment="Top"/>
                     <Image
             x:Name="DragnDropIcon"
@@ -1140,383 +1054,17 @@
             Opacity="1"
             RenderOptions.BitmapScalingMode="HighQuality"
             Height="101"
-            Margin="230,88,0,0"
+            Margin="222,270,0,0"
             VerticalAlignment="Top"
-            Width="103"
+            Width="102"
             Source="/Images/DragnDrop.png"/>
                 </Grid>
-                <TabItem.Triggers>
-                    <EventTrigger RoutedEvent="Selector.Selected">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation From="973" To="407" Duration="0:0:0.8" Storyboard.TargetName="ScriptTab" Storyboard.TargetProperty="Height"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </TabItem.Triggers>
             </TabItem>
-            <TabItem Margin="87,364,-108,-379">
-                <TabItem.Header>
-                    <Grid Cursor="Hand">
-                        <Image
-            x:Name="AboutButton"
-            HorizontalAlignment="Left"
-            Opacity="0.8"
-            Height="38"
-            VerticalAlignment="Center"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Width="38"
-            Source="/Images/About.png"
-            Cursor="Hand"
-                   RenderTransformOrigin="0.5, 0.5" Margin="24,0,0,0">
-                            <Image.RenderTransform>
-                                <ScaleTransform x:Name="ImageTransform6" />
-                            </Image.RenderTransform>
-                            <Image.Triggers>
-                                <EventTrigger RoutedEvent="Image.MouseEnter">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="AboutButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                                <EventTrigger RoutedEvent="Image.MouseLeave">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform6"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                                            <DoubleAnimation
-                        Storyboard.TargetName="AboutButton"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Image.Triggers>
-                        </Image>
-                        <Label
-                Content="About"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                Opacity="0.8"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="62,0,0,0"
-                VerticalAlignment="Center" Height="22" Width="40"/>
-                    </Grid>
-                </TabItem.Header>
-                <Grid Height="403" x:Name="AboutTab" VerticalAlignment="Center" HorizontalAlignment="Center" Width="1096">
-                    <Border x:Name="AdminsBackground" HorizontalAlignment="Left"
-                Height="278" Width="320" Opacity="0.1" BorderBrush="#55AAFF"
-                BorderThickness="0" VerticalAlignment="Top"
-                CornerRadius="20,20,20,20" Margin="26,0,0,0" Background="Black">
-                        <!-- Add any content you want here -->
-                    </Border>
-                    <Label
-                Content="StarZ Admins"
-                FontSize="25px"
-                Foreground="AliceBlue"
-                FontWeight="Bold"
-                HorizontalAlignment="Left"
-                Margin="38,0,0,0"
-                VerticalAlignment="Top"/>
-                    <Label
-            Content="ignYoqzii - Owner / Developper"
-            FontSize="10px"
-            Foreground="AliceBlue"
-            FontWeight="Bold"
-            HorizontalAlignment="Left"
-            Margin="40,48,0,0"
-            VerticalAlignment="Top"/>
-                    <Label
-            Content="zL1me - Co-Owner / Streamer"
-            FontSize="10px"
-            Foreground="AliceBlue"
-            FontWeight="Bold"
-            HorizontalAlignment="Left"
-            Margin="40,71,0,0"
-            VerticalAlignment="Top"/>
-                    <Label
-            Content="OliiR - Co-Owner / Moderator"
-            FontSize="10px"
-            Foreground="AliceBlue"
-            FontWeight="Bold"
-            HorizontalAlignment="Left"
-            Margin="40,94,0,0"
-            VerticalAlignment="Top"/>
+            <TabItem Header="Skins Manager" Margin="451,72,-451,-75">
+                <Grid>
+                    <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
                 </Grid>
-                <TabItem.Triggers>
-                    <EventTrigger RoutedEvent="Selector.Selected">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation From="1805" To="1096" Duration="0:0:0.8" Storyboard.TargetName="AboutTab" Storyboard.TargetProperty="Width"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </TabItem.Triggers>
             </TabItem>
         </TabControl>
-        <Image
-                x:Name="YouTubeIcon"
-                Opacity="0.8"
-                Height="40"
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Source="/Images/YouTube Icon.png"
-                Cursor="Hand"
-                MouseLeftButtonDown="YouTubeIcon_MouseLeftButtonDown"
-                RenderTransformOrigin="0.5, 0.5" Margin="1012,440,26,170">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform1" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform1"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform1"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="YouTubeIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="UIElement.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform1"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform1"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="YouTubeIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
-        <Image
-            x:Name="DiscordIcon"
-            Opacity="0.8"
-            Height="29"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Width="35"
-            Source="/Images/Discord Icon.png"
-            Cursor="Hand"
-            MouseLeftButtonDown="DiscordIcon_MouseLeftButtonDown"
-                   RenderTransformOrigin="0.5, 0.5" Margin="881,446,184,175">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform7" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform7"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform7"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="DiscordIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="UIElement.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform7"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform7"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="DiscordIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
-        <Image
-                x:Name="GithubIcon"
-                Opacity="0.8"
-                Height="34"
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Width="38"
-                Source="/Images/Github.png"
-                Cursor="Hand"
-                MouseLeftButtonDown="GithubIcon_MouseLeftButtonDown"
-                RenderTransformOrigin="0.5, 0.5" Margin="806,443,256,173">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform13" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform13"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform13"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="GithubIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="UIElement.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform13"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform13"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="GithubIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
-        <Image
-            x:Name="TwitchIcon"
-            Opacity="0.8"
-            Height="32"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Width="46"
-            Source="/Images/Twitch.png"
-            Cursor="Hand"
-            MouseLeftButtonDown="TwitchIcon_MouseLeftButtonDown"
-                   RenderTransformOrigin="0.5, 0.5" Margin="948,444,106,174">
-            <Image.RenderTransform>
-                <ScaleTransform x:Name="ImageTransform10" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="UIElement.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform10"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform10"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1.05"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="TwitchIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger RoutedEvent="UIElement.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform10"
-                        Storyboard.TargetProperty="ScaleX"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="ImageTransform10"
-                        Storyboard.TargetProperty="ScaleY"
-                        To="1"
-                        Duration="0:0:0.2"/>
-                            <DoubleAnimation
-                        Storyboard.TargetName="TwitchIcon"
-                        Storyboard.TargetProperty="Opacity"
-                        To="0.8"
-                        Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
-        <Label
-                Content=""
-                x:Name="statusLabel"
-                FontSize="10px"
-                Foreground="AliceBlue"
-                Opacity="0.8"
-                FontWeight="Bold"
-                Margin="29,624,764,-3" Width="307"/>
     </Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -31,13 +32,97 @@ public partial class MainWindow
     private readonly string resourcePacksFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\";
     private const string LatestVersionUrl = "https://raw.githubusercontent.com/Imrglop/Latite-Releases/main/latest_version.txt";
     private const string DownloadBaseUrl = "https://github.com/Imrglop/Latite-Releases/releases/download/{0}/Latite.{1}.dll";
-
+    private const string DLL_FOLDER = @"StarZ Launcher\DLLs";
+    private ObservableCollection<string> _dlls = new ObservableCollection<string>();
 
     public MainWindow()
     {
         InitializeComponent();
         SettingsWindow.Closing += OnClosing;
         InitializeDragDrop();
+        LoadDlls();
+        DllList.ItemsSource = _dlls;
+    }
+
+    private void TogglePanels_Click(object sender, RoutedEventArgs e)
+    {
+        if (PanelB.Visibility == Visibility.Visible)
+        {
+            PanelA.Visibility = Visibility.Visible;
+            PanelB.Visibility = Visibility.Collapsed;
+        }
+        else if (PanelA.Visibility == Visibility.Visible && PanelB.Visibility == Visibility.Collapsed)
+        {
+            PanelA.Visibility = Visibility.Collapsed;
+            PanelB.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            PanelA.Visibility = Visibility.Visible;
+            PanelB.Visibility = Visibility.Collapsed;
+        }
+    }
+
+    private void LoadDlls()
+    {
+        string dllFolderPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            DLL_FOLDER);
+
+        if (Directory.Exists(dllFolderPath))
+        {
+            string[] dllFiles = Directory.GetFiles(dllFolderPath, "*.dll");
+            foreach (string dllFile in dllFiles)
+            {
+                _dlls.Add(Path.GetFileName(dllFile));
+            }
+        }
+    }
+
+    private void EditButton_Click(object sender, RoutedEventArgs e)
+    {
+        string selectedDll = (string)DllList.SelectedItem;
+        if (selectedDll != null)
+        {
+            RenameWindow renameWindow = new RenameWindow(selectedDll);
+            bool? result = renameWindow.ShowDialog();
+            if (result == true)
+            {
+                string currentName = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    DLL_FOLDER,
+                    selectedDll);
+                string newName = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    DLL_FOLDER,
+                    renameWindow.NewName);
+
+                File.Move(currentName, newName);
+
+                int selectedIndex = DllList.SelectedIndex;
+                _dlls[selectedIndex] = renameWindow.NewName;
+            }
+        }
+    }
+
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+        string selectedDll = (string)DllList.SelectedItem;
+        if (selectedDll != null)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this DLL?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                string filePath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    DLL_FOLDER,
+                    selectedDll);
+                File.Delete(filePath);
+
+                _dlls.Remove(selectedDll);
+            }
+        }
     }
 
     private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -136,16 +221,6 @@ public partial class MainWindow
         else
             DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's settings");
     }
-
-    private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/ScR9MGbRSY");
-
-    private void YouTubeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.youtube.com/channel/UCbN3FxySrPSeUMVe5ISraWw");
-
-    private void GithubIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://github.com/ignYoqzii/StarZLauncher");
-
-    private void TwitchIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.twitch.tv/zl1me");
-
-    private void ShowMoreButton_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs");
 
     private bool isFirstTimeOpened = true;
 

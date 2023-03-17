@@ -60,33 +60,33 @@
         </ControlTemplate>
     </Window.Resources>
     <Grid>
-        <Image x:Name="BackgroundImage" Source="/Images/Background.png" Width="1100" Height="650" Stretch="UniformToFill">
+        <Image x:Name ="BackgroundImage" Source="/Images/AlternateImage.png" Width="1100" Height="650" Stretch="UniformToFill" Panel.ZIndex="0">
             <Image.Clip>
                 <RectangleGeometry Rect="0, 0, 1100, 650" RadiusX="20" RadiusY="20"/>
             </Image.Clip>
         </Image>
-        <Border x:Name="WindowToolbar_Copy" HorizontalAlignment="Left"
-            Height="65" Width="1019" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
-            BorderThickness="0.2" VerticalAlignment="Top"
-            CornerRadius="20,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
-            <!-- Add any content you want here -->
-        </Border>
-        <Border x:Name="WindowToolbar_Copy3" HorizontalAlignment="Left"
-            Height="65" Width="81" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
-            BorderThickness="0.2" VerticalAlignment="Top"
-            CornerRadius="0,20,0,0" Margin="1019,0,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown">
+        <Border x:Name="WindowToolbar_Copy" HorizontalAlignment="Left" Panel.ZIndex="3"
+        Height="78" Width="974" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
+        BorderThickness="0.2" VerticalAlignment="Top"
+        CornerRadius="20,0,0,0">
             <!-- Add any content you want here -->
         </Border>
         <Border x:Name="WindowToolbar_Copy1" HorizontalAlignment="Center"
-            Height="140" Width="1100" Opacity="0.8" Background="#111111" BorderBrush="#55AAFF"
-            BorderThickness="0.5" VerticalAlignment="Top"
-            CornerRadius="0,0,20,20" Margin="0,510,0,0">
+                Height="572" Width="1100" Opacity="0.7"
+                BorderThickness="0.5" VerticalAlignment="Top"
+                CornerRadius="0,0,20,20" Margin="0,78,0,0" Background="Black">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,2">
+                    <GradientStop Color="AliceBlue" Offset="0.317"/>
+                    <GradientStop Color="#111111" Offset="0.843"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
             <!-- Add any content you want here -->
         </Border>
-        <Border x:Name="WindowToolbar_Copy4" HorizontalAlignment="Center"
-            Height="366" Width="1032" Opacity="0.4" Background="Black" BorderBrush="#55AAFF"
-            BorderThickness="0.5" VerticalAlignment="Top"
-            CornerRadius="20,20,20,20" Margin="0,106,0,0">
+        <Border x:Name="WindowToolbar_Copy3" HorizontalAlignment="Left" Panel.ZIndex="3"
+                Height="78" Width="126" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
+                BorderThickness="0.2" VerticalAlignment="Top"
+                CornerRadius="0,20,0,0" Margin="974,0,0,0">
             <!-- Add any content you want here -->
         </Border>
         <Label
@@ -99,27 +99,29 @@
             VerticalAlignment="Top"/>
         <Image
             x:Name="StarZIcon"
+            Panel.ZIndex="3"
             HorizontalAlignment="Left"
-            Height="38"
             RenderOptions.BitmapScalingMode="HighQuality"
+            Height="38"
             VerticalAlignment="Top"
-            Width="44"
-            Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="22,12,0,0"/>
+            Width="39"
+            Source="/Images/starz.png" RenderTransformOrigin="0.5,0.5" Margin="29,20,0,0"/>
         <Image
-            Panel.ZIndex="0"
+            Panel.ZIndex="3"
             x:Name="StarZText"
             HorizontalAlignment="Left"
-            Height="28"
             RenderOptions.BitmapScalingMode="HighQuality"
+            Height="19"
             VerticalAlignment="Top"
-            Width="213"
-            Source="/Images/starztext.png" Margin="76,17,0,0"/>
+            Width="132"
+            Source="/Images/starztext.png" Margin="81,32,0,0"/>
         <Image
             x:Name="CloseButton"
             HorizontalAlignment="Left"
             Opacity="0.8"
+            Panel.ZIndex="3"
             Height="34"
-            Margin="1044,16,0,0"
+            Margin="1020,22,0,0"
             VerticalAlignment="Top"
             RenderOptions.BitmapScalingMode="HighQuality"
             Width="34"
@@ -180,6 +182,7 @@
             FontSize="50px"
             Foreground="AliceBlue"
             FontWeight="Bold"
+            Opacity="0.7"
             HorizontalAlignment="Left"
             Margin="866,542,0,0"
             VerticalAlignment="Top"/>
