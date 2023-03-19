@@ -150,7 +150,7 @@ public partial class MainWindow
         }
     }
 
-    private void EditButton_Click(object sender, RoutedEventArgs e)
+    private void Edit_MouseLeftButtonDown(object sender, RoutedEventArgs e)
     {
         string selectedDll = (string)DllList.SelectedItem;
         if (selectedDll != null)
@@ -176,7 +176,7 @@ public partial class MainWindow
         }
     }
 
-    private void DeleteButton_Click(object sender, RoutedEventArgs e)
+    private void Delete_MouseLeftButtonDown(object sender, RoutedEventArgs e)
     {
         string selectedDll = (string)DllList.SelectedItem;
         if (selectedDll != null)

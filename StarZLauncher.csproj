@@ -36,6 +36,8 @@
 		<None Remove="Images/OliiR.jpg" />
 		<None Remove="Images/Change.png" />
 		<None Remove="Images/StarZLauncher.png" />
+		<None Remove="Images/Delete.png" />
+		<None Remove="Images/Edit.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -68,6 +70,8 @@
 		<Resource Include="Images/OliiR.jpg" />
 		<Resource Include="Images/Change.png" />
 		<Resource Include="Images/StarZLauncher.png" />
+		<Resource Include="Images/Delete.png" />
+		<Resource Include="Images/Edit.png" />
     </ItemGroup>
 
     <ItemGroup>
