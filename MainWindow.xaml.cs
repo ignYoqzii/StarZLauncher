@@ -23,8 +23,9 @@ public partial class MainWindow
 {
     public static Process? Minecraft;
     private bool isRunning = false;
-    public static readonly MinecraftVersionInfo minecraftVersionInfo = new MinecraftVersionInfo();
-    string versionNumber = minecraftVersionInfo.VersionNumber;
+    public static readonly VersionInfo versionInfo = new();
+    readonly string versionNumber = versionInfo.VersionNumber;
+    readonly string launcherVersion = versionInfo.LauncherVersion;
     private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
@@ -33,7 +34,7 @@ public partial class MainWindow
     private const string LatestVersionUrl = "https://raw.githubusercontent.com/Imrglop/Latite-Releases/main/latest_version.txt";
     private const string DownloadBaseUrl = "https://github.com/Imrglop/Latite-Releases/releases/download/{0}/Latite.{1}.dll";
     private const string DLL_FOLDER = @"StarZ Launcher\DLLs";
-    private ObservableCollection<string> _dlls = new ObservableCollection<string>();
+    private readonly ObservableCollection<string> _dlls = new();
 
     public MainWindow()
     {
@@ -42,8 +43,78 @@ public partial class MainWindow
         InitializeDragDrop();
         LoadDlls();
         DllList.ItemsSource = _dlls;
+        LoadCurrentVersion(); 
     }
 
+    private void LoadCurrentVersion()
+    {
+        if (versionInfo.filePath != null)
+        {
+            CurrentVersion.Content = $"Current Version: {versionNumber}";
+            LabelVersion.Content = $"{launcherVersion}";
+        }
+        else
+        {
+            CurrentVersion.Content = "Current Version: Error";
+            LabelVersion.Content = "Error";
+        }
+    }
+
+    private bool isFirstTimeOpened = true;
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (isFirstTimeOpened)
+        {
+            DoubleAnimation animation = new(0, 1, new Duration(TimeSpan.FromSeconds(1)))
+            {
+                EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
+            };
+            this.BeginAnimation(Window.OpacityProperty, animation);
+
+            // Wait for 3 seconds before setting the visibility of the grid to Hidden
+            await Task.Delay(2000);
+
+            DoubleAnimation opacityAnimation = new DoubleAnimation
+            {
+                From = 1,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(0.5)),
+            };
+            OpeningAnim.BeginAnimation(Image.OpacityProperty, opacityAnimation);
+
+            await Task.Delay(500);
+            // Handle the Completed event to hide the grid when the opacity animation is finished
+            OpeningAnim.Visibility = Visibility.Collapsed;
+
+            isFirstTimeOpened = false;
+        }
+        SetBackgroundImage();
+    }
+
+    private void LauncherFolder_Click(object sender, RoutedEventArgs e)
+    {
+        string LauncherFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher";
+
+        if (Directory.Exists(LauncherFolderPath))
+        {
+            Process.Start(LauncherFolderPath);
+        }
+        else
+        {
+            MessageBox.Show("Error while opening a folder ; restart the application");
+        }
+    }
+
+    private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/ScR9MGbRSY");
+
+    private void YouTubeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.youtube.com/channel/UCbN3FxySrPSeUMVe5ISraWw");
+
+    private void GithubIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://github.com/ignYoqzii/StarZLauncher");
+
+    private void TwitchIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.twitch.tv/zl1me");
+
+    //Needs some work
     private void TogglePanels_Click(object sender, RoutedEventArgs e)
     {
         if (PanelB.Visibility == Visibility.Visible)
@@ -222,10 +293,6 @@ public partial class MainWindow
             DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's settings");
     }
 
-    private bool isFirstTimeOpened = true;
-
-    //Window animation everytime it is shown
-
     public void SetBackgroundImage()
     {
         // Get file path
@@ -248,21 +315,6 @@ public partial class MainWindow
                 BackgroundImage.Source = image;
             }
         }
-    }
-
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-        if (isFirstTimeOpened)
-        {
-            DoubleAnimation animation = new(0, 1, new Duration(TimeSpan.FromSeconds(2)))
-            {
-                EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
-            };
-            this.BeginAnimation(Window.OpacityProperty, animation);
-
-            isFirstTimeOpened = false;
-        }
-        SetBackgroundImage();
     }
 
     private readonly Dictionary<Button, string> downloads = new();

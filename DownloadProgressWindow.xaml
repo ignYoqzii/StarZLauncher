@@ -81,7 +81,7 @@
                 VerticalAlignment="Top"
                 Margin="229,70,10,0"/>
         <Border x:Name="WindowToolbar_Copy4" Panel.ZIndex="-1" HorizontalAlignment="Center"
-            Height="100" Width="300" Opacity="1" Background="#111111" BorderBrush="#55AAFF"
+            Height="100" Width="300" Opacity="1" Background="#111111" BorderBrush="AliceBlue"
             BorderThickness="0.5" VerticalAlignment="Center"
             CornerRadius="20,20,20,20">
             <!-- Add any content you want here -->

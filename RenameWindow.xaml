@@ -7,9 +7,10 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStyle="None"
+        ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
-        Title="StarZ Launcher Settings"
-        Height="250"
+        Title="Rename"
+        Height="125"
         Width="200"
         AllowsTransparency="True"
         Background="Transparent">
@@ -62,14 +63,15 @@
 
     <Grid>
 
-        <StackPanel Orientation="Vertical" Margin="10">
+        <StackPanel Orientation="Vertical" Margin="10,10,10,1">
             <TextBlock Text="Current name:" Foreground="AliceBlue"/>
             <TextBlock Text="{Binding CurrentName}" Foreground="AliceBlue"/>
             <TextBlock Text="New name:" Foreground="AliceBlue"/>
             <TextBox x:Name="NewNameTextBox"/>
         </StackPanel>
-        <Rectangle Panel.ZIndex="-1" RadiusX="20" RadiusY="20" Fill="#111111" Opacity="0.7"/>
-        <Button Content="Cancel" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" Click="CancelButton_Click" Height="25" Width="50" Margin="90,88,60,136"/>
-        <Button Content="Save" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" IsDefault="True" Click="SaveButton_Click" Width="45" Margin="145,88,10,136"/>
+        <Rectangle Panel.ZIndex="-1" RadiusX="20" RadiusY="20" Fill="#111111" Opacity="1" Stroke="AliceBlue" Margin="0,0,0,1" RenderTransformOrigin="0.5,0.5">
+        </Rectangle>
+        <Button Content="Cancel" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" Click="CancelButton_Click" Height="25" Width="50" Margin="90,88,60,12"/>
+        <Button Content="Save" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" IsDefault="True" Click="SaveButton_Click" Width="45" Margin="145,88,10,12"/>
     </Grid>
 </Window>

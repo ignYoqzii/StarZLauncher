@@ -61,6 +61,30 @@
     <!-- endregion -->
 
     <Grid>
+        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Collapsed">
+            <Border Background="#111111" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="0.5"/>
+            <Image x:Name="OpeningLogo" Source="Images/starz.png" Margin="479,254,479,254" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Border Background="White" CornerRadius="2" BorderThickness="1" Margin="496,394,496,252">
+                <ProgressBar Minimum="0" Maximum="1" Value="0" Background="Transparent" BorderThickness="0">
+                    <ProgressBar.Foreground>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF00BCFB"/>
+                            <GradientStop Color="#FF003E5D" Offset="0.403"/>
+                            <GradientStop Color="#FF00151F" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ProgressBar.Foreground>
+                    <ProgressBar.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="Value" From="0" To="1" Duration="0:0:2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ProgressBar.Triggers>
+                </ProgressBar>
+            </Border>
+        </Grid>
         <Grid ClipToBounds="True">
             <Rectangle x:Name="WindowToolbar" HorizontalAlignment="Center"
         RadiusX="20" RadiusY="20" Height="650" Width="1100" Opacity="0.8"
@@ -340,7 +364,7 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Main Menu" Margin="358,72,-362,-75">
+            <TabItem Header="Main Menu" Margin="362,72,-366,-75">
                 <Grid Height="671" x:Name="MainMenu" Opacity="0.5">
                     <Grid.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
@@ -353,6 +377,7 @@
                             </BeginStoryboard>
                         </EventTrigger>
                     </Grid.Triggers>
+                    <Label x:Name="CurrentVersion" Content="" Foreground="AliceBlue" Margin="782,519,119,128" FontSize="12" HorizontalContentAlignment="Left"  FontWeight="Light"/>
                     <Button
                         Height="58" 
                         x:Name="LaunchButton" 
@@ -401,19 +426,17 @@
         Opacity="0" Height="13" VerticalAlignment="Top" />
                     </Grid>
                     <Grid x:Name="PanelA" Margin="26,128,337,128" Panel.ZIndex="4">
-                        <Image Source="Images/Yoqzii.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="128,136,532,208" />
-                        <Image Source="Images/OliiR.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="329,136,330,208" />
-                        <Image Source="Images/L1me.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="530,136,130,208" />
-                        <Label Content="StarZ Admins" FontSize="30px" FontFamily="Inter" Foreground="AliceBlue" Opacity="0.7" Margin="262,10,263,349"/>
-                        <Label Content="ignYoqzii#8974" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="86,231,490,145"/>
-                        <Label Content="zL1me#6995" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="502,231,101,145"/>
-                        <Label Content="OliiR#5677" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="308,231,309,145"/>
+                        <Label Content="LATEST UPDATES" FontSize="30px" Foreground="AliceBlue" Opacity="0.7" Margin="242,5,243,354"/>
+                        <Label Content="- Bug Fixes" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,83,573,293"/>
+                        <Label Content="- New Design" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,157,541,219"/>
+                        <Label Content="- New Features" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,231,541,145"/>
+                        <Label Content="Last updated: 2023-03-18" FontSize="10px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="570,278,23,113"/>
                         <Rectangle Fill="Gray" Height="89" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,326,0,0" RadiusX="10" RadiusY="10"/>
                         <Rectangle Fill="Transparent" Stroke="AliceBlue" StrokeThickness="1" Height="415" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="10" RadiusY="10"/>
                         <Rectangle Fill="AliceBlue" Height="2" Width="684" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,370,0,0" />
+                        <Rectangle Fill="Gray" Opacity="0.05" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="236" Width="684" Margin="0,66,0,0"/>
                     </Grid>
                     <Grid x:Name="PanelB" Margin="26,128,337,128" Panel.ZIndex="5" Visibility="Collapsed">
-                        <Label Content="Latest Updates" Foreground="AliceBlue" Opacity="0.7" FontSize="30px" Margin="254,10,254,352"/>
                     </Grid>
                     <Image Panel.ZIndex="4" Cursor="Hand" Opacity="0.7" Source="Images/Change.png" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TogglePanels_Click" Margin="728,135,343,513" />
                     <Rectangle Fill="#111111" Height="415" Width="296" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="779,0,0,0" RadiusX="10" RadiusY="10" Stroke="AliceBlue" StrokeThickness="0.5"/>
@@ -536,7 +559,7 @@
             Foreground="AliceBlue"
             FontWeight="Light"
             HorizontalAlignment="Left"
-            Margin="899,554,0,0"
+            Margin="899,559,0,0"
             VerticalAlignment="Top" Width="195"/>
                     <Image
         x:Name="DownloadButton"
@@ -619,7 +642,7 @@
                     </Image>
                 </Grid>
             </TabItem>
-            <TabItem Header="DLLs Clients" Margin="390,72,-390,-75">
+            <TabItem Header="DLLs Clients" Margin="398,72,-398,-75">
                 <Grid x:Name="DLLsClients" Opacity="0.5">
                     <Grid.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
@@ -875,13 +898,13 @@
                         Foreground="AliceBlue"
                         FontWeight="Bold"
                         HorizontalAlignment="Left"
-                        Margin="36,122,0,0"
+                        Margin="36,129,0,0"
                         VerticalAlignment="Top"/>
                     <Rectangle Fill="#111111" Height="72" Width="520" Opacity="0.2" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,172,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
                     <Rectangle Fill="#111111" Height="72" Width="520" Opacity="0.2" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,355,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Mods Manager" Margin="421,72,-421,-75">
+            <TabItem Header="Mods Manager" Margin="432,72,-432,-75">
                 <Grid Margin="10,0,0,0" x:Name="ModsManager" Opacity="0.5">
                     <Grid.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
@@ -1060,9 +1083,266 @@
             Source="/Images/DragnDrop.png"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Skins Manager" Margin="451,72,-451,-75">
-                <Grid>
-                    <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
+            <TabItem Header="About Page" Margin="465,72,-466,-75">
+                <Grid x:Name="AboutPage">
+                    <Grid.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="AboutPage"
+                                     Storyboard.TargetProperty="Opacity"
+                                     From="0.5" To="1" Duration="0:0:1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Grid.Triggers>
+                    <Rectangle Fill="Transparent" Height="78" Width="1100" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
+                    <Rectangle Fill="#111111" Height="442" Width="1046" Opacity="0.2" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Margin="0,129,0,0"/>
+                    <Rectangle Fill="Gray" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="232" Width="255" Margin="71,245,0,0"/>
+                    <Rectangle Fill="Gray" Opacity="0.05" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="232" Width="254" Margin="0,245,0,0"/>
+                    <Rectangle Fill="Gray" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="232" Width="256" Margin="770,245,0,0"/>
+                    <Rectangle Fill="AliceBlue" Height="2" Width="1044" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,616,0,0"/>
+                    <Label Content="Launcher Informations" FontSize="30px" Foreground="AliceBlue" FontWeight="Bold" Margin="378,129,378,490" Panel.ZIndex="3" Opacity="0.5" HorizontalContentAlignment="Center"/>
+                    <Label Content="A Minecraft Bedrock Edition Launcher / Injector For DLLs Clients" FontSize="10px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="383,183,383,458" HorizontalContentAlignment="Center"/>
+                    <Label Content="About Us" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold" Margin="124,310,821,309" Panel.ZIndex="3" Opacity="0.5" HorizontalContentAlignment="Center"/>
+                    <Label Content="Launcher Version" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold" Margin="457,310,457,309" Panel.ZIndex="3" Opacity="0.5" HorizontalContentAlignment="Center"/>
+                    <Label x:Name="LabelVersion" Content="" FontSize="40px" Foreground="AliceBlue" FontWeight="Bold" Margin="457,334,457,285" Panel.ZIndex="3" Opacity="0.5" HorizontalContentAlignment="Center"/>
+                    <Label Content="Launcher Folder" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold" Margin="816,310,114,325" Panel.ZIndex="3" Opacity="0.5" HorizontalContentAlignment="Center"/>
+                    <Image Source="Images/Yoqzii.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="99,348,950,280" />
+                    <Image Source="Images/OliiR.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="176,348,872,280" />
+                    <Image Source="Images/L1me.jpg" RenderOptions.BitmapScalingMode="HighQuality" Margin="252,348,794,280" />
+                    <Label Content="ignYoqzii#8974" FontSize="8px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="78,398,929,252" HorizontalContentAlignment="Center"/>
+                    <Label Content="zL1me#6995" FontSize="8px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="240,398,782,251" HorizontalContentAlignment="Center"/>
+                    <Label Content="OliiR#5677" FontSize="8px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="168,398,864,252" HorizontalContentAlignment="Center"/>
+                    <Button Content="Open" FontSize="15" Cursor="Hand" Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" IsDefault="True" Click="LauncherFolder_Click" Margin="850,356,148,285"/>
+                    <Image
+                x:Name="YouTubeIcon"
+                Opacity="0.8"
+                Height="40"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="/Images/YouTube Icon.png"
+                Cursor="Hand"
+                MouseLeftButtonDown="YouTubeIcon_MouseLeftButtonDown"
+                RenderTransformOrigin="0.5, 0.5" Margin="618,523,420,110">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform1" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform1"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform1"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="YouTubeIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform1"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform1"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="YouTubeIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Image
+            x:Name="DiscordIcon"
+            Opacity="0.8"
+            Height="29"
+            RenderOptions.BitmapScalingMode="HighQuality"
+            Source="/Images/Discord Icon.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="DiscordIcon_MouseLeftButtonDown"
+                   RenderTransformOrigin="0.5, 0.5" Margin="549,529,501,115">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform7" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform7"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform7"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="DiscordIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform7"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform7"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="DiscordIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Image
+                x:Name="GithubIcon"
+                Opacity="0.8"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="/Images/Github.png"
+                Cursor="Hand"
+                MouseLeftButtonDown="GithubIcon_MouseLeftButtonDown"
+                RenderTransformOrigin="0.5, 0.5" Margin="480,524,570,110">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform13" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform13"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform13"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="GithubIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform13"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform13"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="GithubIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Image
+            x:Name="TwitchIcon"
+            Opacity="0.8"
+            Height="32"
+            RenderOptions.BitmapScalingMode="HighQuality"
+            Width="46"
+            Source="/Images/Twitch.png"
+            Cursor="Hand"
+            MouseLeftButtonDown="TwitchIcon_MouseLeftButtonDown"
+                   RenderTransformOrigin="0.5, 0.5" Margin="413,527,635,114">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform10" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform10"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform10"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="TwitchIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform10"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform10"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="TwitchIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
                 </Grid>
             </TabItem>
         </TabControl>
