@@ -67,7 +67,7 @@
         </Image>
         <Border x:Name="WindowToolbar_Copy" HorizontalAlignment="Left" Panel.ZIndex="3"
         Height="78" Width="974" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
-        BorderThickness="0.2" VerticalAlignment="Top"
+        BorderThickness="0.2" VerticalAlignment="Top" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"
         CornerRadius="20,0,0,0">
             <!-- Add any content you want here -->
         </Border>
@@ -85,7 +85,7 @@
         </Border>
         <Border x:Name="WindowToolbar_Copy3" HorizontalAlignment="Left" Panel.ZIndex="3"
                 Height="78" Width="126" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
-                BorderThickness="0.2" VerticalAlignment="Top"
+                BorderThickness="0.2" VerticalAlignment="Top" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"
                 CornerRadius="0,20,0,0" Margin="974,0,0,0">
             <!-- Add any content you want here -->
         </Border>
