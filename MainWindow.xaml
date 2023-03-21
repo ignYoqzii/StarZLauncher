@@ -63,7 +63,7 @@
     <!-- endregion -->
 
     <Grid>
-        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Collapsed">
+        <Grid x:Name="OpeningAnim" Panel.ZIndex="10">
             <Border Background="#111111" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="0.5"/>
             <Image x:Name="OpeningLogo" Source="Images/starz.png" Margin="479,254,479,254" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Border Background="White" CornerRadius="2" BorderThickness="1" Margin="496,394,496,252">
