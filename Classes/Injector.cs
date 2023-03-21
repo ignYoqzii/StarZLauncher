@@ -79,7 +79,7 @@ namespace StarZLauncher.Classes
             });
             Application.Current.Dispatcher.Invoke(() =>
             {
-                string versionNumber = versionInfo.VersionNumber;
+                string? versionNumber = versionInfo.VersionNumber;
                 DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft {versionNumber}");
             });
         }
