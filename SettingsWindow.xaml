@@ -94,6 +94,7 @@
             FontSize="20px"
             Foreground="AliceBlue"
             FontWeight="Bold"
+            Opacity="0.7"
             HorizontalAlignment="Left"
             Margin="71,116,0,0"
             VerticalAlignment="Top"/>

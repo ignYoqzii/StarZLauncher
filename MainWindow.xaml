@@ -15,7 +15,9 @@
     <!-- region Control Templates & Styles -->
     <Window.Resources>
 
-        <ControlTemplate x:Key="Buttons" TargetType="Button">
+        <List x:Key="AllButtons"/>
+
+        <ControlTemplate x:Key="DefaultButtons" TargetType="Button">
             <Border Name="RootElement" RenderTransformOrigin="0.5,0.5">
                 <Border BorderBrush="AliceBlue" BorderThickness="0,0,0,0" CornerRadius="10">
                     <Border.Background>
@@ -61,7 +63,7 @@
     <!-- endregion -->
 
     <Grid>
-        <Grid x:Name="OpeningAnim" Panel.ZIndex="10">
+        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Collapsed">
             <Border Background="#111111" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="0.5"/>
             <Image x:Name="OpeningLogo" Source="Images/starz.png" Margin="479,254,479,254" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Border Background="White" CornerRadius="2" BorderThickness="1" Margin="496,394,496,252">
@@ -388,11 +390,12 @@
                         Cursor="Hand" 
                         Foreground="AliceBlue" 
                         FontFamily="Inter" 
-                        Template="{StaticResource Buttons}" 
+                        Template="{StaticResource DefaultButtons}"
                         VerticalAlignment="Top" Click="LaunchButton_OnLeftClick" 
                         MouseRightButtonDown="LaunchButton_OnRightClick" 
                         Margin="779,590,19,0">
                     </Button>
+                    <Label Content="Default DLL:" x:Name="DefaultDLLLabel" Foreground="AliceBlue" Opacity="1" HorizontalContentAlignment="Right" FontWeight="Light" Margin="884,564,14,77"/>
                     <Label
                 Content="Version Selector"
                 FontSize="20px"
@@ -438,7 +441,7 @@
                     </Grid>
                     <Grid x:Name="PanelB" Margin="26,128,337,128" Panel.ZIndex="5" Visibility="Collapsed">
                     </Grid>
-                    <Image Panel.ZIndex="4" Cursor="Hand" Opacity="0.7" Source="Images/Change.png" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TogglePanels_Click" Margin="728,135,343,513" />
+                    <Image Panel.ZIndex="4" Cursor="Hand" Opacity="0.7" Source="Images/Hide.png" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TogglePanels_Click" Margin="728,135,343,513" />
                     <Rectangle Fill="#111111" Height="415" Width="296" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="779,0,0,0" RadiusX="10" RadiusY="10" Stroke="AliceBlue" StrokeThickness="0.5"/>
                     <Rectangle Fill="#111111" Height="54" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,128,0,0" RadiusX="10" RadiusY="10"/>
                     <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,265,0,0"/>
@@ -456,7 +459,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -483,7 +486,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -510,7 +513,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -537,7 +540,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -555,12 +558,12 @@
                         <TextBlock Text="Download" Opacity="0.8" Foreground="AliceBlue" FontSize="15" FontWeight="Bold"/>
                     </Button>
                     <Label
-            Content="Right click to inject your client DLL"
+            Content="Right click to select a client DLL"
             Foreground="AliceBlue"
             FontWeight="Light"
             HorizontalAlignment="Left"
-            Margin="899,559,0,0"
-            VerticalAlignment="Top" Width="195"/>
+            Margin="913,543,0,0"
+            VerticalAlignment="Top" Width="171"/>
                     <Image
         x:Name="DownloadButton"
         HorizontalAlignment="Left"
@@ -798,6 +801,120 @@
                             </EventTrigger>
                         </Image.Triggers>
                     </Image>
+                    <Image
+                x:Name="DefaultDLLIcon"
+                Opacity="0.9"
+                Panel.ZIndex="1"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="/Images/SetDefaultDLL.png"
+                Cursor="Hand"
+                MouseLeftButtonDown="SetDefaultDLLButton_MouseLeftButtonDown"
+                RenderTransformOrigin="0.5, 0.5" Margin="963,128,105,520">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform3" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform3"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform3"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="DefaultDLLIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform3"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform3"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="DefaultDLLIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.9"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Image
+                x:Name="ResetDefaultDLLIcon"
+                Opacity="0.8"
+                Panel.ZIndex="1"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="/Images/Reset.png"
+                Cursor="Hand"
+                MouseLeftButtonDown="ResetSetDefaultDLLButton_MouseLeftButtonDown"
+                RenderTransformOrigin="0.5, 0.5" Margin="928,128,140,520">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="ImageTransform2" />
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform2"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform2"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1.05"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ResetDefaultDLLIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform2"
+                        Storyboard.TargetProperty="ScaleX"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ImageTransform2"
+                        Storyboard.TargetProperty="ScaleY"
+                        To="1"
+                        Duration="0:0:0.2"/>
+                                        <DoubleAnimation
+                        Storyboard.TargetName="ResetDefaultDLLIcon"
+                        Storyboard.TargetProperty="Opacity"
+                        To="0.8"
+                        Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
                     <Rectangle Fill="#111111" Height="423" Width="520" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Margin="27,122,0,0" Stroke="AliceBlue" StrokeThickness="0.5"/>
                     <Rectangle Fill="#111111" Height="423" Width="492" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Margin="574,122,0,0" Stroke="AliceBlue" StrokeThickness="0.5"/>
                     <Rectangle Fill="AliceBlue" Height="2" Width="1038" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,599,0,0"/>
@@ -820,9 +937,9 @@
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
+                Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
-                Margin="446,193,566,0"
+                Margin="446,195,566,0"
                 Click="Onix_OnLeftClick"/>
                     <Label
             Content="Latite Client"
@@ -851,7 +968,7 @@
             Cursor="Hand" 
             Foreground="AliceBlue" 
             FontFamily="Segoe UI" 
-            Template="{StaticResource Buttons}" 
+            Template="{StaticResource DefaultButtons}" 
             VerticalAlignment="Top"
             Margin="446,265,566,0"
                         Click="Latite_OnLeftClick"/>
@@ -864,7 +981,7 @@
             Cursor="Hand" 
             Foreground="AliceBlue" 
             FontFamily="Segoe UI" 
-            Template="{StaticResource Buttons}" 
+            Template="{StaticResource DefaultButtons}" 
             VerticalAlignment="Top"
             Margin="446,378,566,0"
                         Click="Luconia_OnLeftClick"/>
@@ -878,7 +995,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -905,7 +1022,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -932,7 +1049,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -959,7 +1076,7 @@
                                                 <Border.BorderBrush>
                                                     <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
                                                         <GradientStop Color="#FF002238"/>
-                                                        <GradientStop Color="#FF009CFF" Offset="1"/>
+                                                        <GradientStop Color="#FF004F69" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.BorderBrush>
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -1049,7 +1166,7 @@
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
+                Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
                 Margin="328,493,0,0"
                 Click="TexturePackButton_OnLeftClick" Width="115"/>
@@ -1064,7 +1181,7 @@
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
+                Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
                 Margin="448,493,0,0"
                 Click="GetScriptsButton_OnLeftClick" Width="61"/>
@@ -1079,7 +1196,7 @@
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
+                Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
                 Margin="978,217,0,0"
                 Click="Persona_Click" Width="60"/>
@@ -1094,7 +1211,7 @@
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
+                Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
                 Margin="911,395,0,0"
                 Click="ShaderInstall_Click" Width="61"/>
@@ -1109,7 +1226,7 @@
                 Cursor="Hand" 
                 Foreground="AliceBlue" 
                 FontFamily="Segoe UI" 
-                Template="{StaticResource Buttons}" 
+                Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
                 Margin="977,395,0,0"
                 Click="ShaderRemove_Click" Width="61"/>
@@ -1196,7 +1313,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="About Page" Margin="465,72,-466,-75">
-                <Grid x:Name="AboutPage">
+                <Grid x:Name="AboutPage" Opacity="0.5">
                     <Grid.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
                             <BeginStoryboard>
@@ -1226,7 +1343,7 @@
                     <Label Content="ignYoqzii#8974" FontSize="8px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="78,398,929,252" HorizontalContentAlignment="Center"/>
                     <Label Content="zL1me#6995" FontSize="8px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="240,398,782,251" HorizontalContentAlignment="Center"/>
                     <Label Content="OliiR#5677" FontSize="8px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="168,398,864,252" HorizontalContentAlignment="Center"/>
-                    <Button Content="Open" FontSize="15" Cursor="Hand" Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource Buttons}" IsDefault="True" Click="LauncherFolder_Click" Margin="850,356,148,285"/>
+                    <Button Content="Open" FontSize="15" Cursor="Hand" Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" IsDefault="True" Click="LauncherFolder_Click" Margin="850,356,148,285"/>
                     <Image
                 x:Name="YouTubeIcon"
                 Opacity="0.8"

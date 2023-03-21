@@ -23,14 +23,16 @@ public partial class MainWindow
 {
     public static Process? Minecraft;
     private bool isRunning = false;
-    public static readonly VersionInfo versionInfo = new();
-    readonly string versionNumber = versionInfo.VersionNumber;
-    readonly string launcherVersion = versionInfo.LauncherVersion;
+    public static readonly versionInfo versionInfo = new();
+    readonly string? versionNumber = versionInfo.VersionNumber;
+    readonly string? launcherVersion = versionInfo.LauncherVersion;
     private static readonly SettingsWindow SettingsWindow = new();
     public static bool IsMinecraftRunning;
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
     private readonly string starzScriptsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher\StarZ Scripts\";
     private readonly string resourcePacksFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\";
+    private static readonly string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Config.txt");
+    private string? defaultDll;
     private const string LatestVersionUrl = "https://raw.githubusercontent.com/Imrglop/Latite-Releases/main/latest_version.txt";
     private const string DownloadBaseUrl = "https://github.com/Imrglop/Latite-Releases/releases/download/{0}/Latite.{1}.dll";
     private const string DLL_FOLDER = @"StarZ Launcher\DLLs";
@@ -43,9 +45,16 @@ public partial class MainWindow
         InitializeDragDrop();
         LoadDlls();
         DllList.ItemsSource = _dlls;
-        LoadCurrentVersion(); 
+        LoadCurrentVersion();
+        LoadDefaultDLL();
+        // Call CheckForUpdates to check for updates on startup
+        versionInfo.CheckForUpdates();
     }
-
+    private void LoadDefaultDLL()
+    {
+        defaultDll = File.ReadLines(configFilePath).FirstOrDefault(line => line.StartsWith("DefaultDLL:"))?.Trim().Replace("DefaultDLL: ", "");
+        DefaultDLLLabel.Content = $"Default DLL: {defaultDll}";
+    }
     private void LoadCurrentVersion()
     {
         if (versionInfo.filePath != null)
@@ -75,7 +84,7 @@ public partial class MainWindow
             // Wait for 3 seconds before setting the visibility of the grid to Hidden
             await Task.Delay(2000);
 
-            DoubleAnimation opacityAnimation = new DoubleAnimation
+            DoubleAnimation opacityAnimation = new()
             {
                 From = 1,
                 To = 0,
@@ -155,7 +164,7 @@ public partial class MainWindow
         string selectedDll = (string)DllList.SelectedItem;
         if (selectedDll != null)
         {
-            RenameWindow renameWindow = new RenameWindow(selectedDll);
+            RenameWindow renameWindow = new(selectedDll);
             bool? result = renameWindow.ShowDialog();
             if (result == true)
             {
@@ -174,6 +183,43 @@ public partial class MainWindow
                 _dlls[selectedIndex] = renameWindow.NewName;
             }
         }
+    }
+
+    private void SetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        string selectedItem = (string)DllList.SelectedItem;
+        if (selectedItem == null) return;
+
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Config.txt");
+        if (!File.Exists(configPath)) return;
+
+        var result = MessageBox.Show($"Are you sure you want to set the default DLL to {selectedItem}? This will automatically inject your DLL when launching.", "Confirmation", MessageBoxButton.OKCancel);
+        if (result != MessageBoxResult.OK) return;
+
+        string[] lines = File.ReadAllLines(configPath);
+        if (lines.Length == 0) return;
+
+        lines[0] = "DefaultDLL: " + selectedItem;
+
+        File.WriteAllLines(configPath, lines);
+        LoadDefaultDLL();
+    }
+
+    private void ResetSetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Config.txt");
+        if (!File.Exists(configPath)) return;
+
+        var result = MessageBox.Show($"Are you sure you want to reset the default DLL to None? Doing so will remove the auto-injection on launch.", "Confirmation", MessageBoxButton.OKCancel);
+        if (result != MessageBoxResult.OK) return;
+
+        string[] lines = File.ReadAllLines(configPath);
+        if (lines.Length == 0) return;
+
+        lines[0] = "DefaultDLL: None";
+
+        File.WriteAllLines(configPath, lines);
+        LoadDefaultDLL();
     }
 
     private void Delete_MouseLeftButtonDown(object sender, RoutedEventArgs e)
@@ -211,19 +257,66 @@ public partial class MainWindow
     }
     //Play Section (Main Menu)
     //Only run Minecraft without DLLs
-    private void LaunchButton_OnLeftClick(object sender, RoutedEventArgs e)
+    public async void LaunchButton_OnLeftClick(object sender, RoutedEventArgs e)
     {
-        if (Process.GetProcessesByName("Minecaft.Windows").Length != 0) return;
+        if (Process.GetProcessesByName("Minecraft.Windows").Length != 0) return;
 
         Process.Start("minecraft:");
 
-        while (true)
+        Minecraft = await Task.Run(() =>
         {
-            if (Process.GetProcessesByName("Minecraft.Windows").Length == 0) continue;
-            Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
-            break;
+            while (Process.GetProcessesByName("Minecraft.Windows").Length == 0) { }
+            return Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
+        });
+        if (Minecraft == null) return;
+
+        try
+        {
+            LoadDefaultDLL();
+            if (defaultDll == "None")
+            {
+                // Launch the game without injecting
+                IsMinecraftRunning = true;
+                Minecraft.EnableRaisingEvents = true;
+                Minecraft.Exited += IfMinecraftExited;
+            }
+            else if (!string.IsNullOrEmpty(defaultDll))
+            {
+                // Check if the DLL file exists in the specified location
+                string dllFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs", defaultDll);
+                if (File.Exists(dllFilePath))
+                {
+                    try
+                    {
+                        // Inject the specified DLL file
+                        await Injector.WaitForModules();
+                        Injector.Inject(dllFilePath);
+                        IsMinecraftRunning = true;
+
+                        Minecraft.EnableRaisingEvents = true;
+                        Minecraft.Exited += IfMinecraftExited;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Failed to inject DLL file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"The specified DLL file '{defaultDll}' does not exist in the 'StarZ Launcher/DLLs' folder. Make sure your DLL is located in that folder!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("The 'Config.txt' file does not specify a default DLL file or the 'DefaultDLL' line is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to read the 'Config.txt' file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
 
     //Run Minecraft with a DLL
     public async void LaunchButton_OnRightClick(object sender, RoutedEventArgs e)
@@ -424,9 +517,11 @@ public partial class MainWindow
         isRunning = true; // set installation in progress flag
 
         // show file dialog to the user to select the zip file
-        OpenFileDialog openFileDialog = new OpenFileDialog();
-        openFileDialog.Filter = "Zip Files|*.zip";
-        openFileDialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "StarZ Versions");
+        OpenFileDialog openFileDialog = new()
+        {
+            Filter = "Zip Files|*.zip",
+            InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "StarZ Versions")
+        };
         bool? _ = openFileDialog.ShowDialog();
 
         if (!_ == true)
@@ -438,9 +533,11 @@ public partial class MainWindow
         SetStatusLabelText("Installing... Please wait...", Colors.Yellow);
         // unregister Minecraft from Microsoft Store
         string unregistercommand = $"Get-AppxPackage *minecraftUWP* | Remove-AppxPackage";
-        ProcessStartInfo psiunregister = new ProcessStartInfo("powershell.exe", unregistercommand);
-        psiunregister.UseShellExecute = true;
-        psiunregister.Verb = "runas"; // Run PowerShell as administrator
+        ProcessStartInfo psiunregister = new("powershell.exe", unregistercommand)
+        {
+            UseShellExecute = true,
+            Verb = "runas" // Run PowerShell as administrator
+        };
         Process.Start(psiunregister).WaitForExit();
 
         string selectedZipFile = openFileDialog.FileName;
@@ -467,9 +564,11 @@ public partial class MainWindow
         string registercommand = $"Add-AppxPackage -Path {manifestPath} -Register";
         SetStatusLabelText("Registering...", Colors.Green);
 
-        ProcessStartInfo psiregister = new ProcessStartInfo("powershell.exe", registercommand);
-        psiregister.UseShellExecute = true;
-        psiregister.Verb = "runas"; // Run PowerShell as administrator
+        ProcessStartInfo psiregister = new("powershell.exe", registercommand)
+        {
+            UseShellExecute = true,
+            Verb = "runas" // Run PowerShell as administrator
+        };
         Process.Start(psiregister).WaitForExit();
 
         // reset the label text and color
@@ -632,8 +731,10 @@ public partial class MainWindow
             return;
         }
 
-        var dialog = new System.Windows.Forms.FolderBrowserDialog();
-        dialog.Description = "Select persona folder";
+        var dialog = new System.Windows.Forms.FolderBrowserDialog
+        {
+            Description = "Select persona folder"
+        };
 
         if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
@@ -706,10 +807,8 @@ public partial class MainWindow
         {
             string url = $"https://github.com/ignYoqzii/StarZLauncher/releases/download/shadersinstaller/{file}";
             string destinationFilePath = Path.Combine(destinationPath, file);
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(url, destinationFilePath);
-            }
+            using WebClient client = new();
+            client.DownloadFile(url, destinationFilePath);
         }
 
         MessageBox.Show("Shaders installed successfully!");

@@ -4,8 +4,8 @@ namespace StarZLauncher
 {
     public partial class RenameWindow
     {
-        public string CurrentName { get; private set; }
-        public string NewName { get; private set; }
+        public string? CurrentName { get; private set; }
+        public string? NewName { get; private set; }
 
         public RenameWindow(string currentName)
         {

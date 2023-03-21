@@ -34,10 +34,12 @@
 		<None Remove="Images/Yoqzii.jpg" />
 		<None Remove="Images/L1me.jpg" />
 		<None Remove="Images/OliiR.jpg" />
-		<None Remove="Images/Change.png" />
+		<None Remove="Images/Reset.png" />
 		<None Remove="Images/StarZLauncher.png" />
 		<None Remove="Images/Delete.png" />
 		<None Remove="Images/Edit.png" />
+		<None Remove="Images/SetDefaultDLL.png" />
+		<None Remove="Images/Hide.png" />
     </ItemGroup>
 
     <ItemGroup>
@@ -68,10 +70,12 @@
 		<Resource Include="Images/Yoqzii.jpg" />
 		<Resource Include="Images/L1me.jpg" />
 		<Resource Include="Images/OliiR.jpg" />
-		<Resource Include="Images/Change.png" />
+		<Resource Include="Images/Reset.png" />
 		<Resource Include="Images/StarZLauncher.png" />
 		<Resource Include="Images/Delete.png" />
 		<Resource Include="Images/Edit.png" />
+		<Resource Include="Images/SetDefaultDLL.png" />
+		<Resource Include="Images/Hide.png" />
     </ItemGroup>
 
     <ItemGroup>
