@@ -1,5 +1,6 @@
 ﻿using DiscordRPC;
 
+
 namespace StarZLauncher.Classes
 {
     // From Plextora#0033 / Modified by Yoqzii
@@ -12,29 +13,36 @@ namespace StarZLauncher.Classes
         {
             get
             {
-                if (discordClient == null)
-                {
-                    discordClient = new DiscordRpcClient(ClientId);
-                }
+                discordClient ??= new DiscordRpcClient(ClientId);
                 return discordClient;
-            }
+            }   
         }
 
-        public static void IdlePresence()
+        public static void SetPresence()
         {
             DiscordClient.SetPresence(new RichPresence
             {
                 State = "In the launcher",
+                Details = "",
                 Timestamps = Timestamps.Now,
                 Assets = new Assets
                 {
                     LargeImageKey = "starz",
-                    LargeImageText = "StarZ Launcher Logo"
+                    LargeImageText = "StarZ Launcher",
+                    SmallImageKey = "minecraft",
+                    SmallImageText = "Minecraft For Windows"
                 }
             });
         }
 
-        public static void StopPresence()
+
+        public static void IdlePresence()
+        {
+            DiscordClient.UpdateState("In the launcher");
+            DiscordClient.UpdateDetails("");
+        }
+
+        public static void TerminatePresence()
         {
             if (discordClient == null || discordClient.IsDisposed) return;
             discordClient.ClearPresence();

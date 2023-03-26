@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -28,20 +29,14 @@ namespace StarZLauncher.Classes
 
                 if (targetProcess != null)
                 {
-                    var procHandle = Needed.OpenProcess(Needed.PROCESS_CREATE_THREAD | Needed.PROCESS_QUERY_INFORMATION |
-                                                         Needed.PROCESS_VM_OPERATION | Needed.PROCESS_VM_WRITE | Needed.PROCESS_VM_READ,
-                        false, targetProcess.Id);
+                    var procHandle = Resources.OpenProcess(Resources.PROCESS_CREATE_THREAD | Resources.PROCESS_QUERY_INFORMATION | Resources.PROCESS_VM_OPERATION | Resources.PROCESS_VM_WRITE | Resources.PROCESS_VM_READ, false, targetProcess.Id);
 
-                    var loadLibraryAddress = Needed.GetProcAddress(Needed.GetModuleHandle("kernel32.dll"), "LoadLibraryA");
+                    var loadLibraryAddress = Resources.GetProcAddress(Resources.GetModuleHandle("kernel32.dll"), "LoadLibraryA");
 
-                    var allocMemAddress = Needed.VirtualAllocEx(procHandle, IntPtr.Zero,
-                        (uint)((path.Length + 1) * Marshal.SizeOf(typeof(char))), Needed.MEM_COMMIT
-                                                                                  | Needed.MEM_RESERVE, Needed.PAGE_READWRITE);
+                    var allocMemAddress = Resources.VirtualAllocEx(procHandle, IntPtr.Zero, (uint)((path.Length + 1) * Marshal.SizeOf(typeof(char))), Resources.MEM_COMMIT | Resources.MEM_RESERVE, Resources.PAGE_READWRITE);
 
-                    Needed.WriteProcessMemory(procHandle, allocMemAddress, Encoding.Default.GetBytes(path),
-                        (uint)((path.Length + 1) * Marshal.SizeOf(typeof(char))), out _);
-                    Needed.CreateRemoteThread(procHandle, IntPtr.Zero, 0, loadLibraryAddress,
-                        allocMemAddress, 0, IntPtr.Zero);
+                    Resources.WriteProcessMemory(procHandle, allocMemAddress, Encoding.Default.GetBytes(path), (uint)((path.Length + 1) * Marshal.SizeOf(typeof(char))), out _);
+                    Resources.CreateRemoteThread(procHandle, IntPtr.Zero, 0, loadLibraryAddress, allocMemAddress, 0, IntPtr.Zero);
                 }
             }
             catch (Exception ex)
@@ -55,10 +50,7 @@ namespace StarZLauncher.Classes
         {
             var infoFile = new FileInfo(path);
             var fSecurity = infoFile.GetAccessControl();
-            fSecurity.AddAccessRule(
-                new FileSystemAccessRule(new SecurityIdentifier("S-1-15-2-1"),
-                    FileSystemRights.FullControl, InheritanceFlags.None,
-                    PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
+            fSecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier("S-1-15-2-1"), FileSystemRights.FullControl, InheritanceFlags.None, PropagationFlags.NoPropagateInherit, AccessControlType.Allow));
 
             infoFile.SetAccessControl(fSecurity);
         }
@@ -72,21 +64,25 @@ namespace StarZLauncher.Classes
                 });
                 while (true)
                 {
-                    Minecraft?.Refresh();
-                    if (Minecraft is { Modules.Count: > 160 }) break;
+                    try
+                    {
+                        Minecraft?.Refresh();
+                    }
+                    catch (Win32Exception ex)
+                    {
+                        MessageBox.Show($"Minecraft was exited before injecting: {ex.Message}" , "StarZ crashed =(");
+                    }
+
+                    if (Minecraft?.Modules.Count > 160) break;
                     Thread.Sleep(4000);
                 }
             });
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                string? versionNumber = versionInfo.VersionNumber;
-                DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft {versionNumber}");
-            });
         }
+
     }
 }
 
-public class Needed
+public class Resources
 {
     public const int WM_NCLBUTTONDOWN = 0xA1;
     public const int HT_CAPTION = 0x2;
@@ -117,14 +113,11 @@ public class Needed
     public static extern nint GetProcAddress(nint hModule, string procName);
 
     [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-    public static extern nint VirtualAllocEx(nint hProcess, nint lpAddress, uint dwSize,
-        uint flAllocationType, uint flProtect);
+    public static extern nint VirtualAllocEx(nint hProcess, nint lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
 
     [DllImport("kernel32.dll", SetLastError = true)]
-    public static extern bool WriteProcessMemory(nint hProcess, nint lpBaseAddress, byte[] lpBuffer, uint nSize,
-        out IntPtr lpNumberOfBytesWritten);
+    public static extern bool WriteProcessMemory(nint hProcess, nint lpBaseAddress, byte[] lpBuffer, uint nSize, out IntPtr lpNumberOfBytesWritten);
 
     [DllImport("kernel32.dll")]
-    public static extern nint CreateRemoteThread(nint hProcess, nint lpThreadAttributes, uint dwStackSize,
-        nint lpStartAddress, nint lpParameter, uint dwCreationFlags, nint lpThreadId);
+    public static extern nint CreateRemoteThread(nint hProcess, nint lpThreadAttributes, uint dwStackSize, nint lpStartAddress, nint lpParameter, uint dwCreationFlags, nint lpThreadId);
 }
