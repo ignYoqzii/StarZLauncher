@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,8 +32,9 @@ public partial class MainWindow
     private readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
     private readonly string starzScriptsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher\StarZ Scripts\";
     private readonly string resourcePacksFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\resource_packs\";
-    private static readonly string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Config.txt");
     private string? defaultDll;
+    public static string? DllNameLaunchOnLeftClick { get; private set; }
+    public static string? DllNameLaunchOnRightClick { get; private set; }
     private const string LatestVersionUrl = "https://raw.githubusercontent.com/Imrglop/Latite-Releases/main/latest_version.txt";
     private const string DownloadBaseUrl = "https://github.com/Imrglop/Latite-Releases/releases/download/{0}/Latite.{1}.dll";
     private const string DLL_FOLDER = @"StarZ Launcher\DLLs";
@@ -41,6 +43,7 @@ public partial class MainWindow
     public MainWindow()
     {
         InitializeComponent();
+        SetBackgroundImage();
         SettingsWindow.Closing += OnClosing;
         InitializeDragDrop();
         LoadDlls();
@@ -50,9 +53,10 @@ public partial class MainWindow
         // Call CheckForUpdates to check for updates on startup
         versionInfo.CheckForUpdates();
     }
+
     private void LoadDefaultDLL()
     {
-        defaultDll = File.ReadLines(configFilePath).FirstOrDefault(line => line.StartsWith("DefaultDLL:"))?.Trim().Replace("DefaultDLL: ", "");
+        defaultDll = ConfigTool.GetDefaultDLL();
         DefaultDLLLabel.Content = $"Default DLL: {defaultDll}";
     }
     private void LoadCurrentVersion()
@@ -98,7 +102,6 @@ public partial class MainWindow
 
             isFirstTimeOpened = false;
         }
-        SetBackgroundImage();
     }
 
     private void LauncherFolder_Click(object sender, RoutedEventArgs e)
@@ -111,7 +114,7 @@ public partial class MainWindow
         }
         else
         {
-            MessageBox.Show("Error while opening a folder ; restart the application");
+            MessageBox.Show("Error while opening a folder ; restart the application. If the issue persists, ask for #support on our Discord server.");
         }
     }
 
@@ -161,29 +164,27 @@ public partial class MainWindow
 
     private void Edit_MouseLeftButtonDown(object sender, RoutedEventArgs e)
     {
-        string selectedDll = (string)DllList.SelectedItem;
-        if (selectedDll != null)
+        string selectedDll = (string)DllList.SelectedItem ?? throw new ArgumentNullException(nameof(DllList.SelectedItem));
+        string currentName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
+
+        RenameWindow renameWindow = new(selectedDll);
+        _ = renameWindow.ShowDialog();
+        string newName = renameWindow.NewName ?? throw new ArgumentNullException(nameof(renameWindow.NewName));
+
+        string newFullName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, newName);
+
+        File.Move(currentName, newFullName);
+
+        int selectedIndex = DllList.SelectedIndex;
+        _dlls[selectedIndex] = newName;
+
+        if (selectedDll == defaultDll)
         {
-            RenameWindow renameWindow = new(selectedDll);
-            bool? result = renameWindow.ShowDialog();
-            if (result == true)
-            {
-                string currentName = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    DLL_FOLDER,
-                    selectedDll);
-                string newName = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    DLL_FOLDER,
-                    renameWindow.NewName);
-
-                File.Move(currentName, newName);
-
-                int selectedIndex = DllList.SelectedIndex;
-                _dlls[selectedIndex] = renameWindow.NewName;
-            }
+            ConfigTool.SetDefaultDLL(newName);
+            LoadDefaultDLL();
         }
     }
+
 
     private void SetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
     {
@@ -196,12 +197,7 @@ public partial class MainWindow
         var result = MessageBox.Show($"Are you sure you want to set the default DLL to {selectedItem}? This will automatically inject your DLL when launching.", "Confirmation", MessageBoxButton.OKCancel);
         if (result != MessageBoxResult.OK) return;
 
-        string[] lines = File.ReadAllLines(configPath);
-        if (lines.Length == 0) return;
-
-        lines[0] = "DefaultDLL: " + selectedItem;
-
-        File.WriteAllLines(configPath, lines);
+        ConfigTool.SetDefaultDLL(selectedItem);
         LoadDefaultDLL();
     }
 
@@ -213,12 +209,7 @@ public partial class MainWindow
         var result = MessageBox.Show($"Are you sure you want to reset the default DLL to None? Doing so will remove the auto-injection on launch.", "Confirmation", MessageBoxButton.OKCancel);
         if (result != MessageBoxResult.OK) return;
 
-        string[] lines = File.ReadAllLines(configPath);
-        if (lines.Length == 0) return;
-
-        lines[0] = "DefaultDLL: None";
-
-        File.WriteAllLines(configPath, lines);
+        ConfigTool.SetDefaultDLL("None");
         LoadDefaultDLL();
     }
 
@@ -238,6 +229,11 @@ public partial class MainWindow
                 File.Delete(filePath);
 
                 _dlls.Remove(selectedDll);
+            }
+            if (selectedDll == defaultDll)
+            {
+                ConfigTool.SetDefaultDLL("None");
+                LoadDefaultDLL();
             }
         }
     }
@@ -289,6 +285,44 @@ public partial class MainWindow
                     try
                     {
                         // Inject the specified DLL file
+                        string filenameWithoutExtension = Path.GetFileNameWithoutExtension(dllFilePath);
+                        DllNameLaunchOnLeftClick = filenameWithoutExtension;
+                        bool DiscordRPCisEnabled = ConfigTool.GetDiscordRPC();
+                        bool DiscordShowGameVersionisEnabled = ConfigTool.GetDiscordRPCShowGameVersion();
+                        bool DiscordShowDLLNameisEnabled = ConfigTool.GetDiscordRPCShowDLLName();
+                        if (DiscordRPCisEnabled == true)
+                        {
+                            if (DiscordShowGameVersionisEnabled == true)
+                            {
+                                DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Playing Minecraft {versionNumber}");
+                            }
+                            else if (DiscordShowGameVersionisEnabled == false)
+                            {
+                                DiscordRichPresenceManager.DiscordClient.UpdateDetails("Playing Minecraft");
+                            }
+                            if (DiscordShowDLLNameisEnabled == true)
+                            {
+                                DiscordRichPresenceManager.DiscordClient.UpdateState($"With {DllNameLaunchOnLeftClick}");
+                            }
+                            else if (DiscordShowDLLNameisEnabled == false)
+                            {
+                                DiscordRichPresenceManager.DiscordClient.UpdateState("");
+                            }
+                        }
+
+                        string LaunchOptionisSelected = ConfigTool.GetLaunchOption();
+                        if (LaunchOptionisSelected == "MinimizeToTray")
+                        {
+                            TrayManager.MinimizeToTray();
+                            this.Hide();
+                            SettingsWindow.Hide();
+                            this.Close();
+                        }
+                        else if (LaunchOptionisSelected == "Minimize")
+                        {
+                            WindowState = WindowState.Minimized;
+                            SettingsWindow.Hide();
+                        }
                         await Injector.WaitForModules();
                         Injector.Inject(dllFilePath);
                         IsMinecraftRunning = true;
@@ -346,6 +380,44 @@ public partial class MainWindow
 
         try
         {
+            string filenameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
+            DllNameLaunchOnRightClick = filenameWithoutExtension;
+            bool DiscordRPCisEnabled = ConfigTool.GetDiscordRPC();
+            bool DiscordShowGameVersionisEnabled = ConfigTool.GetDiscordRPCShowGameVersion();
+            bool DiscordShowDLLNameisEnabled = ConfigTool.GetDiscordRPCShowDLLName();
+            if (DiscordRPCisEnabled == true)
+            {
+                if (DiscordShowGameVersionisEnabled == true)
+                {
+                    DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Playing Minecraft {versionNumber}");
+                }
+                else if (DiscordShowGameVersionisEnabled == false)
+                {
+                    DiscordRichPresenceManager.DiscordClient.UpdateDetails("Playing Minecraft");
+                }
+                if (DiscordShowDLLNameisEnabled == true)
+                {
+                    DiscordRichPresenceManager.DiscordClient.UpdateState($"With {DllNameLaunchOnRightClick}");
+                }
+                else if (DiscordShowDLLNameisEnabled == false)
+                {
+                    DiscordRichPresenceManager.DiscordClient.UpdateState("");
+                }
+            }
+
+            string LaunchOptionisSelected = ConfigTool.GetLaunchOption();
+            if (LaunchOptionisSelected == "MinimizeToTray")
+            {
+                TrayManager.MinimizeToTray();
+                this.Hide();
+                SettingsWindow.Hide();
+                this.Close();
+            }
+            else if (LaunchOptionisSelected == "Minimize")
+            {
+                WindowState = WindowState.Minimized;
+                SettingsWindow.Hide();
+            }
             await Injector.WaitForModules();
             Injector.Inject(openFileDialog.FileName);
             IsMinecraftRunning = true;
@@ -359,9 +431,13 @@ public partial class MainWindow
         }
     }
 
-    private static void IfMinecraftExited(object sender, EventArgs e)
+    private void IfMinecraftExited(object sender, EventArgs e)
     {
-        DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher");
+        bool DiscordRPCisEnabled = ConfigTool.GetDiscordRPC();
+        if (DiscordRPCisEnabled == true)
+        {
+            DiscordRichPresenceManager.IdlePresence();
+        }
         IsMinecraftRunning = false;
     }
 
@@ -378,35 +454,22 @@ public partial class MainWindow
 
         // Show the settings window
         SettingsWindow.Show();
-
-        // Update the Discord Rich Presence state
-        if (IsMinecraftRunning)
-            DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft {versionNumber}");
-        else
-            DiscordRichPresenceManager.DiscordClient.UpdateState("In the launcher's settings");
     }
 
     public void SetBackgroundImage()
     {
-        // Get file path
-        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Background.txt");
+        // Read file contents (image file name)
+        string fileName = ConfigTool.GetLauncherBackground();
 
-        // Check if file exists
-        if (File.Exists(filePath))
+        // Create file path for image file
+        string imagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Images", fileName);
+
+        // Check if image file exists
+        if (File.Exists(imagePath))
         {
-            // Read file contents (image file name)
-            string fileName = File.ReadAllText(filePath).Trim();
-
-            // Create file path for image file
-            string imagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Images", fileName);
-
-            // Check if image file exists
-            if (File.Exists(imagePath))
-            {
-                // Load image into image control
-                BitmapImage image = new(new Uri(imagePath));
-                BackgroundImage.Source = image;
-            }
+            // Load image into image control
+            BitmapImage image = new(new Uri(imagePath));
+            BackgroundImage.Source = image;
         }
     }
 
@@ -441,7 +504,7 @@ public partial class MainWindow
             // Check for internet connectivity
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
             {
-                throw new Exception("No internet connectivity");
+                MessageBox.Show("No internet!");
             }
 
             if (File.Exists(filePath))

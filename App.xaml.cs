@@ -11,27 +11,20 @@ namespace StarZLauncher;
 /// </summary>
 public partial class App : Application
 {
-    private static bool hasRun = false;
+    bool HasRun = false;
     private const string? VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        if (!hasRun)
-        {
-            DiscordRichPresenceManager.DiscordClient.Initialize();
-            DiscordRichPresenceManager.IdlePresence();
-            hasRun = true;
-        }
-
         string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         string starZLauncherPath = Path.Combine(documentsPath, "StarZ Launcher");
         string starZVersionsPath = Path.Combine(starZLauncherPath, "StarZ Versions");
         string starZScriptsPath = Path.Combine(starZLauncherPath, "StarZ Scripts");
         string dllsPath = Path.Combine(starZLauncherPath, "DLLs");
-        string configPath = Path.Combine(starZLauncherPath, "Config.txt");
         string versionFilePath = Path.Combine(starZLauncherPath, "LauncherVersion.txt");
+        string oldConfigFilePath = Path.Combine(starZLauncherPath, "Config.txt");
 
         if (!Directory.Exists(starZLauncherPath))
         {
@@ -53,16 +46,28 @@ public partial class App : Application
             Directory.CreateDirectory(dllsPath);
         }
 
-        if (!File.Exists(configPath))
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(configPath));
-            File.WriteAllText(configPath, "DefaultDLL: None");
-        }
 
         if (!File.Exists(versionFilePath))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(versionFilePath));
             DownloadLatestVersion(versionFilePath); // Download the latest version from the URL and save it to the file
+        }
+
+        if (File.Exists(oldConfigFilePath))
+        {
+            File.Delete(oldConfigFilePath); // This deletes the old Config.txt from user's computer to replace it with the new config system (Settings.txt from ConfigTool)
+        }
+
+        if (!HasRun)
+        {
+            bool discordRPC = ConfigTool.GetDiscordRPC();
+            if (discordRPC == true)
+            {
+                DiscordRichPresenceManager.DiscordClient.Initialize();
+                DiscordRichPresenceManager.SetPresence();
+                HasRun = true;
+            }
+            return;
         }
     }
 
@@ -72,5 +77,5 @@ public partial class App : Application
         string? latestVersion = client.DownloadString(VERSION_URL).Trim();
         File.WriteAllText(filePath, latestVersion); // Write the latest version to the file
     }
-    private void App_OnExit(object sender, ExitEventArgs e) => DiscordRichPresenceManager.StopPresence();
+    private void App_OnExit(object sender, ExitEventArgs e) => DiscordRichPresenceManager.TerminatePresence();
 }

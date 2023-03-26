@@ -90,7 +90,7 @@
         <Grid ClipToBounds="True">
             <Rectangle x:Name="WindowToolbar" HorizontalAlignment="Center"
         RadiusX="20" RadiusY="20" Height="650" Width="1100" Opacity="0.8"
-        Fill="#111111" StrokeThickness="0.2" Stroke="#55AAFF" VerticalAlignment="Center">
+        Fill="#111111" StrokeThickness="0" Stroke="#55AAFF" VerticalAlignment="Center">
             </Rectangle>
             <Image x:Name ="BackgroundImage" Source="/Images/AlternateImage.png" Width="1100" Height="650" Stretch="UniformToFill" Panel.ZIndex="0">
                 <Image.Clip>
@@ -99,7 +99,7 @@
             </Image>
             <Border x:Name="WindowToolbar_Copy" HorizontalAlignment="Left" Panel.ZIndex="3"
         Height="78" Width="974" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
-        BorderThickness="0.2" VerticalAlignment="Top"
+        BorderThickness="0.5" VerticalAlignment="Top"
         CornerRadius="20,0,0,0">
                 <!-- Add any content you want here -->
             </Border>
@@ -117,7 +117,7 @@
             </Border>
             <Border x:Name="WindowToolbar_Copy3" HorizontalAlignment="Left" Panel.ZIndex="3"
                 Height="78" Width="126" Opacity="0.825" Background="#111111" BorderBrush="AliceBlue"
-                BorderThickness="0.2" VerticalAlignment="Top"
+                BorderThickness="0.5" VerticalAlignment="Top"
                 CornerRadius="0,20,0,0" Margin="974,0,0,0">
                 <!-- Add any content you want here -->
             </Border>
@@ -435,14 +435,14 @@
                         <Label Content="- New Design" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,157,541,219"/>
                         <Label Content="- New Features" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,231,541,145"/>
                         <Label Content="Last updated: 2023-03-18" FontSize="10px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="570,278,23,113"/>
-                        <Rectangle Fill="Transparent" Stroke="AliceBlue" StrokeThickness="1" Height="415" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="10" RadiusY="10"/>
+                        <Rectangle Fill="Transparent" Stroke="AliceBlue" StrokeThickness="0" Height="415" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="10" RadiusY="10"/>
                         <Rectangle Fill="AliceBlue" Height="2" Width="502" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,360,0,0" />
                         <Rectangle Fill="Gray" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="236" Width="684" Margin="0,66,0,0"/>
                     </Grid>
                     <Grid x:Name="PanelB" Margin="26,128,337,128" Panel.ZIndex="5" Visibility="Collapsed">
                     </Grid>
                     <Image Panel.ZIndex="4" Cursor="Hand" Opacity="0.7" Source="Images/Hide.png" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TogglePanels_Click" Margin="728,135,343,513" />
-                    <Rectangle Fill="#111111" Height="415" Width="296" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="779,0,0,0" RadiusX="10" RadiusY="10" Stroke="AliceBlue" StrokeThickness="0.5"/>
+                    <Rectangle Fill="#111111" Height="415" Width="296" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="779,0,0,0" RadiusX="10" RadiusY="10" Stroke="AliceBlue" StrokeThickness="0"/>
                     <Rectangle Fill="#111111" Height="54" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,128,0,0" RadiusX="10" RadiusY="10"/>
                     <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,265,0,0"/>
                     <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,438,0,0"/>

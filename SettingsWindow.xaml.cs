@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using StarZLauncher.Classes;
-using static StarZLauncher.MainWindow;
 
 
 namespace StarZLauncher
@@ -15,35 +15,25 @@ namespace StarZLauncher
         public SettingsWindow()
         {
             InitializeComponent();
+            SetBackgroundImage();
+            LoadSettingsFromFile();
         }
 
         private void SetBackgroundImage()
         {
-            // Get file path
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Background.txt");
+            // Read file contents (image file name)
+            string fileName = ConfigTool.GetLauncherBackground();
 
-            // Check if file exists
-            if (File.Exists(filePath))
+            // Create file path for image file
+            string imagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Images", fileName);
+
+            // Check if image file exists
+            if (File.Exists(imagePath))
             {
-                // Read file contents (image file name)
-                string fileName = File.ReadAllText(filePath).Trim();
-
-                // Create file path for image file
-                string imagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Images", fileName);
-
-                // Check if image file exists
-                if (File.Exists(imagePath))
-                {
-                    // Load image into image control
-                    BitmapImage image = new(new Uri(imagePath));
-                    BackgroundImage.Source = image;
-                }
+                // Load image into image control
+                BitmapImage image = new(new Uri(imagePath));
+                BackgroundImage.Source = image;
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            SetBackgroundImage();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -75,9 +65,7 @@ namespace StarZLauncher
                 // Copy new image to Images directory with unique name
                 File.Copy(openFileDialog.FileName, newImagePath, true);
 
-                // Update Background.txt file with new image name
-                string backgroundFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Background.txt");
-                File.WriteAllText(backgroundFilePath, newImageName);
+                ConfigTool.SetLauncherBackground(newImageName);
 
                 // Load new image
                 BitmapImage bitmapImage = new();
@@ -85,7 +73,7 @@ namespace StarZLauncher
                 bitmapImage.UriSource = new Uri(newImagePath);
                 bitmapImage.EndInit();
                 BackgroundImage.Source = bitmapImage;
-                foreach (System.Windows.Window window in Application.Current.Windows)
+                foreach (Window window in Application.Current.Windows)
                 {
                     // Check if the window is a MainWindow or a subclass of MainWindow
                     if (window is MainWindow || window.GetType().IsSubclassOf(typeof(MainWindow)))
@@ -97,21 +85,122 @@ namespace StarZLauncher
             }
         }
 
+        private void LoadSettingsFromFile()
+        {
+            bool DiscordRPCisChecked = ConfigTool.GetDiscordRPC();
+            if (DiscordRPCisChecked == true)
+            {
+                DRP.IsChecked= true;
+                DiscordOptions.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DRP.IsChecked = false;
+                DiscordOptions.Visibility = Visibility.Collapsed;
+            }
+            bool DiscordRPCSGVisChecked = ConfigTool.GetDiscordRPCShowGameVersion();
+            if (DiscordRPCSGVisChecked == true)
+            {
+                SGV.IsChecked = true;
+            }
+            else
+            {
+                SGV.IsChecked = false;
+            }
+            bool DiscordRPCSDNisChecked = ConfigTool.GetDiscordRPCShowDLLName();
+            if (DiscordRPCSDNisChecked == true)
+            {
+                SDN.IsChecked = true;
+            }
+            else
+            {
+                SDN.IsChecked = false;
+            }
+
+            string LaunchOptionisSelected = ConfigTool.GetLaunchOption();
+            if (LaunchOptionisSelected == "RemainOpen")
+            {
+                ComboBoxLaunchOption.SelectedIndex = 0;
+            }
+            if (LaunchOptionisSelected == "MinimizeToTray")
+            {
+                ComboBoxLaunchOption.SelectedIndex = 1;
+            }
+            if (LaunchOptionisSelected == "Minimize")
+            {
+                ComboBoxLaunchOption.SelectedIndex = 2;
+            }
+        }
+
+        private void DRP_Click(object sender, RoutedEventArgs e)
+        {
+            if (DRP.IsChecked == true)
+            {
+                DiscordOptions.Visibility = Visibility.Visible;
+                ConfigTool.SetDiscordRPC(true); // set DiscordRPC to true
+                if (!DiscordRichPresenceManager.DiscordClient.IsInitialized)
+                {
+                    DiscordRichPresenceManager.DiscordClient.Initialize();
+                }
+                DiscordRichPresenceManager.SetPresence();
+            }
+            else
+            {
+                DiscordOptions.Visibility = Visibility.Collapsed;
+                ConfigTool.SetDiscordRPC(false); // set DiscordRPC to false
+                DiscordRichPresenceManager.DiscordClient.ClearPresence();
+            }
+        }
+
+        private void SGV_Click(object sender, RoutedEventArgs e)
+        {
+            if (SGV.IsChecked == true)
+            {
+                ConfigTool.SetDiscordRPCShowGameVersion(true);
+            }
+            else
+            {
+                ConfigTool.SetDiscordRPCShowGameVersion(false);
+            }
+        }
+
+        private void SDN_Click(object sender, RoutedEventArgs e)
+        {
+            if (SDN.IsChecked == true)
+            {
+                ConfigTool.SetDiscordRPCShowDLLName(true);
+            }
+            else
+            {
+                ConfigTool.SetDiscordRPCShowDLLName(false);
+            }
+        }
+
+        private void ComboBoxLaunchOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem selectedItem = ComboBoxLaunchOption.SelectedItem as ComboBoxItem ?? throw new ArgumentNullException(nameof(ComboBoxLaunchOption.SelectedItem));
+            string selectedContent = selectedItem.Content?.ToString() ?? throw new ArgumentNullException(nameof(selectedItem.Content));
+
+            // Do something based on the selected content
+            if (selectedContent == "Remain open")
+            {
+                ConfigTool.SetLaunchOption("RemainOpen");
+            }
+            else if (selectedContent == "Minimize to tray")
+            {
+                ConfigTool.SetLaunchOption("MinimizeToTray");
+            }
+            else if (selectedContent == "Minimize")
+            {
+                ConfigTool.SetLaunchOption("Minimize");
+            }
+        }
+
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Hide();
-            string? versionNumber = Classes.versionInfo.VersionNumber;
-            // Update the Discord Rich Presence state
-            if (MainWindow.IsMinecraftRunning)
-                DiscordRichPresenceManager.DiscordClient.UpdateState($"Playing Minecraft {versionNumber}");
-            else
-                DiscordRichPresenceManager.DiscordClient.UpdateState($"In the launcher");
         }
 
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
         private void WindowToolbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();

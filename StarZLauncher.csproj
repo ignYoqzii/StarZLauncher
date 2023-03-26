@@ -8,6 +8,9 @@
         <Platforms>AnyCPU;x64</Platforms>
         <ApplicationIcon>starz.ico</ApplicationIcon>
         <LangVersion>11</LangVersion>
+		<Company>StarZ</Company>
+		<Product>StarZ Launcher</Product>
+		<AssemblyName>StarZ Launcher</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
