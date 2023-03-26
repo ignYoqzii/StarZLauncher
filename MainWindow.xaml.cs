@@ -149,8 +149,7 @@ public partial class MainWindow
     private void LoadDlls()
     {
         string dllFolderPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            DLL_FOLDER);
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER);
 
         if (Directory.Exists(dllFolderPath))
         {
@@ -164,24 +163,24 @@ public partial class MainWindow
 
     private void Edit_MouseLeftButtonDown(object sender, RoutedEventArgs e)
     {
-        string selectedDll = (string)DllList.SelectedItem ?? throw new ArgumentNullException(nameof(DllList.SelectedItem));
-        string currentName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
-
-        RenameWindow renameWindow = new(selectedDll);
-        _ = renameWindow.ShowDialog();
-        string newName = renameWindow.NewName ?? throw new ArgumentNullException(nameof(renameWindow.NewName));
-
-        string newFullName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, newName);
-
-        File.Move(currentName, newFullName);
-
-        int selectedIndex = DllList.SelectedIndex;
-        _dlls[selectedIndex] = newName;
-
-        if (selectedDll == defaultDll)
+        string selectedDll = (string)DllList.SelectedItem;
+        if (selectedDll != null)
         {
-            ConfigTool.SetDefaultDLL(newName);
-            LoadDefaultDLL();
+            RenameWindow? renameWindow = new(selectedDll);
+            bool? result = renameWindow.ShowDialog();
+            if (result == true)
+            {
+                string currentName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
+                string newName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, renameWindow.NewName);
+                File.Move(currentName, newName);
+                int selectedIndex = DllList.SelectedIndex;
+                _dlls[selectedIndex] = renameWindow.NewName;
+            }
+            if (selectedDll == defaultDll)
+            {
+                ConfigTool.SetDefaultDLL(renameWindow.NewName);
+                LoadDefaultDLL();
+            }
         }
     }
 
@@ -191,7 +190,7 @@ public partial class MainWindow
         string selectedItem = (string)DllList.SelectedItem;
         if (selectedItem == null) return;
 
-        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Config.txt");
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
         if (!File.Exists(configPath)) return;
 
         var result = MessageBox.Show($"Are you sure you want to set the default DLL to {selectedItem}? This will automatically inject your DLL when launching.", "Confirmation", MessageBoxButton.OKCancel);
@@ -203,7 +202,7 @@ public partial class MainWindow
 
     private void ResetSetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
     {
-        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Config.txt");
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
         if (!File.Exists(configPath)) return;
 
         var result = MessageBox.Show($"Are you sure you want to reset the default DLL to None? Doing so will remove the auto-injection on launch.", "Confirmation", MessageBoxButton.OKCancel);
@@ -222,10 +221,7 @@ public partial class MainWindow
 
             if (result == MessageBoxResult.Yes)
             {
-                string filePath = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    DLL_FOLDER,
-                    selectedDll);
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
                 File.Delete(filePath);
 
                 _dlls.Remove(selectedDll);

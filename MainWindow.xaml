@@ -63,7 +63,7 @@
     <!-- endregion -->
 
     <Grid>
-        <Grid x:Name="OpeningAnim" Panel.ZIndex="10">
+        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Collapsed">
             <Border Background="#111111" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="0.5"/>
             <Image x:Name="OpeningLogo" Source="Images/starz.png" Margin="479,254,479,254" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Border Background="White" CornerRadius="2" BorderThickness="1" Margin="496,394,496,252">
@@ -437,7 +437,7 @@
                         <Label Content="Last updated: 2023-03-18" FontSize="10px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="570,278,23,113"/>
                         <Rectangle Fill="Transparent" Stroke="AliceBlue" StrokeThickness="0" Height="415" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="10" RadiusY="10"/>
                         <Rectangle Fill="AliceBlue" Height="2" Width="502" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,360,0,0" />
-                        <Rectangle Fill="Gray" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="236" Width="684" Margin="0,66,0,0"/>
+                        <Rectangle Fill="Gray" Opacity="0.05" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="236" Width="684" Margin="0,66,0,0"/>
                     </Grid>
                     <Grid x:Name="PanelB" Margin="26,128,337,128" Panel.ZIndex="5" Visibility="Collapsed">
                     </Grid>
@@ -1129,8 +1129,8 @@
                         HorizontalAlignment="Left"
                         Margin="36,129,0,0"
                         VerticalAlignment="Top"/>
-                    <Rectangle Fill="#111111" Height="72" Width="520" Opacity="0.2" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,172,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
-                    <Rectangle Fill="#111111" Height="72" Width="520" Opacity="0.2" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,355,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
+                    <Rectangle Fill="Gray" Height="72" Width="520" Opacity="0.05" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,172,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
+                    <Rectangle Fill="Gray" Height="72" Width="520" Opacity="0.05" HorizontalAlignment="Left" Panel.ZIndex="-1"  VerticalAlignment="Top" Margin="27,355,0,0" StrokeThickness="0.5" Stroke="AliceBlue"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Mods Manager" Margin="432,72,-432,-75">
@@ -1146,8 +1146,8 @@
                             </BeginStoryboard>
                         </EventTrigger>
                     </Grid.Triggers>
-                    <Rectangle Fill="#111111" Height="86" Width="479" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="575,365,0,0"/>
-                    <Rectangle Fill="#111111" Height="86" Width="479" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="575,187,0,0"/>
+                    <Rectangle Fill="Gray" Height="86" Width="479" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="575,365,0,0"/>
+                    <Rectangle Fill="Gray" Height="86" Width="479" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="575,187,0,0"/>
                     <Rectangle Fill="AliceBlue" Height="2" Width="1038" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,599,0,0"/>
                     <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>
                     <Border x:Name="DragZone" HorizontalAlignment="Left"
