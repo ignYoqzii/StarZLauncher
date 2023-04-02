@@ -1066,7 +1066,7 @@
                         </Button.Style>
                         <TextBlock Text="1.17 DLL" Opacity="0.8" Foreground="AliceBlue" FontSize="10" FontWeight="Bold"/>
                     </Button>
-                    <Button x:Name="downloadButtonlatest" BorderThickness="2" Tag="1.19.63" VerticalAlignment="Top" Cursor="Hand" Margin="290,297,744,0" Click="DownloadButtonLatite_Click" Height="32">
+                    <Button x:Name="downloadButtonlatest" BorderThickness="2" Tag="1.19.71" VerticalAlignment="Top" Cursor="Hand" Margin="290,297,744,0" Click="DownloadButtonLatite_Click" Height="32">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">

@@ -248,19 +248,41 @@ public partial class MainWindow
         DragMove();
     }
     //Play Section (Main Menu)
+    private static void OpenGame()
+    {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Normal,
+                FileName = "explorer.exe",
+                Arguments = "shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App",
+                UseShellExecute = true,
+                Verb = "runas" // run with elevated privileges
+            }
+        };
+
+        // load the game faster
+        process.Start();
+        process.PriorityClass = ProcessPriorityClass.High;
+
+        Task.Delay(1500).Wait(); // wait for 1.5 seconds before killing the Runtime Broker process and load the game way faster
+        Process.GetProcessesByName("RuntimeBroker").ToList().ForEach(process => process.Kill());
+    }
+
     //Only run Minecraft without DLLs
     public async void LaunchButton_OnLeftClick(object sender, RoutedEventArgs e)
     {
-        if (Process.GetProcessesByName("Minecraft.Windows").Length != 0) return;
+        if (Process.GetProcessesByName("Minecaft.Windows").Length != 0) return;
 
-        Process.Start("minecraft:");
+        OpenGame();
 
-        Minecraft = await Task.Run(() =>
+        while (true)
         {
-            while (Process.GetProcessesByName("Minecraft.Windows").Length == 0) { }
-            return Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
-        });
-        if (Minecraft == null) return;
+            if (Process.GetProcessesByName("Minecraft.Windows").Length == 0) continue;
+            Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
+            break;
+        }
 
         try
         {
@@ -363,16 +385,16 @@ public partial class MainWindow
             return;
         }
 
-        if (Process.GetProcessesByName("Minecraft.Windows").Length != 0) return;
+        if (Process.GetProcessesByName("Minecaft.Windows").Length != 0) return;
 
-        Process.Start("minecraft:");
+        OpenGame();
 
-        Minecraft = await Task.Run(() =>
+        while (true)
         {
-            while (Process.GetProcessesByName("Minecraft.Windows").Length == 0) { }
-            return Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
-        });
-        if (Minecraft == null) return;
+            if (Process.GetProcessesByName("Minecraft.Windows").Length == 0) continue;
+            Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
+            break;
+        }
 
         try
         {

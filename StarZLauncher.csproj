@@ -11,6 +11,11 @@
 		<Company>StarZ</Company>
 		<Product>StarZ Launcher</Product>
 		<AssemblyName>StarZ Launcher</AssemblyName>
+		<Description>A Minecraft Bedrock Edition Launcher</Description>
+		<Copyright>StarZ Team ©</Copyright>
+		<FileVersion>4.2.1.0</FileVersion>
+		<AssemblyVersion>4.2.1.0</AssemblyVersion>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
     <ItemGroup>
@@ -92,6 +97,7 @@
     <ItemGroup>
       <Reference Include="Accessibility" />
       <Reference Include="System.IO.Compression" />
+      <Reference Include="System.Management" />
       <Reference Include="System.Windows.Forms" />
     </ItemGroup>
 
