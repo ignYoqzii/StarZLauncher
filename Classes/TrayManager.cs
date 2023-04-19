@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace StarZLauncher
+namespace StarZLauncher.Classes
 {
     // class to create and handle the system tray icon if the option in settings is selected
     public static class TrayManager

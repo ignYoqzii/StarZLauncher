@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 
-namespace StarZLauncher
+namespace StarZLauncher.Classes
 {
     // This class handles the Settings.txt file
     public static class ConfigTool
