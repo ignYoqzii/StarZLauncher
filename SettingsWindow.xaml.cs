@@ -19,6 +19,7 @@ namespace StarZLauncher
             LoadSettingsFromFile();
         }
 
+        // Load the background image everytime the window is opened or loaded
         private void SetBackgroundImage()
         {
             // Read file contents (image file name)
@@ -36,6 +37,7 @@ namespace StarZLauncher
             }
         }
 
+        // Change the background image on the click of the button
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // Create directory for images if it doesn't exist
@@ -85,6 +87,7 @@ namespace StarZLauncher
             }
         }
 
+        // Load the default values of the checkboxes, drop downs... on window's loading
         private void LoadSettingsFromFile()
         {
             bool DiscordRPCisChecked = ConfigTool.GetDiscordRPC();
@@ -132,6 +135,7 @@ namespace StarZLauncher
             }
         }
 
+        // Event for Discord RPC option
         private void DRP_Click(object sender, RoutedEventArgs e)
         {
             if (DRP.IsChecked == true)
@@ -152,6 +156,7 @@ namespace StarZLauncher
             }
         }
 
+        // Event for show game version option
         private void SGV_Click(object sender, RoutedEventArgs e)
         {
             if (SGV.IsChecked == true)
@@ -164,6 +169,7 @@ namespace StarZLauncher
             }
         }
 
+        // Event for show dll name option
         private void SDN_Click(object sender, RoutedEventArgs e)
         {
             if (SDN.IsChecked == true)
@@ -176,6 +182,7 @@ namespace StarZLauncher
             }
         }
 
+        // Event for launch option
         private void ComboBoxLaunchOption_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBoxItem selectedItem = ComboBoxLaunchOption.SelectedItem as ComboBoxItem ?? throw new ArgumentNullException(nameof(ComboBoxLaunchOption.SelectedItem));
@@ -196,11 +203,13 @@ namespace StarZLauncher
             }
         }
 
+        // Close the settings window
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Hide();
         }
 
+        // Move the window on screen
         private void WindowToolbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();

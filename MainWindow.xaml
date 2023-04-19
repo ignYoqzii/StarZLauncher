@@ -63,7 +63,7 @@
     <!-- endregion -->
 
     <Grid>
-        <Grid x:Name="OpeningAnim" Panel.ZIndex="10">
+        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Collapsed">
             <Border Background="#111111" CornerRadius="20" BorderBrush="AliceBlue" BorderThickness="0.5"/>
             <Image x:Name="OpeningLogo" Source="Images/starz.png" Margin="479,254,479,254" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Border Background="White" CornerRadius="2" BorderThickness="1" Margin="496,394,496,252">
@@ -379,11 +379,11 @@
                             </BeginStoryboard>
                         </EventTrigger>
                     </Grid.Triggers>
-                    <Label x:Name="CurrentVersion" Content="" Foreground="AliceBlue" Margin="782,519,119,128" FontSize="12" HorizontalContentAlignment="Left"  FontWeight="Light"/>
+                    <Label x:Name="CurrentVersion" Content="N/A" Foreground="AliceBlue" Margin="782,607,222,40" FontSize="12" HorizontalContentAlignment="Center" FontWeight="Bold"/>
                     <Button
                         Height="58" 
                         x:Name="LaunchButton" 
-                        Content="LAUNCH" 
+                        Content="PLAY"                       
                         FontWeight="DemiBold" 
                         FontSize="30px"
                         RenderOptions.BitmapScalingMode="HighQuality"
@@ -393,7 +393,7 @@
                         Template="{StaticResource DefaultButtons}"
                         VerticalAlignment="Top" Click="LaunchButton_OnLeftClick" 
                         MouseRightButtonDown="LaunchButton_OnRightClick" 
-                        Margin="779,590,19,0">
+                        Margin="884,590,19,0">
                     </Button>
                     <Label Content="Default DLL:" x:Name="DefaultDLLLabel" Foreground="AliceBlue" Opacity="1" HorizontalContentAlignment="Right" FontWeight="Light" Margin="884,564,14,77"/>
                     <Label
@@ -430,11 +430,6 @@
         Opacity="0" Height="13" VerticalAlignment="Top" />
                     </Grid>
                     <Grid x:Name="PanelA" Margin="26,128,337,128" Panel.ZIndex="4">
-                        <Label Content="LATEST UPDATES" FontSize="30px" Foreground="AliceBlue" Opacity="0.7" Margin="242,5,243,354"/>
-                        <Label Content="- Bug Fixes" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,83,573,293"/>
-                        <Label Content="- New Design" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,157,541,219"/>
-                        <Label Content="- New Features" FontSize="20px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="40,231,541,145"/>
-                        <Label Content="Last updated: 2023-03-18" FontSize="10px" Foreground="AliceBlue" FontWeight="Bold"  Opacity="0.7" Margin="570,278,23,113"/>
                         <Rectangle Fill="Transparent" Stroke="AliceBlue" StrokeThickness="0" Height="415" Width="731" Opacity="0.1" HorizontalAlignment="Center" VerticalAlignment="Center" RadiusX="10" RadiusY="10"/>
                         <Rectangle Fill="AliceBlue" Height="2" Width="502" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,360,0,0" />
                         <Rectangle Fill="Gray" Opacity="0.05" HorizontalAlignment="Center" VerticalAlignment="Top" RadiusX="10" RadiusY="10" Height="236" Width="684" Margin="0,66,0,0"/>
@@ -443,9 +438,10 @@
                     </Grid>
                     <Image Panel.ZIndex="4" Cursor="Hand" Opacity="0.7" Source="Images/Hide.png" RenderOptions.BitmapScalingMode="HighQuality" MouseLeftButtonDown="TogglePanels_Click" Margin="728,135,343,513" />
                     <Rectangle Fill="#111111" Height="415" Width="296" Opacity="0.2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="779,0,0,0" RadiusX="10" RadiusY="10" Stroke="AliceBlue" StrokeThickness="0"/>
-                    <Rectangle Fill="#111111" Height="54" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,128,0,0" RadiusX="10" RadiusY="10"/>
-                    <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,265,0,0"/>
-                    <Rectangle Fill="#111111" Height="86" Width="296" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,438,0,0"/>
+                    <Rectangle Fill="Gray" Height="54" Width="296" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,128,0,0" RadiusX="10" RadiusY="10"/>
+                    <Rectangle Fill="Gray" Height="86" Width="296" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,265,0,0"/>
+                    <Rectangle Fill="Gray" Height="34" RadiusX="10" RadiusY="10" Width="90" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="782,602,0,0"/>
+                    <Rectangle Fill="Gray" Height="86" Width="296" Opacity="0.05" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="779,438,0,0"/>
                     <Rectangle Fill="#111111" Height="415" Width="731" Opacity="0.3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="26,0,0,0" RadiusX="10" RadiusY="10"/>
                     <Rectangle Fill="AliceBlue" Height="2" Width="731" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,617,0,0"/>
                     <Rectangle Fill="Transparent" Height="78" Width="1100" Opacity="0.1" Canvas.Left="14" Canvas.Top="27" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,22,0,0" MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"/>

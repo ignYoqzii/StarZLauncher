@@ -97,7 +97,6 @@
     <ItemGroup>
       <Reference Include="Accessibility" />
       <Reference Include="System.IO.Compression" />
-      <Reference Include="System.Management" />
       <Reference Include="System.Windows.Forms" />
     </ItemGroup>
 

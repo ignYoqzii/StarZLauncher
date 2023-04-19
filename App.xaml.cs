@@ -6,9 +6,7 @@ using StarZLauncher.Classes;
 
 namespace StarZLauncher;
 
-/// <summary>
-///     Interaction logic for App.xaml
-/// </summary>
+// class to create the launcher's folders in documents + check for launcher's version + call the DiscordRPC class for initializations based on the settings
 public partial class App : Application
 {
     bool HasRun = false;

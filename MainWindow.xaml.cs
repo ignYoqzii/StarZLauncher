@@ -7,7 +7,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,24 +53,63 @@ public partial class MainWindow
         versionInfo.CheckForUpdates();
     }
 
+    // Load the default dll name on launch to display on the mainwindow
     private void LoadDefaultDLL()
     {
         defaultDll = ConfigTool.GetDefaultDLL();
         DefaultDLLLabel.Content = $"Default DLL: {defaultDll}";
     }
+
+    // Load the versions numbers for the labels
     private void LoadCurrentVersion()
     {
         if (versionInfo.filePath != null)
         {
-            CurrentVersion.Content = $"Current Version: {versionNumber}";
+            CurrentVersion.Content = $"{versionNumber}";
             LabelVersion.Content = $"{launcherVersion}";
         }
         else
         {
-            CurrentVersion.Content = "Current Version: Error";
+            CurrentVersion.Content = "Error";
             LabelVersion.Content = "Error";
         }
     }
+
+    // Load the background image on window's loading
+    public void SetBackgroundImage()
+    {
+        // Read file contents (image file name)
+        string fileName = ConfigTool.GetLauncherBackground();
+
+        // Create file path for image file
+        string imagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Images", fileName);
+
+        // Check if image file exists
+        if (File.Exists(imagePath))
+        {
+            // Load image into image control
+            BitmapImage image = new(new Uri(imagePath));
+            BackgroundImage.Source = image;
+        }
+    }
+
+    // This loads the dlls from the DLLs folder in documents to display them in the DLLs section of the launcher after
+    private void LoadDlls()
+    {
+        string dllFolderPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER);
+
+        if (Directory.Exists(dllFolderPath))
+        {
+            string[] dllFiles = Directory.GetFiles(dllFolderPath, "*.dll");
+            foreach (string dllFile in dllFiles)
+            {
+                _dlls.Add(Path.GetFileName(dllFile));
+            }
+        }
+    }
+
+    // Animation on program's launch
 
     private bool isFirstTimeOpened = true;
 
@@ -104,29 +142,37 @@ public partial class MainWindow
         }
     }
 
-    private void LauncherFolder_Click(object sender, RoutedEventArgs e)
+    // close the program
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
-        string LauncherFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher";
-
-        if (Directory.Exists(LauncherFolderPath))
-        {
-            Process.Start(LauncherFolderPath);
-        }
-        else
-        {
-            MessageBox.Show("Error while opening a folder ; restart the application. If the issue persists, ask for #support on our Discord server.");
-        }
+        Application.Current.Shutdown();
     }
 
-    private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/ScR9MGbRSY");
+    // minimize the program
+    private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+    // move the window on screen
+    private void WindowToolbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        DragMove();
+    }
 
-    private void YouTubeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.youtube.com/channel/UCbN3FxySrPSeUMVe5ISraWw");
+    private static void OnClosing(object sender, CancelEventArgs e) => e.Cancel = true;
 
-    private void GithubIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://github.com/ignYoqzii/StarZLauncher");
+    /// <summary>
 
-    private void TwitchIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.twitch.tv/zl1me");
+
+
+    // Main Menu section code
+
+
+
+    /// </summary>
 
     //Needs some work
+    //This is the event for the little eye icon to hide or show the news
     private void TogglePanels_Click(object sender, RoutedEventArgs e)
     {
         if (PanelB.Visibility == Visibility.Visible)
@@ -146,108 +192,7 @@ public partial class MainWindow
         }
     }
 
-    private void LoadDlls()
-    {
-        string dllFolderPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER);
-
-        if (Directory.Exists(dllFolderPath))
-        {
-            string[] dllFiles = Directory.GetFiles(dllFolderPath, "*.dll");
-            foreach (string dllFile in dllFiles)
-            {
-                _dlls.Add(Path.GetFileName(dllFile));
-            }
-        }
-    }
-
-    private void Edit_MouseLeftButtonDown(object sender, RoutedEventArgs e)
-    {
-        string selectedDll = (string)DllList.SelectedItem;
-        if (selectedDll != null)
-        {
-            RenameWindow? renameWindow = new(selectedDll);
-            bool? result = renameWindow.ShowDialog();
-            if (result == true)
-            {
-                string currentName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
-                string newName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, renameWindow.NewName);
-                File.Move(currentName, newName);
-                int selectedIndex = DllList.SelectedIndex;
-                _dlls[selectedIndex] = renameWindow.NewName;
-            }
-            if (selectedDll == defaultDll)
-            {
-                ConfigTool.SetDefaultDLL(renameWindow.NewName);
-                LoadDefaultDLL();
-            }
-        }
-    }
-
-
-    private void SetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
-    {
-        string selectedItem = (string)DllList.SelectedItem;
-        if (selectedItem == null) return;
-
-        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
-        if (!File.Exists(configPath)) return;
-
-        var result = MessageBox.Show($"Are you sure you want to set the default DLL to {selectedItem}? This will automatically inject your DLL when launching.", "Confirmation", MessageBoxButton.OKCancel);
-        if (result != MessageBoxResult.OK) return;
-
-        ConfigTool.SetDefaultDLL(selectedItem);
-        LoadDefaultDLL();
-    }
-
-    private void ResetSetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
-    {
-        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
-        if (!File.Exists(configPath)) return;
-
-        var result = MessageBox.Show($"Are you sure you want to reset the default DLL to None? Doing so will remove the auto-injection on launch.", "Confirmation", MessageBoxButton.OKCancel);
-        if (result != MessageBoxResult.OK) return;
-
-        ConfigTool.SetDefaultDLL("None");
-        LoadDefaultDLL();
-    }
-
-    private void Delete_MouseLeftButtonDown(object sender, RoutedEventArgs e)
-    {
-        string selectedDll = (string)DllList.SelectedItem;
-        if (selectedDll != null)
-        {
-            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this DLL?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
-                File.Delete(filePath);
-
-                _dlls.Remove(selectedDll);
-            }
-            if (selectedDll == defaultDll)
-            {
-                ConfigTool.SetDefaultDLL("None");
-                LoadDefaultDLL();
-            }
-        }
-    }
-
-    private void CloseButton_Click(object sender, RoutedEventArgs e)
-    {
-        Application.Current.Shutdown();
-    }
-
-    private void MinimizeButton_Click(object sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState.Minimized;
-    }
-    private void WindowToolbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        DragMove();
-    }
-    //Play Section (Main Menu)
+    // launch the game
     private static void OpenGame()
     {
         var process = new Process
@@ -258,19 +203,17 @@ public partial class MainWindow
                 FileName = "explorer.exe",
                 Arguments = "shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App",
                 UseShellExecute = true,
-                Verb = "runas" // run with elevated privileges
             }
         };
 
         // load the game faster
         process.Start();
-        process.PriorityClass = ProcessPriorityClass.High;
 
         Task.Delay(1500).Wait(); // wait for 1.5 seconds before killing the Runtime Broker process and load the game way faster
         Process.GetProcessesByName("RuntimeBroker").ToList().ForEach(process => process.Kill());
     }
 
-    //Only run Minecraft without DLLs
+    //Only run Minecraft without DLLs or with the default dll
     public async void LaunchButton_OnLeftClick(object sender, RoutedEventArgs e)
     {
         if (Process.GetProcessesByName("Minecaft.Windows").Length != 0) return;
@@ -370,7 +313,7 @@ public partial class MainWindow
     }
 
 
-    //Run Minecraft with a DLL
+    //Run Minecraft with a DLL selected from the file explorer window
     public async void LaunchButton_OnRightClick(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new()
@@ -449,6 +392,7 @@ public partial class MainWindow
         }
     }
 
+    // handle the game closing event
     private void IfMinecraftExited(object sender, EventArgs e)
     {
         bool DiscordRPCisEnabled = ConfigTool.GetDiscordRPC();
@@ -459,6 +403,7 @@ public partial class MainWindow
         IsMinecraftRunning = false;
     }
 
+    // show the settings window on click of the settings icon
     private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
     {
         {
@@ -474,23 +419,7 @@ public partial class MainWindow
         SettingsWindow.Show();
     }
 
-    public void SetBackgroundImage()
-    {
-        // Read file contents (image file name)
-        string fileName = ConfigTool.GetLauncherBackground();
-
-        // Create file path for image file
-        string imagePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Images", fileName);
-
-        // Check if image file exists
-        if (File.Exists(imagePath))
-        {
-            // Load image into image control
-            BitmapImage image = new(new Uri(imagePath));
-            BackgroundImage.Source = image;
-        }
-    }
-
+    // download StarZ X Minecraft selected version
     private readonly Dictionary<Button, string> downloads = new();
     private bool isDownloading = false;
 
@@ -579,7 +508,7 @@ public partial class MainWindow
         }
     }
 
-    //To install the appxs
+    //To install the zips after download
     private void InstallButton_Click(object sender, EventArgs e)
     {
         if (isRunning) // check if installation is already in progress or not
@@ -676,7 +605,16 @@ public partial class MainWindow
         });
     }
 
-    //Scripts / Mods Section
+    /// <summary>
+    
+    
+    
+    // Mods Manager section code
+    
+    
+    
+    /// </summary>
+
     private void GetScriptsButton_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://github.com/bernarddesfosse/OnixClient_Scripts");
 
     //Open the resourcepacks folder
@@ -693,6 +631,8 @@ public partial class MainWindow
             MessageBox.Show("Error while opening a folder ; is Minecraft installed?");
         }
     }
+
+    // Drag and drop code for the textures packs and the lua scripts
     private void InitializeDragDrop()
     {
         DragZone.AllowDrop = true;
@@ -801,6 +741,7 @@ public partial class MainWindow
         return extension.Equals(".zip", StringComparison.OrdinalIgnoreCase);
     }
 
+    // persona skin pack installer if StarZ X Minecraft is installed
     private void Persona_Click(object sender, RoutedEventArgs e)
     {
         string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -833,6 +774,7 @@ public partial class MainWindow
         }
     }
 
+    // shader materials.bin installer if StarZ X Minecraft is installed
     private void ShaderInstall_Click(object sender, RoutedEventArgs e)
     {
         string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -895,6 +837,7 @@ public partial class MainWindow
         MessageBox.Show("Shaders installed successfully!");
     }
 
+    // remove any installed shader
     private void ShaderRemove_Click(object sender, RoutedEventArgs e)
     {
         string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -953,8 +896,94 @@ public partial class MainWindow
         MessageBox.Show("Shaders removed successfully!");
     }
 
-    //DLLs Section
+    /// <summary>
+
+
+
+    // DLLs Clients section code
+
+
+
+    /// </summary>
+
     // Download Latite's DLLs and launch Minecraft if checkbox is checked
+
+    // To edit the name of a dll
+    private void Edit_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        string selectedDll = (string)DllList.SelectedItem;
+        if (selectedDll != null)
+        {
+            RenameWindow? renameWindow = new(selectedDll);
+            bool? result = renameWindow.ShowDialog();
+            if (result == true)
+            {
+                string currentName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
+                string newName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, renameWindow.NewName);
+                File.Move(currentName, newName);
+                int selectedIndex = DllList.SelectedIndex;
+                _dlls[selectedIndex] = renameWindow.NewName;
+            }
+            if (selectedDll == defaultDll)
+            {
+                ConfigTool.SetDefaultDLL(renameWindow.NewName);
+                LoadDefaultDLL();
+            }
+        }
+    }
+
+    // set the selected dll as default
+    private void SetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        string selectedItem = (string)DllList.SelectedItem;
+        if (selectedItem == null) return;
+
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
+        if (!File.Exists(configPath)) return;
+
+        var result = MessageBox.Show($"Are you sure you want to set the default DLL to {selectedItem}? This will automatically inject your DLL when launching.", "Confirmation", MessageBoxButton.OKCancel);
+        if (result != MessageBoxResult.OK) return;
+
+        ConfigTool.SetDefaultDLL(selectedItem);
+        LoadDefaultDLL();
+    }
+
+    // remove the default dll
+    private void ResetSetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
+        if (!File.Exists(configPath)) return;
+
+        var result = MessageBox.Show($"Are you sure you want to reset the default DLL to None? Doing so will remove the auto-injection on launch.", "Confirmation", MessageBoxButton.OKCancel);
+        if (result != MessageBoxResult.OK) return;
+
+        ConfigTool.SetDefaultDLL("None");
+        LoadDefaultDLL();
+    }
+
+    // delete the selected dll
+    private void Delete_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+    {
+        string selectedDll = (string)DllList.SelectedItem;
+        if (selectedDll != null)
+        {
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this DLL?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
+                File.Delete(filePath);
+
+                _dlls.Remove(selectedDll);
+            }
+            if (selectedDll == defaultDll)
+            {
+                ConfigTool.SetDefaultDLL("None");
+                LoadDefaultDLL();
+            }
+        }
+    }
+
     private void DownloadButtonLatite_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button)
@@ -1012,5 +1041,36 @@ public partial class MainWindow
     private void Latite_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/latite");
 
     private void Luconia_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://discord.gg/luconia");
-    private static void OnClosing(object sender, CancelEventArgs e) => e.Cancel = true;
+
+    /// <summary>
+
+
+
+    // About section code
+
+
+
+    /// </summary>
+    
+    private void LauncherFolder_Click(object sender, RoutedEventArgs e)
+    {
+        string LauncherFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher";
+
+        if (Directory.Exists(LauncherFolderPath))
+        {
+            Process.Start(LauncherFolderPath);
+        }
+        else
+        {
+            MessageBox.Show("Error while opening a folder ; restart the application. If the issue persists, ask for #support on our Discord server.");
+        }
+    }
+
+    private void DiscordIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://discord.gg/ScR9MGbRSY");
+
+    private void YouTubeIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.youtube.com/channel/UCbN3FxySrPSeUMVe5ISraWw");
+
+    private void GithubIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://github.com/ignYoqzii/StarZLauncher");
+
+    private void TwitchIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => Process.Start("https://www.twitch.tv/zl1me");
 }
