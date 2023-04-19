@@ -3,6 +3,7 @@ using System.Windows.Forms;
 
 namespace StarZLauncher
 {
+    // class to create and handle the system tray icon if the option in settings is selected
     public static class TrayManager
     {
         private static NotifyIcon? _notifyIcon;

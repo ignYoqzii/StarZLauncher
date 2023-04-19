@@ -9,6 +9,7 @@ namespace StarZLauncher.Classes
 {
     public class versionInfo
     {
+        // class to handle the versions check for the game and the launcher
         // Path to the telemetry_info.json file
         public static string filePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\telemetry_info.json";
 

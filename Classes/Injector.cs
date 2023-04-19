@@ -14,6 +14,7 @@ using static StarZLauncher.MainWindow;
 
 namespace StarZLauncher.Classes
 {
+    // class to inject the dlls
     public static class Injector
     {
         public static void Inject(string path)

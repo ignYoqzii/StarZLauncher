@@ -3,6 +3,7 @@
 
 namespace StarZLauncher.Classes
 {
+    // Handles the DiscordRPC initialization
     // From Plextora#0033 / Modified by Yoqzii
     public static class DiscordRichPresenceManager
     {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace StarZLauncher
 {
+    // This class handles the Settings.txt file
     public static class ConfigTool
     {
         // Default values for settings
