@@ -8,7 +8,7 @@ A modern looking launcher with many features in future updates !
 # Notes
 Works with any Minecraft version as long as your dll supports it.
 
-**You can use this launcher to create your own (like a template), but my name should appear in your credits =)**
+## Make sure to check ![LICENSE.md]()
 
 
 
