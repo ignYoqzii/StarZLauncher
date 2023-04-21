@@ -8,7 +8,7 @@ A modern looking launcher with many features in future updates !
 # Notes
 Works with any Minecraft version as long as your dll supports it.
 
-## Make sure to check ![LICENSE.md]()
+## Make sure to check ![LICENSE.md](https://github.com/ignYoqzii/StarZLauncher/blob/main/LICENSE.md)
 
 
 
