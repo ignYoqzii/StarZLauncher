@@ -71,7 +71,7 @@ namespace StarZLauncher.Classes
                     }
                     catch (Win32Exception ex)
                     {
-                        MessageBox.Show($"Minecraft was exited before injecting: {ex.Message}" , "StarZ crashed =(");
+                        MessageBox.Show($"Minecraft was exited before injecting: {ex.Message}", "StarZ crashed =(");
                     }
 
                     if (Minecraft?.Modules.Count > 160) break;

@@ -16,7 +16,7 @@ namespace StarZLauncher.Classes
             {
                 discordClient ??= new DiscordRpcClient(ClientId);
                 return discordClient;
-            }   
+            }
         }
 
         public static void SetPresence()
