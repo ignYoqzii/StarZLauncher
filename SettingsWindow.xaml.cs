@@ -93,7 +93,7 @@ namespace StarZLauncher
             bool DiscordRPCisChecked = ConfigTool.GetDiscordRPC();
             if (DiscordRPCisChecked == true)
             {
-                DRP.IsChecked= true;
+                DRP.IsChecked = true;
                 DiscordOptions.Visibility = Visibility.Visible;
             }
             else

@@ -175,20 +175,13 @@ public partial class MainWindow
     //This is the event for the little eye icon to hide or show the news
     private void TogglePanels_Click(object sender, RoutedEventArgs e)
     {
-        if (PanelB.Visibility == Visibility.Visible)
-        {
-            PanelA.Visibility = Visibility.Visible;
-            PanelB.Visibility = Visibility.Collapsed;
-        }
-        else if (PanelA.Visibility == Visibility.Visible && PanelB.Visibility == Visibility.Collapsed)
+        if (PanelA.Visibility == Visibility.Visible)
         {
             PanelA.Visibility = Visibility.Collapsed;
-            PanelB.Visibility = Visibility.Collapsed;
         }
-        else
+        else if (PanelA.Visibility == Visibility.Collapsed)
         {
             PanelA.Visibility = Visibility.Visible;
-            PanelB.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -206,11 +199,11 @@ public partial class MainWindow
             }
         };
 
-        // load the game faster
         process.Start();
 
+        // load the game faster
         Task.Delay(1500).Wait(); // wait for 1.5 seconds before killing the Runtime Broker process and load the game way faster
-        Process.GetProcessesByName("RuntimeBroker").ToList().ForEach(process => process.Kill());
+        Process.GetProcessesByName("RuntimeBroker").ToList().ForEach(runtimeprocess => runtimeprocess.Kill());
     }
 
     //Only run Minecraft without DLLs or with the default dll
@@ -606,16 +599,16 @@ public partial class MainWindow
     }
 
     /// <summary>
-    
-    
-    
+
+
+
     // Mods Manager section code
-    
-    
-    
+
+
+
     /// </summary>
 
-    private void GetScriptsButton_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://github.com/bernarddesfosse/OnixClient_Scripts");
+    private void GetScriptsButton_OnLeftClick(object sender, RoutedEventArgs e) => Process.Start("https://github.com/OnixClient-Scripts/OnixClient_Scripts");
 
     //Open the resourcepacks folder
     private void TexturePackButton_OnLeftClick(object sender, RoutedEventArgs e)
@@ -922,11 +915,15 @@ public partial class MainWindow
                 string newName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, renameWindow.NewName);
                 File.Move(currentName, newName);
                 int selectedIndex = DllList.SelectedIndex;
+#pragma warning disable CS8601 // Possible null reference assignment.
                 _dlls[selectedIndex] = renameWindow.NewName;
+#pragma warning restore CS8601 // Possible null reference assignment.
             }
             if (selectedDll == defaultDll)
             {
+#pragma warning disable CS8604 // Possible null reference argument.
                 ConfigTool.SetDefaultDLL(renameWindow.NewName);
+#pragma warning restore CS8604 // Possible null reference argument.
                 LoadDefaultDLL();
             }
         }
@@ -1009,13 +1006,6 @@ public partial class MainWindow
             Directory.CreateDirectory(DllsFolderPath);
             File.WriteAllBytes(fileName, data);
             MessageBox.Show($"Latite's DLL for Minecraft {minecraftVersion} has been downloaded!");
-
-            // Check if the checkbox is checked
-            if (Checkbox.IsChecked == true)
-            {
-                MainWindow mainWindow = new();
-                mainWindow.LaunchButton_OnRightClick(sender, e);
-            }
         }
         catch (WebException ex)
         {
@@ -1051,7 +1041,7 @@ public partial class MainWindow
 
 
     /// </summary>
-    
+
     private void LauncherFolder_Click(object sender, RoutedEventArgs e)
     {
         string LauncherFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\StarZ Launcher";
