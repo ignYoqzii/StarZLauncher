@@ -2,7 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Windows;
-using StarZLauncher.Classes;
+using StarZLauncher.Classes.Settings;
+using StarZLauncher.Classes.Discord;
 
 namespace StarZLauncher;
 
