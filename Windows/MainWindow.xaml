@@ -21,7 +21,7 @@
         <Grid 
             x:Name="OpeningAnim" 
             Panel.ZIndex="10" 
-            Visibility="Collapsed">
+            Visibility="Visible">
 
             <Border 
                 Background="#111111" 
