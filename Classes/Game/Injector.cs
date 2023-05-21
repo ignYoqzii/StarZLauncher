@@ -43,7 +43,7 @@ namespace StarZLauncher.Classes.Game
             catch (Exception ex)
             {
                 // Log the exception for debugging purposes
-                Console.WriteLine($"Error injecting library: {ex}");
+                MessageBox.Show($"Error injecting library: {ex}");
             }
         }
 
@@ -79,7 +79,6 @@ namespace StarZLauncher.Classes.Game
                 }
             });
         }
-
     }
 }
 

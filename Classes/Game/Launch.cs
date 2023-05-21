@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows;
 using System.IO;
+using System.Linq;
+using Windows.Management.Deployment;
+using Windows.System;
 using Microsoft.Win32;
 using static StarZLauncher.Windows.MainWindow;
 using static StarZLauncher.Classes.Tabs.DLLsManager;
 using StarZLauncher.Classes.Settings;
 using StarZLauncher.Classes.Discord;
+using Windows.ApplicationModel;
+using System.Threading.Tasks;
+using Windows.Foundation;
+using static System.WindowsRuntimeSystemExtensions;
+using Windows.System.Diagnostics;
+using StarZLauncher.Windows;
 
 namespace StarZLauncher.Classes.Game
 {
@@ -31,26 +39,10 @@ namespace StarZLauncher.Classes.Game
 
         public static void OpenGame()
         {
-            var process = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    WindowStyle = ProcessWindowStyle.Normal,
-                    FileName = "explorer.exe",
-                    Arguments = "shell:appsFolder\\Microsoft.MinecraftUWP_8wekyb3d8bbwe!App",
-                    UseShellExecute = true,
-                }
-            };
-
-            process.Start();
-
-            Task.Run(() =>
-            {
-                Task.Delay(1500).Wait();
-                LoadGameFaster();
-            });
+            Process.Start("minecraft:");
         }
 
+        // gotta find where to put this so it actually works
         private static void LoadGameFaster()
         {
             var brokers = Process.GetProcessesByName("RuntimeBroker");
@@ -144,7 +136,7 @@ namespace StarZLauncher.Classes.Game
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to inject DLL file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                StarZMessageBox.ShowDialog($"Injection failed! {ex.Message}", "Error !", false);
             }
         }
 
@@ -224,22 +216,22 @@ namespace StarZLauncher.Classes.Game
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Failed to inject DLL file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            StarZMessageBox.ShowDialog($"Injection failed! {ex.Message}", "Error !", false);
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"The specified DLL file '{defaultDll}' does not exist in the 'StarZ Launcher/DLLs' folder. Make sure your DLL is located in that folder!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        StarZMessageBox.ShowDialog("The DLL you provided couldn't be found!", "Error !", false);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("The 'Config.txt' file does not specify a default DLL file or the 'DefaultDLL' line is missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    StarZMessageBox.ShowDialog($"Settings.txt error on line 1 of the file.", "Error !", false);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to read the 'Config.txt' file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                StarZMessageBox.ShowDialog($"Failed to read Settings.txt. {ex.Message}", "Error !", false);
             }
         }
     }
