@@ -13,6 +13,7 @@
 > * Manage your textures packs
 > * Manage your client DLLs and inject them into the game
 > * Easily apply RenderDragon shaders to your game
+> * Easily manage profiles (com.mojang folder)
 > * Easily manage cosmetics skin packs (personas)
 > * Easily manage your Minecraft Version
 > * Clean and user friendly design
