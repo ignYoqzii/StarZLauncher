@@ -25,7 +25,7 @@ namespace StarZLauncher.Classes.Settings
             foreach (Window window in Application.Current.Windows)
             {
                 // Basic buttons
-                var basicButtons = new string[] { "LaunchButton", "AddDLLsButton", "GetScriptsButton", "TexturePacksFolderButton", "Cosmetic", "Shader", "ShaderRemove", "LauncherFolderButton", "ChangeImageButton", "CancelDownloadButton", "CancelRenameButton", "SaveRenameButton" };
+                var basicButtons = new string[] { "LaunchButton", "AddDLLsButton", "GetScriptsButton", "TexturePacksFolderButton", "Cosmetic", "Shader", "ShaderRemove", "LauncherFolderButton", "ChangeImageButton", "CancelDownloadButton", "CancelRenameButton", "SaveRenameButton", "ProfileApply", "ProfileSave" };
 
                 foreach (string buttonName in basicButtons)
                 {
@@ -98,7 +98,7 @@ namespace StarZLauncher.Classes.Settings
             foreach (Window window in Application.Current.Windows)
             {
                 // Basic buttons
-                var basicButtons = new string[] { "LaunchButton", "AddDLLsButton", "GetScriptsButton", "TexturePacksFolderButton", "Cosmetic", "Shader", "ShaderRemove", "LauncherFolderButton", "ChangeImageButton", "CancelDownloadButton", "CancelRenameButton", "SaveRenameButton" };
+                var basicButtons = new string[] { "LaunchButton", "AddDLLsButton", "GetScriptsButton", "TexturePacksFolderButton", "Cosmetic", "Shader", "ShaderRemove", "LauncherFolderButton", "ChangeImageButton", "CancelDownloadButton", "CancelRenameButton", "SaveRenameButton", "ProfileApply", "ProfileSave" };
 
                 foreach (string buttonName in basicButtons)
                 {

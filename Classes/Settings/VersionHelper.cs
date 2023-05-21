@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using StarZLauncher.Windows;
 using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes.Settings
@@ -68,9 +69,9 @@ namespace StarZLauncher.Classes.Settings
             }
             else
             {
-                DialogResult result = System.Windows.Forms.MessageBox.Show("StarZ Launcher is outdated. Do you want to download the latest version?", "Update Available", MessageBoxButtons.YesNo);
+                bool? result = StarZMessageBox.ShowDialog("A new update is available. Click OK to update the launcher to the latest, or CANCEL to ignore and keep using an outdated version.", "New update available !");
 
-                if (result == DialogResult.Yes)
+                if (result == true)
                 {
                     string downloadLink = string.Format(DOWNLOAD_URL, latestVersion);
                     DownloadLatestLauncher(downloadLink);
@@ -122,13 +123,13 @@ namespace StarZLauncher.Classes.Settings
         {
             if (telemetryinfoPath != null)
             {
-                CurrentMinecraftVersion.Content = $"{VersionNumber}";
-                CurrentLauncherVersion.Content = $"{LauncherVersion}";
+                CurrentMinecraftVersion!.Content = $"{VersionNumber}";
+                CurrentLauncherVersion!.Content = $"{LauncherVersion}";
             }
             else
             {
-                CurrentMinecraftVersion.Content = "Error";
-                CurrentLauncherVersion.Content = "Error";
+                CurrentMinecraftVersion!.Content = "Error";
+                CurrentLauncherVersion!.Content = "Error";
             }
         }
     }
