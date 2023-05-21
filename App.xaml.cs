@@ -21,6 +21,7 @@ public partial class App : Application
         string starZLauncherPath = Path.Combine(documentsPath, "StarZ Launcher");
         string starZVersionsPath = Path.Combine(starZLauncherPath, "StarZ Versions");
         string starZScriptsPath = Path.Combine(starZLauncherPath, "StarZ Scripts");
+        string profilesPath = Path.Combine(starZLauncherPath, "Profiles");
         string dllsPath = Path.Combine(starZLauncherPath, "DLLs");
         string versionFilePath = Path.Combine(starZLauncherPath, "LauncherVersion.txt");
         string oldConfigFilePath = Path.Combine(starZLauncherPath, "Config.txt");
@@ -45,6 +46,10 @@ public partial class App : Application
             Directory.CreateDirectory(dllsPath);
         }
 
+        if (!Directory.Exists(profilesPath))
+        {
+            Directory.CreateDirectory(profilesPath);
+        }
 
         if (!File.Exists(versionFilePath))
         {
