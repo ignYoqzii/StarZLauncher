@@ -10,7 +10,7 @@
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen"
         Title="Rename"
-        Height="125"
+        Height="200"
         Width="200"
         AllowsTransparency="True"
         Background="Transparent">
@@ -18,14 +18,60 @@
     <Grid>
 
         <StackPanel Orientation="Vertical" Margin="10,10,10,1">
-            <TextBlock Text="Current name:" Foreground="AliceBlue"/>
-            <TextBlock Text="{Binding CurrentName}" Foreground="AliceBlue"/>
-            <TextBlock Text="New name:" Foreground="AliceBlue"/>
-            <TextBox x:Name="NewNameTextBox"/>
+            <TextBlock Text="Current name :" FontSize="15" FontWeight="Bold" Foreground="AliceBlue" Margin="0,0,0,10">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <Label Content="{Binding CurrentName}" Foreground="AliceBlue" Background="#202020" FontSize="15" VerticalContentAlignment="Center" Margin="0,0,0,10" Height="30">
+                <Label.Effect>
+                    <DropShadowEffect/>
+                </Label.Effect>
+            </Label>
+            <TextBlock Text="New name :" FontWeight="Bold" Foreground="AliceBlue" FontSize="15" Margin="0,0,0,10">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TextBox x:Name="NewNameTextBox" Background="#202020" BorderThickness="2" BorderBrush="#202020" VerticalContentAlignment="Center" Cursor="IBeam" FontSize="15" Foreground="AliceBlue" Margin="0,0,0,10" Height="30">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Foreground" Value="AliceBlue"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TextBox">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="Gray"/>
+                                        </Trigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="Gray"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBox.Style>
+                <TextBox.Effect>
+                    <DropShadowEffect/>
+                </TextBox.Effect>
+            </TextBox>
         </StackPanel>
-        <Rectangle Panel.ZIndex="-1" RadiusX="20" RadiusY="20" Fill="#111111" Opacity="1" Stroke="AliceBlue" Margin="0,0,0,1" RenderTransformOrigin="0.5,0.5">
+        <Rectangle Panel.ZIndex="-1" RadiusX="20" RadiusY="20" Fill="#111111" Opacity="1" Stroke="AliceBlue" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" StrokeThickness="0">
         </Rectangle>
-        <Button x:Name="CancelRenameButton" Content="Cancel" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" Click="CancelButton_Click" Height="25" Width="50" Margin="90,88,60,12"/>
-        <Button x:Name="SaveRenameButton" Content="Save" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" IsDefault="True" Click="SaveButton_Click" Width="45" Margin="145,88,10,12"/>
+        <Button x:Name="CancelRenameButton" Content="Cancel" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" Click="CancelButton_Click" Width="50" Margin="65,163,85,10">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button x:Name="SaveRenameButton" Content="Save" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" IsDefault="True" Click="SaveButton_Click" Margin="10,163,140,10">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
     </Grid>
 </Window>

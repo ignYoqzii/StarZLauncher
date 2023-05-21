@@ -12,18 +12,38 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         Background="Transparent"
-        Height="100"
-        Width="300"
-        Loaded="Window_Loaded">
+        Height="225"
+        Width="500">
     <Grid>
 
-        <TextBlock Text="Downloading . . ." Foreground="AliceBlue" Opacity="0.8" FontWeight="Bold" Margin="10,40,82,40" />
+        <TextBlock Text="Downloading . . ." Foreground="AliceBlue" FontSize="25" Opacity="0.75" FontWeight="Bold" Margin="10,10,285,175" >
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect>
+        </TextBlock>
 
-        <ProgressBar Name="progressBar" Background="AliceBlue" Opacity="0.5" Minimum="0" Maximum="100" Margin="10,14,10,65" 
-                 Height="20" FlowDirection="LeftToRight"/>
+        <TextBlock Text="Click on CANCEL to terminate the download at anytime if you have changed your mind. The download can be restarted anytime!" Foreground="AliceBlue" Background="#202020" TextWrapping="Wrap" FontSize="15" Opacity="0.8" FontWeight="DemiBold" Margin="10,58,10,96" Padding="5,5,5,5" >
+            <TextBlock.Effect>
+                <DropShadowEffect/>
+            </TextBlock.Effect>
+        </TextBlock>
+
+        <ProgressBar Name="progressBar" Background="#313131" BorderThickness="0" Minimum="0" Maximum="100" Margin="10,149,10,56" 
+                 Height="20" FlowDirection="LeftToRight">
+            <ProgressBar.Effect>
+                <DropShadowEffect/>
+            </ProgressBar.Effect>
+            <ProgressBar.Foreground>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Color="#FF00BCFB" Offset="0"/>
+                    <GradientStop Color="#FF003E5D" Offset="0.403"/>
+                    <GradientStop Color="#FF00151F" Offset="1"/>
+                </LinearGradientBrush>
+            </ProgressBar.Foreground>
+        </ProgressBar>
 
         <Button 
-                Height="20" 
+                Height="26" 
                 x:Name="CancelDownloadButton" 
                 Content="Cancel" 
                 FontWeight="Bold" 
@@ -33,10 +53,14 @@
                 FontFamily="Segoe UI"
                 Template="{StaticResource DefaultButtons}" 
                 VerticalAlignment="Top"
-                Margin="229,70,10,0"/>
+                Margin="10,189,433,0">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
         <Border x:Name="WindowToolbar_Copy4" Panel.ZIndex="-1" HorizontalAlignment="Center"
-            Height="100" Width="300" Opacity="1" Background="#111111" BorderBrush="AliceBlue"
-            BorderThickness="0.5" VerticalAlignment="Center"
+            Height="224" Width="500" Opacity="1" Background="#111111" BorderBrush="AliceBlue"
+            BorderThickness="0" VerticalAlignment="Center"
             CornerRadius="20,20,20,20">
             <!-- Add any content you want here -->
         </Border>

@@ -458,10 +458,14 @@
                             Template="{StaticResource DefaultButtons}"
                             VerticalAlignment="Top" Click="LaunchButton_OnLeftClick" 
                             MouseRightButtonDown="LaunchButton_OnRightClick" 
-                            Margin="884,590,19,0" />
+                            Margin="884,590,19,0" >
+                            <Button.Effect>
+                                <DropShadowEffect/>
+                            </Button.Effect>
+                        </Button>
 
                         <Label
-                            Content="Custom Versions"
+                            Content="Popular Versions"
                             FontSize="20px"
                             Panel.ZIndex="3"
                             Foreground="AliceBlue"
@@ -481,37 +485,37 @@
                             VerticalAlignment="Top" Width="126" />
 
                         <Label 
-                            Content="StarZ X Minecraft 1.19.51"
+                            Content="1.19.81.1"
                             FontSize="15px" Foreground="AliceBlue"
                             FontWeight="Bold" 
-                            Margin="782,182,49,455" 
+                            Margin="782,207,235,430" 
                             Panel.ZIndex="3" 
                             Opacity="0.7" />
 
                         <Label 
-                            Content="StarZ X Minecraft 1.18.12" 
+                            Content="1.18.12.1" 
                             FontSize="15px"
                             Foreground="AliceBlue"
                             FontWeight="Bold" 
-                            Margin="782,265,49,372"
+                            Margin="782,291,235,346"
                             Panel.ZIndex="3" 
                             Opacity="0.7" />
 
                         <Label 
-                            Content="StarZ X Minecraft 1.17.41" 
+                            Content="1.17.41.1" 
                             FontSize="15px" 
                             Foreground="AliceBlue" 
                             FontWeight="Bold" 
-                            Margin="782,351,49,286" 
+                            Margin="782,375,235,262" 
                             Panel.ZIndex="3"
                             Opacity="0.7" />
 
                         <Label 
-                            Content="StarZ X Minecraft 1.16.100"
+                            Content="1.16.100.4"
                             FontSize="15px" 
                             Foreground="AliceBlue" 
                             FontWeight="Bold" 
-                            Margin="782,438,49,199" 
+                            Margin="782,463,222,174" 
                             Panel.ZIndex="3" 
                             Opacity="0.7" />
 
@@ -578,9 +582,20 @@
 
                         </Grid>
 
+                        <TextBlock
+                            x:Name="InstallationStatus2"
+                            Text="" 
+                            FontSize="15"
+                            FontWeight="Bold" 
+                            Foreground="AliceBlue" 
+                            Opacity="0.7" 
+                            Margin="26,632,500,10" 
+                            TextAlignment="Left"/>
+
                         <Image 
                             Panel.ZIndex="4" 
-                            Cursor="Hand" 
+                            Cursor="Hand"
+                            ToolTip="Hide"
                             Opacity="0.7" 
                             Source="/Images/Hide.png" 
                             RenderOptions.BitmapScalingMode="HighQuality"
@@ -598,7 +613,8 @@
                             RadiusX="10" 
                             RadiusY="10" 
                             Stroke="AliceBlue" 
-                            StrokeThickness="0" />
+                            StrokeThickness="0" >
+                        </Rectangle>
 
                         <Rectangle 
                             Fill="Gray"
@@ -627,7 +643,11 @@
                             Opacity="0.05" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top"
-                            Margin="782,602,0,0" />
+                            Margin="782,602,0,0" >
+                            <Rectangle.Effect>
+                                <DropShadowEffect/>
+                            </Rectangle.Effect>
+                        </Rectangle>
 
                         <Rectangle 
                             Fill="#111111" 
@@ -638,7 +658,11 @@
                             VerticalAlignment="Top"
                             Margin="26,128,0,0" 
                             RadiusX="10" 
-                            RadiusY="10" />
+                            RadiusY="10" >
+                            <Rectangle.Effect>
+                                <DropShadowEffect/>
+                            </Rectangle.Effect>
+                        </Rectangle>
 
                         <Rectangle 
                             Fill="AliceBlue" 
@@ -651,7 +675,11 @@
                             RadiusY="3" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top" 
-                            Margin="26,616,0,0" />
+                            Margin="26,616,0,0" >
+                            <Rectangle.Effect>
+                                <DropShadowEffect/>
+                            </Rectangle.Effect>
+                        </Rectangle>
 
                         <Rectangle 
                             Fill="Transparent" 
@@ -660,15 +688,16 @@
                             Opacity="0.1"
                             Canvas.Left="14" 
                             Canvas.Top="27" 
-                            HorizontalAlignment="Center" 
+                            HorizontalAlignment="Center"
+                            MouseLeftButtonDown="WindowToolbar_MouseLeftButtonDown"
                             VerticalAlignment="Top" 
                             Margin="0,22,0,0" />
 
                         <Button 
                             x:Name="downloadButton1_19" 
                             Style="{StaticResource DefaultDownloadButtons}" 
-                            Tag="1.19.51.1" 
-                            Margin="788,216,187,420" 
+                            Tag="1.19.81.1" 
+                            Margin="947,204,28,431" 
                             Click="DownloadButton_Click">
                             <TextBlock 
                                 Text="Download" 
@@ -682,7 +711,7 @@
                             x:Name="downloadButton1_18" 
                             Style="{StaticResource DefaultDownloadButtons}"
                             Tag="1.18.12.1" 
-                            Margin="788,299,187,337" 
+                            Margin="947,288,28,348" 
                             Click="DownloadButton_Click">
                             <TextBlock 
                                 Text="Download" 
@@ -696,7 +725,7 @@
                             x:Name="downloadButton1_17" 
                             Style="{StaticResource DefaultDownloadButtons}" 
                             Tag="1.17.41.1" 
-                            Margin="788,385,188,251" 
+                            Margin="947,372,29,263" 
                             Click="DownloadButton_Click">
                             <TextBlock 
                                 Text="Download" 
@@ -710,7 +739,7 @@
                             x:Name="downloadButton1_16" 
                             Style="{StaticResource DefaultDownloadButtons}"
                             Tag="1.16.100.4"
-                            Margin="788,472,187,163" 
+                            Margin="947,460,28,175" 
                             Click="DownloadButton_Click">
                             <TextBlock 
                                 Text="Download" 
@@ -844,17 +873,103 @@
                             FontWeight="Bold" 
                             Foreground="AliceBlue" 
                             Opacity="0.7" 
-                            Margin="263,12,263,508" 
+                            Margin="263,10,263,510" 
                             TextAlignment="Center"/>
+
+                        <TextBlock
+                            x:Name="InstallationStatus"
+                            Text="" 
+                            FontSize="15"
+                            FontWeight="Bold" 
+                            Foreground="AliceBlue" 
+                            Opacity="0.7" 
+                            Margin="70,43,456,501" 
+                            TextAlignment="Left"/>
+
+                        <TextBlock
+                            Text="Status:" 
+                            FontSize="15"
+                            FontWeight="Bold" 
+                            Foreground="AliceBlue" 
+                            Opacity="0.7" 
+                            Margin="15,43,1024,501" 
+                            TextAlignment="Left"/>
 
                         <Image
                             Source="/Images/arrow.png"
                             Height="20"
+                            ToolTip="Go back"
                             Width="20"
                             RenderOptions.BitmapScalingMode="HighQuality"
                             Opacity="0.7"
                             Cursor="Hand"
                             MouseLeftButtonDown="GoBackFullVersionList_MouseLeftButtonDown" Margin="10,12,1054,527"/>
+
+                        <Image
+                            x:Name="InstallButton"
+                            HorizontalAlignment="Left"
+                            Opacity="0.8"
+                            ToolTip="Install"
+                            Height="24"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Margin="1060,17,0,0"
+                            VerticalAlignment="Top"
+                            Width="24"
+                            Source="/Images/DownloadIcon.png"
+                            Cursor="Hand"
+                            MouseLeftButtonDown="InstallButton_Click"
+                            RenderTransformOrigin="0.5, 0.5">
+                            <Image.RenderTransform>
+                                <ScaleTransform 
+                                    x:Name="ImageTransform9" />
+                            </Image.RenderTransform>
+                            <Image.Triggers>
+                                <EventTrigger 
+                                    RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ImageTransform9"
+                                                Storyboard.TargetProperty="ScaleX"
+                                                To="1.05"
+                                                Duration="0:0:0.2"/>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ImageTransform9"
+                                                Storyboard.TargetProperty="ScaleY"
+                                                To="1.05"
+                                                Duration="0:0:0.2"/>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="InstallButton"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger 
+                                    RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ImageTransform9"
+                                                Storyboard.TargetProperty="ScaleX"
+                                                To="1"
+                                                Duration="0:0:0.2"/>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="ImageTransform9"
+                                                Storyboard.TargetProperty="ScaleY"
+                                                To="1"
+                                                Duration="0:0:0.2"/>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="InstallButton"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.8"
+                                                Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Image.Triggers>
+                        </Image>
 
                         <ScrollViewer 
                             x:Name="versionsScrollView" 
@@ -881,8 +996,8 @@
                                                         <Track.Thumb>
                                                             <Thumb 
                                                                 Width="14" 
-                                                                Height="30" 
-                                                                Background="White" 
+                                                                Height="200" 
+                                                                Background="AliceBlue" 
                                                                 Opacity="0.7">
                                                                 <Thumb.Template>
                                                                     <ControlTemplate 
@@ -966,9 +1081,10 @@
                                                     Visibility="Visible">
                                                     <Track.Thumb>
                                                         <Thumb 
-                                                            Background="White" 
-                                                            Height="30" 
-                                                            Width="14" 
+                                                            Background="AliceBlue" 
+                                                            Height="200" 
+                                                            Width="14"
+                                                            BorderThickness="0"
                                                             Opacity="0.7" />
                                                     </Track.Thumb>
                                                 </Track>
@@ -995,7 +1111,7 @@
                                                 Height="120" 
                                                 Width="150" 
                                                 BorderBrush="Gray" 
-                                                BorderThickness="1" 
+                                                BorderThickness="0" 
                                                 Opacity="1" 
                                                 CornerRadius="20">
                                                 <Border.Background>
@@ -1099,6 +1215,9 @@
                             Background="Transparent" 
                             BorderThickness="0.1" 
                             d:ItemsSource="{d:SampleData ItemCount=15}">
+                            <ListBox.Effect>
+                                <DropShadowEffect/>
+                            </ListBox.Effect>
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel 
@@ -1125,7 +1244,11 @@
                         FontFamily="Inter" 
                         Template="{StaticResource DefaultButtons}" 
                         Margin="981,556,62,66" 
-                        Click="AddDllsButton_OnLeftClick"/>
+                        Click="AddDllsButton_OnLeftClick">
+                        <Button.Effect>
+                            <DropShadowEffect/>
+                        </Button.Effect>
+                    </Button>
 
                     <Image
                         x:Name="DeleteIcon"
@@ -1436,7 +1559,7 @@
                         Opacity="1" 
                         HorizontalContentAlignment="Left" 
                         FontWeight="Light" 
-                        Margin="35,158,863,488"/>
+                        Margin="35,158,51,488"/>
 
                 </Grid>
 
@@ -1503,7 +1626,7 @@
                     <Border 
                         x:Name="OtherMods" 
                         HorizontalAlignment="Center"
-                        Height="212" 
+                        Height="278" 
                         Width="1064" 
                         Opacity="0.1" 
                         Background="#111111" 
@@ -1511,7 +1634,7 @@
                         BorderThickness="0" 
                         VerticalAlignment="Top"
                         CornerRadius="20,20,20,20" 
-                        Margin="0,440,0,0" 
+                        Margin="0,374,0,0" 
                         Panel.ZIndex="2"/>
 
                     <Rectangle 
@@ -1603,6 +1726,58 @@
                         Margin="990,602,0,0"
                         Click="ShaderRemove_Click" Width="60"/>
 
+                    <Button 
+                        Height="26"
+                        Panel.ZIndex="3"
+                        x:Name="ProfileSave" 
+                        Content="Save" 
+                        FontWeight="Bold" 
+                        FontSize="10px"
+                        HorizontalAlignment="Left"
+                        Cursor="Hand" 
+                        Foreground="AliceBlue" 
+                        FontFamily="Segoe UI" 
+                        Template="{StaticResource DefaultButtons}" 
+                        VerticalAlignment="Top"
+                        Margin="990,462,0,0"
+                        Click="ProfileSave_Click" Width="60"/>
+
+                    <Button 
+                        Height="26"
+                        Panel.ZIndex="3"
+                        x:Name="ProfileApply" 
+                        Content="Apply" 
+                        FontWeight="Bold" 
+                        FontSize="10px"
+                        HorizontalAlignment="Left"
+                        Cursor="Hand" 
+                        Foreground="AliceBlue" 
+                        FontFamily="Segoe UI" 
+                        Template="{StaticResource DefaultButtons}" 
+                        VerticalAlignment="Top"
+                        Margin="925,462,0,0"
+                        Click="ProfileApply_Click" Width="60"/>
+
+                    <Label
+                        Content="Profiles Manager"
+                        FontSize="15px"
+                        Opacity="0.5"
+                        Foreground="AliceBlue"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Left"
+                        Margin="30,452,0,0"
+                        VerticalAlignment="Top"/>
+
+                    <Label
+                        Content="Manage your textures packs, worlds, mods from the com.mojang folder"
+                        FontSize="10px"
+                        Opacity="0.5"
+                        Foreground="AliceBlue"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Left"
+                        Margin="30,472,0,0"
+                        VerticalAlignment="Top"/>
+
                     <Label
                         Content="Custom Personas"
                         FontSize="15px"
@@ -1634,7 +1809,7 @@
                         VerticalAlignment="Top"/>
 
                     <Label
-                        Content="Modify game's files to get a working RenderDragon shader (BSBE)"
+                        Content="Modify game's files to get a working RenderDragon shader (BSBE) (1.19+ only!)"
                         FontSize="10px"
                         Opacity="0.5"
                         Foreground="AliceBlue"
@@ -1650,7 +1825,7 @@
                         Foreground="AliceBlue"
                         FontWeight="Bold"
                         HorizontalAlignment="Center"
-                        Margin="0,442,0,0"
+                        Margin="0,374,0,0"
                         VerticalAlignment="Top" Height="39"/>
 
                     <Label
@@ -1660,7 +1835,7 @@
                         Foreground="AliceBlue"
                         FontWeight="Bold"
                         HorizontalAlignment="Center"
-                        Margin="0,481,0,0"
+                        Margin="0,413,0,0"
                         VerticalAlignment="Top"/>
 
                     <Label
@@ -1670,7 +1845,7 @@
                         Foreground="AliceBlue"
                         FontWeight="Bold"
                         HorizontalAlignment="Center"
-                        Margin="0,184,0,0"
+                        Margin="0,179,0,0"
                         VerticalAlignment="Top"/>
 
                     <Label
@@ -1680,7 +1855,7 @@
                         Foreground="AliceBlue"
                         FontWeight="Bold"
                         HorizontalAlignment="Center"
-                        Margin="0,322,0,0"
+                        Margin="0,317,0,0"
                         VerticalAlignment="Top"/>
 
                     <Image
@@ -1692,7 +1867,7 @@
                         Height="101"
                         VerticalAlignment="Top"
                         Width="102"
-                        Source="/Images/DragnDrop.png" Margin="0,221,0,0"/>
+                        Source="/Images/DragnDrop.png" Margin="0,216,0,0"/>
 
                 </Grid>
 
@@ -1836,7 +2011,7 @@
 
                     <Label 
                         x:Name="LabelVersion" 
-                        Content=""
+                        Content="N/A"
                         FontSize="40px" 
                         Foreground="AliceBlue" 
                         FontWeight="Bold" 
@@ -2162,6 +2337,18 @@
             </TabItem>
 
         </TabControl>
+
+        <Border 
+            x:Name="DarkBackgroundWindows"
+            Visibility="Collapsed"
+            HorizontalAlignment="Center" 
+            Height="650" 
+            Width="1100" 
+            Opacity="0.7"
+            BorderThickness="0.5" 
+            VerticalAlignment="Center" 
+            CornerRadius="20" 
+            Background="Black" />
 
     </Grid>
 

@@ -22,6 +22,10 @@ public partial class MainWindow
     public static StackPanel? FullVersionsListStackPanel;
     public static ListBox? DLLsListManager;
     public static Border? DragAndDropZone;
+    public static TextBlock? InstallStatusText;
+    public static TextBlock? InstallStatusText2;
+    public static Border? BackgroundForWindowsOnTop;
+    private static bool isVersionsListLoaded;
     private static readonly SettingsWindow SettingsWindow = new();
 
     public MainWindow()
@@ -33,6 +37,9 @@ public partial class MainWindow
         CurrentLauncherVersion = LabelVersion;
         DLLsListManager = DllList;
         DragAndDropZone = DragZone;
+        InstallStatusText = InstallationStatus;
+        InstallStatusText2 = InstallationStatus2;
+        BackgroundForWindowsOnTop = DarkBackgroundWindows;
         SettingsWindow.Closing += OnClosing;
         Loader.Load();
     }
@@ -143,7 +150,11 @@ public partial class MainWindow
 
     private void ShowFullVersionsList_Click(object sender, RoutedEventArgs e) 
     {
-        MinecraftVersionsListManager.LoadVersionsManager();
+        if (isVersionsListLoaded == false) 
+        {
+            MinecraftVersionsListManager.LoadVersionsManager();
+            isVersionsListLoaded = true;
+        }
         MainMenu.Visibility = Visibility.Collapsed;
         FullVersionsList.Visibility = Visibility.Visible;
     }
@@ -170,20 +181,20 @@ public partial class MainWindow
     //To download the appxs
     private void DownloadButton_Click(object sender, RoutedEventArgs e)
     {
-        MinecraftVersionsListManager.DownloadCustomVersions(sender);
+        MinecraftVersionsListManager.DownloadPopularVersions(sender);
     }
 
     //To install the zips after download
-    private void InstallButton_Click(object sender, EventArgs e)
+    private async void InstallButton_Click(object sender, EventArgs e)
     {
-        MinecraftVersionsListManager.InstallMinecraftPackage();
+        await MinecraftVersionsListManager.InstallMinecraftPackage();
     }
 
     /// <summary>
 
 
 
-    // Mods Manager section code
+    // Tools Manager section code
 
 
 
@@ -202,7 +213,7 @@ public partial class MainWindow
         }
         else
         {
-            MessageBox.Show("Error while opening a folder ; is Minecraft installed?");
+            StarZMessageBox.ShowDialog("Is Minecraft installed?", "Error !", false);
         }
     }
 
@@ -222,6 +233,16 @@ public partial class MainWindow
     private void ShaderRemove_Click(object sender, RoutedEventArgs e)
     {
         ToolsManager.ShaderRemove();
+    }
+
+    private void ProfileSave_Click(object sender, RoutedEventArgs e)
+    {
+        ToolsManager.SaveProfile();
+    }
+
+    private void ProfileApply_Click(object sender, RoutedEventArgs e)
+    {
+        ToolsManager.ApplyProfile();
     }
 
     /// <summary>
@@ -283,7 +304,7 @@ public partial class MainWindow
         }
         else
         {
-            MessageBox.Show("Error while opening a folder ; restart the application. If the issue persists, ask for #support on our Discord server.");
+            StarZMessageBox.ShowDialog("You are technically not supposed to see this! Ask for help from the nearest developer.", "Error !", false);
         }
     }
 

@@ -6,7 +6,8 @@ namespace StarZLauncher.Windows
     public partial class RenameWindow
     {
         public string? CurrentName { get; private set; }
-        public string? NewName { get; private set; }
+        public string? NewNameDLLs { get; private set; }
+        public string? NewNameProfile { get; private set; }
 
         public RenameWindow(string currentName)
         {
@@ -23,7 +24,8 @@ namespace StarZLauncher.Windows
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            NewName = NewNameTextBox.Text += ".dll";
+            NewNameProfile = NewNameTextBox.Text.Trim();
+            NewNameDLLs = NewNameProfile + ".dll";
             DialogResult = true;
         }
     }
