@@ -19,7 +19,7 @@ namespace StarZLauncher.Classes.Tabs
         public static void LoadDefaultDLL()
         {
             defaultDll = ConfigTool.GetDefaultDLL();
-            DefaultDLLText.Content = $"Default DLL on launch: {defaultDll}";
+            DefaultDLLText!.Content = $"Default DLL on launch: {defaultDll}";
         }
 
         public static void LoadDLLs()
@@ -35,19 +35,19 @@ namespace StarZLauncher.Classes.Tabs
                     _dlls.Add(Path.GetFileName(dllFile));
                 }
             }
-            DLLsListManager.ItemsSource = _dlls;
+            DLLsListManager!.ItemsSource = _dlls;
         }
 
         public static void SetDefaultDLL()
         {
-            string selectedItem = (string)DLLsListManager.SelectedItem;
+            string selectedItem = (string)DLLsListManager!.SelectedItem;
             if (selectedItem == null) return;
 
             string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
             if (!File.Exists(configPath)) return;
 
-            var result = MessageBox.Show($"Are you sure you want to set the default DLL to {selectedItem}? This will automatically inject your DLL when launching.", "Confirmation", MessageBoxButton.OKCancel);
-            if (result != MessageBoxResult.OK) return;
+            bool? result = StarZMessageBox.ShowDialog($"This is going to set the default DLL to {selectedItem}. It will automatically inject this DLL when launching.", "Warning !");
+            if (result == false) return;
 
             ConfigTool.SetDefaultDLL(selectedItem);
             LoadDefaultDLL();
@@ -55,22 +55,24 @@ namespace StarZLauncher.Classes.Tabs
 
         public static void Edit()
         {
-            string selectedDll = (string)DLLsListManager.SelectedItem;
+            string selectedDll = (string)DLLsListManager!.SelectedItem;
             if (selectedDll != null)
             {
                 RenameWindow? renameWindow = new(selectedDll);
+                BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
                 bool? result = renameWindow.ShowDialog();
                 if (result == true)
                 {
                     string currentName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
-                    string newName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, renameWindow.NewName);
+                    string newName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, renameWindow.NewNameDLLs);
                     File.Move(currentName, newName);
                     int selectedIndex = DLLsListManager.SelectedIndex;
-                    _dlls[selectedIndex] = renameWindow.NewName;
+                    _dlls[selectedIndex] = renameWindow.NewNameDLLs!;
                 }
+                BackgroundForWindowsOnTop.Visibility = Visibility.Collapsed;
                 if (selectedDll == defaultDll)
                 {
-                    ConfigTool.SetDefaultDLL(renameWindow.NewName);
+                    ConfigTool.SetDefaultDLL(renameWindow.NewNameDLLs!);
                     LoadDefaultDLL();
                 }
             }
@@ -81,8 +83,8 @@ namespace StarZLauncher.Classes.Tabs
             string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
             if (!File.Exists(configPath)) return;
 
-            var result = MessageBox.Show($"Are you sure you want to reset the default DLL to None? Doing so will remove the auto-injection on launch.", "Confirmation", MessageBoxButton.OKCancel);
-            if (result != MessageBoxResult.OK) return;
+            bool? result = StarZMessageBox.ShowDialog($"This is going to reset the default DLL to NONE. Doing so will remove the auto-injection of your DLL on launch.", "Warning !");
+            if (result == false) return;
 
             ConfigTool.SetDefaultDLL("None");
             LoadDefaultDLL();
@@ -90,22 +92,22 @@ namespace StarZLauncher.Classes.Tabs
 
         public static void Delete()
         {
-            string selectedDll = (string)DLLsListManager.SelectedItem;
+            string selectedDll = (string)DLLsListManager!.SelectedItem;
             if (selectedDll != null)
             {
-                MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this DLL?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                bool? result = StarZMessageBox.ShowDialog("This is going to delete the DLL you selected. If it was the DLL set as default on launch, it will be reset to NONE.", "Warning !");
 
-                if (result == MessageBoxResult.Yes)
+                if (result == true)
                 {
                     string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), DLL_FOLDER, selectedDll);
                     File.Delete(filePath);
 
                     _dlls.Remove(selectedDll);
-                }
-                if (selectedDll == defaultDll)
-                {
-                    ConfigTool.SetDefaultDLL("None");
-                    LoadDefaultDLL();
+                    if (selectedDll == defaultDll)
+                    {
+                        ConfigTool.SetDefaultDLL("None");
+                        LoadDefaultDLL();
+                    }
                 }
             }
         }
