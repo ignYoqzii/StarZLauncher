@@ -26,7 +26,7 @@
 How do I install StarZ ?
 
 
-Simply download the latest release here: [Releases](https://github.com/JiayiSoftware/JiayiLauncher/releases).
+Simply download the latest release here: [Releases](https://github.com/ignYoqzii/StarZLauncher/releases).
 
 OR
 
