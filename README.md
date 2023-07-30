@@ -20,7 +20,9 @@
 
 ## Look
 
-![Header](https://cdn.discordapp.com/attachments/1072331008613044274/1107108634242064415/starz.png)
+![Header](https://cdn.discordapp.com/attachments/1072331008613044274/1135305294608601218/starz1.png)
+
+![Header](https://cdn.discordapp.com/attachments/1072331008613044274/1135305294927364226/starz2.png)
 
 ## Installation
 How do I install StarZ ?
