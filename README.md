@@ -9,7 +9,7 @@
 </p>
 
 <div align="center">
-  <a href="https://discord.gg/ScR9MGbRSY">
+  <a href="https://discord.com/invite/ScR9MGbRSY">
     <img src="https://img.shields.io/discord/1095673935727654953?label=Discord&logo=discord&style=for-the-badge">
   </a>
   <a href="https://github.com/ignYoqzii/StarZLauncher/releases">
