@@ -56,7 +56,7 @@ namespace StarZLauncher.Classes
 
             foreach (string filePath in musicFiles)
             {
-                MusicItem musicItem = new MusicItem(filePath);
+                MusicItem musicItem = new(filePath);
                 MusicItems.Add(musicItem);
             }
             CheckForItemsCount();

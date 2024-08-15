@@ -131,13 +131,19 @@ namespace StarZLauncher.Classes
                     var outputFilePath = Path.Combine(MusicDirectoryPath, $"{sanitizedTitle}.mp3");
 
                     // Download the audio stream to a temporary file
-                    await youtube.Videos.Streams.DownloadAsync(audioStreamInfo, tempFilePath);
+                    using (var httpClient = new HttpClient())
+                    using (var response = await httpClient.GetAsync(audioStreamInfo.Url, HttpCompletionOption.ResponseHeadersRead))
+                    using (var inputStream = await response.Content.ReadAsStreamAsync())
+                    using (var outputStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 8192, useAsync: true))
+                    {
+                        await inputStream.CopyToAsync(outputStream);
+                    }
 
-                    // Convert the temporary file to MP3 format to unprotect the file
-                    await Task.Run(() => ConvertToMp3(tempFilePath, outputFilePath));
+                    // Convert the temporary file to MP3 format
+                    ConvertToMp3(tempFilePath, outputFilePath);
 
                     // Delete the temporary file
-                    System.IO.File.Delete(tempFilePath);
+                    File.Delete(tempFilePath);
 
                     // Embed the thumbnail and Author into the MP3 file
                     await EmbedThumbnailandAuthorAsync(outputFilePath, video);
@@ -146,24 +152,49 @@ namespace StarZLauncher.Classes
                 }
                 else
                 {
-                    MessageBox.Show("No audio stream found for the provided video URL.");
+                    StarZMessageBox.ShowDialog("No audio stream found for the provided video URL.", "Error", false);
                 }
             }
             catch (Exception ex)
             {
                 StarZMessageBox.ShowDialog($"An error occurred: {ex.Message}", "Error!", false);
             }
+            finally
+            {
+                // Force garbage collection
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
         }
 
         private static void ConvertToMp3(string inputFilePath, string outputFilePath)
         {
-            var converter = new FFMpegConverter();
-            var settings = new ConvertSettings
+            try
             {
-                // Use custom output arguments to set the audio bitrate to 128 kbps
-                CustomOutputArgs = "-b:a 128k"
-            };
-            converter.ConvertMedia(new[] { new FFMpegInput(inputFilePath) }, outputFilePath, "mp3", settings);
+                // Define the path to the FFMpeg executable
+                string ffmpegPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Musics");
+
+                // Ensure the output directory exists
+                Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
+
+                // Create the FFMpeg converter instance with the specified tool path
+                var converter = new FFMpegConverter { FFMpegToolPath = ffmpegPath };
+
+                // Configure conversion settings
+                var settings = new ConvertSettings
+                {
+                    // Set audio bitrate
+                    CustomOutputArgs = "-b:a 128k"
+                };
+
+                // Perform the conversion
+                converter.ConvertMedia(new[] { new FFMpegInput(inputFilePath) }, outputFilePath, "mp3", settings);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, log the error, or show a message to the user
+                StarZMessageBox.ShowDialog($"An error occurred during MP3 conversion: {ex.Message}", "Error", false);
+            }
         }
 
         private static async Task EmbedThumbnailandAuthorAsync(string filePath, IVideo video)
@@ -196,7 +227,7 @@ namespace StarZLauncher.Classes
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to embed thumbnail: {ex.Message}");
+                StarZMessageBox.ShowDialog($"Failed to embed thumbnail: {ex.Message}", "Error", false);
             }
         }
 
