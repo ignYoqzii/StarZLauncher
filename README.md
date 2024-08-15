@@ -31,6 +31,7 @@
 - **Cosmetics & Skin Packs**: Handle and apply skin packs and cosmetics (personas) with simplicity.
 - **Version Control**: Effortlessly manage your Minecraft versions.
 - **Clean & Intuitive UI**: Enjoy a user-friendly and aesthetically pleasing interface.
+- **And many more !**
 
 ---
 
