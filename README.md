@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Images/StarZLauncher.png?raw=true" width="700">
+  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Resources/StarZ X Minecraft.png?raw=true" width="700">
 </div>
 
 <div align="center">
