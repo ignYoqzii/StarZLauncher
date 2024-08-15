@@ -48,7 +48,7 @@
 ### How to Install StarZ Launcher
 
 1. **Download the Latest Release**: Get the most recent version from the [Releases Page](https://github.com/ignYoqzii/StarZLauncher/releases).
-2. **Join Our Community**: Alternatively, join our [Discord Server](https://discord.com/invite/ScR9MGbRSY) to download the launcher and get support.
+2. **Join Our Community**: Alternatively, join our [Discord Server](https://discord.gg/ScR9MGbRSY) to download the launcher and get support.
 
 ---
 
@@ -65,4 +65,4 @@ While the codebase is still evolving, it's a great learning opportunity as we co
 
 ## 📜 License
 
-StarZ Launcher is licensed under the [StarZ Launcher License](https://github.com/ignYoqzii/StarZLauncher/blob/main/LICENSE.md). Feel free to explore, use, and contribute within the terms of the license.
+StarZ Launcher is licensed under the [StarZ Launcher License](https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LICENSE.md). Feel free to explore, use, and contribute within the terms of the license.
