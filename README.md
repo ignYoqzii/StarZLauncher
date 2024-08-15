@@ -1,48 +1,72 @@
 <div align="center">
-  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Images/StarZLauncher.png?raw=true" width="700"></a>
+  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Images/StarZLauncher.png?raw=true" width="700">
 </div>
+
 <div align="center">
-  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Images/starztext.png?raw=true" width="1000"></a>
+  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Images/starztext.png?raw=true" width="1000">
 </div>
 
-### A Minecraft for Windows Launcher / Injector (Bedrock Edition)
+<h1 align="center">StarZ Launcher</h1>
 
-[Discord](https://discord.com/invite/ScR9MGbRSY)
+<p align="center">
+  <strong>A Powerful and User-Friendly Minecraft Launcher/Injector for Windows (Bedrock Edition)</strong>
+</p>
 
-## Features
-> * Manage your textures packs
-> * Manage your client DLLs and inject them into the game
-> * Easily apply RenderDragon shaders to your game
-> * Easily manage profiles (com.mojang folder)
-> * Easily manage cosmetics skin packs (personas)
-> * Easily manage your Minecraft Version
-> * Clean and user friendly design
+<div align="center">
+  <a href="https://discord.com/invite/ScR9MGbRSY">
+    <img src="https://img.shields.io/discord/ScR9MGbRSY?label=Discord&logo=discord&style=for-the-badge">
+  </a>
+  <a href="https://github.com/ignYoqzii/StarZLauncher/releases">
+    <img src="https://img.shields.io/github/v/release/ignYoqzii/StarZLauncher?label=Latest%20Release&style=for-the-badge">
+  </a>
+  <a href="https://github.com/ignYoqzii/StarZLauncher/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/github/license/ignYoqzii/StarZLauncher?style=for-the-badge">
+  </a>
+</div>
 
-## Look
+---
 
-![Header](https://cdn.discordapp.com/attachments/1072331008613044274/1135305294608601218/starz1.png)
+## 🌟 Features
 
-![Header](https://cdn.discordapp.com/attachments/1072331008613044274/1135305294927364226/starz2.png)
+- **Texture Pack Management**: Seamlessly manage your texture packs with ease.
+- **Client DLL Injection**: Inject and manage client DLLs effortlessly.
+- **RenderDragon Shader Support**: Easily apply stunning shaders to enhance your game.
+- **Profile Management**: Conveniently manage your Minecraft profiles (com.mojang folder).
+- **Cosmetics & Skin Packs**: Handle and apply skin packs and cosmetics (personas) with simplicity.
+- **Version Control**: Effortlessly manage your Minecraft versions.
+- **Clean & Intuitive UI**: Enjoy a user-friendly and aesthetically pleasing interface.
 
-## Installation
-How do I install StarZ ?
+---
 
+## 📸 Screenshots
 
-Simply download the latest release here: [Releases](https://github.com/ignYoqzii/StarZLauncher/releases).
+<div align="center">
+  <img src="https://cdn.discordapp.com/attachments/1072331008613044274/1135305294608601218/starz1.png" alt="Screenshot 1" width="800">
+  <img src="https://cdn.discordapp.com/attachments/1072331008613044274/1135305294927364226/starz2.png" alt="Screenshot 2" width="800">
+</div>
 
-OR
+---
 
-Join the discord server to download it there: [Discord](https://discord.com/invite/ScR9MGbRSY).
+## 📥 Installation
 
-## Contributing
-If you want to contribute to StarZ Launcher, you can fork the repository and submit a pull request.
+### How to Install StarZ Launcher
 
-StarZ is written in C# and uses XAML for the UI elements (WPF)
+1. **Download the Latest Release**: Get the most recent version from the [Releases Page](https://github.com/ignYoqzii/StarZLauncher/releases).
+2. **Join Our Community**: Alternatively, join our [Discord Server](https://discord.com/invite/ScR9MGbRSY) to download the launcher and get support.
 
-The code is pretty much a mess, but I'm, ignYoqzii, still learning and improving while creating this program.
+---
 
-## License
-The StarZ Launcher License : [here](https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LICENSE.md).
+## 🤝 Contributing
 
+Interested in contributing to StarZ Launcher? Fork the repository and submit a pull request! 
 
+- **Language**: C#
+- **UI Framework**: XAML (WPF)
 
+While the codebase is still evolving, it's a great learning opportunity as we continue to improve the program.
+
+---
+
+## 📜 License
+
+StarZ Launcher is licensed under the [StarZ Launcher License](https://github.com/ignYoqzii/StarZLauncher/blob/main/LICENSE.md). Feel free to explore, use, and contribute within the terms of the license.
