@@ -2,10 +2,6 @@
   <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/StarZ%20Launcher/StarZLauncher/Resources/StarZ%20X%20Minecraft.png?raw=true" width="700">
 </div>
 
-<div align="center">
-  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/Images/starztext.png?raw=true" width="1000">
-</div>
-
 <h1 align="center">StarZ Launcher</h1>
 
 <p align="center">
