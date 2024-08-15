@@ -10,7 +10,7 @@
         <!-- Opening animation -->
 
 
-        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Collapsed">
+        <Grid x:Name="OpeningAnim" Panel.ZIndex="10" Visibility="Visible">
 
 
 
