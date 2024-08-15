@@ -15,7 +15,7 @@
   <a href="https://github.com/ignYoqzii/StarZLauncher/releases">
     <img src="https://img.shields.io/github/v/release/ignYoqzii/StarZLauncher?label=Latest%20Release&style=for-the-badge">
   </a>
-  <a href="">
+  <a href="https://github.com/ignYoqzii/StarZLauncher/blob/main/LICENSE.md">
     <img src="https://img.shields.io/github/license/ignYoqzii/StarZLauncher?style=for-the-badge">
   </a>
 </div>
