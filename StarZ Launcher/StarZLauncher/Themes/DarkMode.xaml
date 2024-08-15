@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- TextBlocks, Labels and TextBoxes Styles -->
+    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource DarkTextColor1}" />
+    </Style>
+    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Setter Property="Foreground" Value="{DynamicResource DarkTextColor1}" />
+    </Style>
+    <Style x:Key="LabelStyle" TargetType="Label">
+        <Setter Property="Foreground" Value="{DynamicResource DarkTextColor1}" />
+    </Style>
+
+    <!-- Borders Styles -->
+    <Style x:Key="PrimaryBorder" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource DarkMode1}" />
+    </Style>
+    <Style x:Key="SecondaryBorder" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource DarkMode2}" />
+    </Style>
+
+    <!-- StarZ Logo Style -->
+    <Style x:Key="StarZLogo" TargetType="Image">
+        <Setter Property="Source" Value="/Resources/StarZLogoLight.png" />
+    </Style>
+
+</ResourceDictionary>

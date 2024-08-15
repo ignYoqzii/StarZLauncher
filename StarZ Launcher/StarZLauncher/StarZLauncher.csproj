@@ -1,0 +1,146 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+	<Platforms>AnyCPU;x64</Platforms>
+	<ApplicationIcon>Resources/starz.ico</ApplicationIcon>
+	<LangVersion>11</LangVersion>
+	<Company>StarZ Team ©</Company>
+	<Product>StarZ: A Minecraft Bedrock Edition Launcher</Product>
+	<AssemblyName>StarZLauncher</AssemblyName>
+    <Description>A Minecraft Bedrock Edition Launcher</Description>
+	<Copyright>StarZ Team ©</Copyright>
+	<FileVersion>5.0.8.0</FileVersion>
+	<AssemblyVersion>5.0.8.0</AssemblyVersion>
+	<PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Resources/HacksGray.png" />
+		<None Remove="Resources/HomeGray.png" />
+		<None Remove="Resources/ModulesGray.png" />
+		<None Remove="Resources/MusicPlayerGray.png" />
+		<None Remove="Resources/SettingsGray.png" />
+		<None Remove="Resources/HacksWhite.png" />
+		<None Remove="Resources/HomeWhite.png" />
+		<None Remove="Resources/ModulesWhite.png" />
+		<None Remove="Resources/MusicPlayerWhite.png" />
+		<None Remove="Resources/SettingsWhite.png" />
+		<None Remove="Resources/StarZLogoDark.png" />
+		<None Remove="Resources/StarZLogoLight.png" />
+		<None Remove="Resources/Search.png" />
+		<None Remove="Resources/Delete.png" />
+		<None Remove="Resources/Play.png" />
+		<None Remove="Resources/Pause.png" />
+		<None Remove="Resources/Stop.png" />
+		<None Remove="Resources/Unknow.png" />
+		<None Remove="Resources/Discord.png" />
+		<None Remove="Resources/Avatar.png" />
+		<None Remove="Resources/ToolsGray.png" />
+		<None Remove="Resources/ToolsWhite.png" />
+		<None Remove="Resources/ModulesGray.png" />
+		<None Remove="Resources/ModulesWhite.png" />
+		<None Remove="Resources/MinimizeGray.png" />
+		<None Remove="Resources/MinimizeWhite.png" />
+		<None Remove="Resources/CloseGray.png" />
+		<None Remove="Resources/CloseWhite.png" />
+		<None Remove="Resources/Reset.png" />
+		<None Remove="Resources/Edit.png" />
+		<None Remove="Resources/SetDefaultDLL.png" />
+		<None Remove="Resources/DownloadIcon.png" />
+		<None Remove="Resources/arrow.png" />
+		<None Remove="Resources/Info.png" />
+		<None Remove="Resources/DragnDrop.png" />
+		<None Remove="Resources/DLL.png" />
+		<None Remove="Resources/InfoGray.png" />
+		<None Remove="Resources/ComputerGray.png" />
+		<None Remove="Resources/ComputerWhite.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Resources/starz.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources/HomeGray.png" />
+		<Resource Include="Resources/MusicPlayerGray.png" />
+		<Resource Include="Resources/SettingsGray.png" />
+		<Resource Include="Resources/HomeWhite.png" />
+		<Resource Include="Resources/MusicPlayerWhite.png" />
+		<Resource Include="Resources/SettingsWhite.png" />
+		<Resource Include="Resources/StarZLogoDark.png" />
+		<Resource Include="Resources/StarZLogoLight.png" />
+		<Resource Include="Resources/Search.png" />
+		<Resource Include="Resources/Delete.png" />
+		<Resource Include="Resources/Play.png" />
+		<Resource Include="Resources/Pause.png" />
+		<Resource Include="Resources/Stop.png" />
+		<Resource Include="Resources/Unknow.png" />
+		<Resource Include="Resources/Discord.png" />
+		<Resource Include="Resources/Avatar.png" />
+		<Resource Include="Resources/ToolsGray.png" />
+		<Resource Include="Resources/ToolsWhite.png" />
+		<Resource Include="Resources/ModulesGray.png" />
+		<Resource Include="Resources/ModulesWhite.png" />
+		<Resource Include="Resources/MinimizeGray.png" />
+		<Resource Include="Resources/MinimizeWhite.png" />
+		<Resource Include="Resources/CloseGray.png" />
+		<Resource Include="Resources/CloseWhite.png" />
+		<Resource Include="Resources/Reset.png" />
+		<Resource Include="Resources/Edit.png" />
+		<Resource Include="Resources/SetDefaultDLL.png" />
+		<Resource Include="Resources/DownloadIcon.png" />
+		<Resource Include="Resources/Arrow.png" />
+		<Resource Include="Resources/Info.png" />
+		<Resource Include="Resources/DragnDrop.png" />
+		<Resource Include="Resources/DLL.png" />
+		<Resource Include="Resources/InfoGray.png" />
+		<Resource Include="Resources/ComputerGray.png" />
+		<Resource Include="Resources/ComputerWhite.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AngleSharp" Version="1.1.2" />
+		<PackageReference Include="BetterFolderBrowser" Version="1.2.0" />
+		<PackageReference Include="Costura.Fody" Version="5.7.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Fody" Version="6.8.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Discord.Net" Version="3.15.3" />
+		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
+		<PackageReference Include="LibreHardwareMonitorLib" Version="0.9.3" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+		<PackageReference Include="Microsoft.NETCore.Platforms" Version="8.0.0-preview.4.23259.5" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="System.Runtime.WindowsRuntime" Version="4.7.0" />
+		<PackageReference Include="NReco.VideoConverter" Version="1.2.1" />
+		<PackageReference Include="System.Buffers" Version="4.5.1" />
+		<PackageReference Include="System.Memory" Version="4.5.5" />
+		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="7.0.0-preview.2.22152.2" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.4" />
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
+		<PackageReference Include="TagLibSharp" Version="2.3.0" />
+		<PackageReference Include="YoutubeExplode" Version="6.4.0" />
+		<Reference Include="Accessibility" />
+		<Reference Include="System.IO.Compression" />
+		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Windows" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="Windows">
+			<HintPath>C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.22000.0\Windows.winmd</HintPath>
+			<IsWinMDFile>true</IsWinMDFile>
+		</Reference>
+	</ItemGroup>
+
+</Project>
