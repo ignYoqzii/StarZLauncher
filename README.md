@@ -37,8 +37,8 @@
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="https://cdn.discordapp.com/attachments/1072331008613044274/1135305294608601218/starz1.png" alt="Screenshot 1" width="800">
-  <img src="https://cdn.discordapp.com/attachments/1072331008613044274/1135305294927364226/starz2.png" alt="Screenshot 2" width="800">
+  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/StarZ%20Launcher/StarZLauncher/Resources/Screenshot%201.png?raw=true" alt="Dark Mode" width="800">
+  <img src="https://github.com/ignYoqzii/StarZLauncher/blob/main/StarZ%20Launcher/StarZLauncher/Resources/Screenchot%202.png?raw=true" alt="Light Mode" width="800">
 </div>
 
 ---
