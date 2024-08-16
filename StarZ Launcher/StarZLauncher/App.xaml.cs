@@ -1,4 +1,5 @@
 ﻿using StarZLauncher.Classes;
+using StarZLauncher.Windows;
 using System;
 using System.IO;
 using System.Net;
@@ -9,89 +10,111 @@ namespace StarZLauncher;
 
 public partial class App : Application
 {
-    bool HasRun = false;
-    private const string? VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
+    private bool HasRun = false;
+    private const string VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
+    private static readonly string logFileName = $"AppStartup.txt";
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        bool debug = ConfigManager.GetDebugFontInstaller();
-        if (debug == false)
+        try
         {
-            Task.Run(() => FontInstaller.FontInstallation());
-        }
-        string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        string starZLauncherPath = Path.Combine(documentsPath, "StarZ Launcher");
-        string VersionsPath = Path.Combine(starZLauncherPath, "Versions");
-        string profilesPath = Path.Combine(starZLauncherPath, "Profiles");
-        string musicsPath = Path.Combine(starZLauncherPath, "Musics");
-        string dllsPath = Path.Combine(starZLauncherPath, "DLLs");
-        string logsPath = Path.Combine(starZLauncherPath, "Logs");
-        string versionFilePath = Path.Combine(starZLauncherPath, "LauncherVersion.txt");
-        string oldConfigFilePath = Path.Combine(starZLauncherPath, "Config.txt");
-
-        if (!Directory.Exists(starZLauncherPath))
-        {
-            Directory.CreateDirectory(starZLauncherPath);
-        }
-
-        if (!Directory.Exists(VersionsPath))
-        {
-            Directory.CreateDirectory(VersionsPath);
-        }
-
-        if (!Directory.Exists(dllsPath))
-        {
-            Directory.CreateDirectory(dllsPath);
-        }
-
-        if (!Directory.Exists(profilesPath))
-        {
-            Directory.CreateDirectory(profilesPath);
-        }
-
-        if (!Directory.Exists(musicsPath))
-        {
-            Directory.CreateDirectory(musicsPath);
-        }
-
-        if (!Directory.Exists(logsPath))
-        {
-            Directory.CreateDirectory(logsPath);
-        }
-
-        if (!File.Exists(versionFilePath))
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(versionFilePath));
-            DownloadLatestVersion(versionFilePath); // Download the latest version from the URL and save it to the file
-        }
-
-        if (File.Exists(oldConfigFilePath))
-        {
-            File.Delete(oldConfigFilePath); // This deletes the old Config.txt from user's computer to replace it with the new config system (Settings.txt from ConfigTool)
-        }
-
-        if (!HasRun)
-        {
-            bool discordRPC = ConfigManager.GetDiscordRPC();
-            bool offlinemode = ConfigManager.GetOfflineMode();
-            if (discordRPC == true & offlinemode == false)
+            bool debug = ConfigManager.GetDebugFontInstaller();
+            if (!debug)
             {
-                DiscordRichPresenceManager.DiscordClient.Initialize();
-                DiscordRichPresenceManager.SetPresence();
-                HasRun = true;
+                Task.Run(() => FontInstaller.FontInstallation());
             }
-            return;
+            else
+            {
+                LogManager.Log("Font installation is disabled. To re-enable it, change 'DebugFontInstaller' value in Settings.txt to 'False'.", "FontInstaller.txt");
+            }
+
+            string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string starZLauncherPath = Path.Combine(documentsPath, "StarZ Launcher");
+            string VersionsPath = Path.Combine(starZLauncherPath, "Versions");
+            string profilesPath = Path.Combine(starZLauncherPath, "Profiles");
+            string musicsPath = Path.Combine(starZLauncherPath, "Musics");
+            string dllsPath = Path.Combine(starZLauncherPath, "DLLs");
+            string logsPath = Path.Combine(starZLauncherPath, "Logs");
+            string versionFilePath = Path.Combine(starZLauncherPath, "LauncherVersion.txt");
+            string oldConfigFilePath = Path.Combine(starZLauncherPath, "Config.txt");
+
+            EnsureDirectoryExists(starZLauncherPath);
+            EnsureDirectoryExists(VersionsPath);
+            EnsureDirectoryExists(dllsPath);
+            EnsureDirectoryExists(profilesPath);
+            EnsureDirectoryExists(musicsPath);
+            EnsureDirectoryExists(logsPath);
+
+            if (!File.Exists(versionFilePath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(versionFilePath));
+                DownloadLatestVersion(versionFilePath);
+            }
+
+            if (File.Exists(oldConfigFilePath))
+            {
+                File.Delete(oldConfigFilePath);
+            }
+
+            if (!HasRun)
+            {
+                bool discordRPC = ConfigManager.GetDiscordRPC();
+                bool offlinemode = ConfigManager.GetOfflineMode();
+                if (discordRPC && !offlinemode)
+                {
+                    DiscordRichPresenceManager.DiscordClient.Initialize();
+                    DiscordRichPresenceManager.SetPresence();
+                    HasRun = true;
+                    LogManager.Log("Initialized Discord Rich Presence.", logFileName);
+                }
+                else
+                {
+                    LogManager.Log("Could not initialize Discord Rich Presence. This is either because Discord RPC was disabled or Offline Mode is enabled.", logFileName);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.Log($"Error during application startup: {ex.Message}", logFileName);
+        }
+    }
+
+    private static void EnsureDirectoryExists(string path)
+    {
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+            LogManager.Log($"Created directory: {path}", logFileName);
         }
     }
 
     private static void DownloadLatestVersion(string filePath)
     {
-        using WebClient client = new();
-        string? latestVersion = client.DownloadString(VERSION_URL).Trim();
-        File.WriteAllText(filePath, latestVersion); // Write the latest version to the file
+        try
+        {
+            using WebClient client = new();
+            string latestVersion = client.DownloadString(VERSION_URL).Trim();
+            File.WriteAllText(filePath, latestVersion);
+            LogManager.Log($"Downloaded and updated version file: {filePath}", logFileName);
+        }
+        catch (Exception ex)
+        {
+            LogManager.Log($"Error downloading latest version: {ex.Message}", logFileName);
+        }
     }
-    private void App_OnExit(object sender, ExitEventArgs e) => DiscordRichPresenceManager.TerminatePresence();
-}
 
+    private void App_OnExit(object sender, ExitEventArgs e)
+    {
+        try
+        {
+            DiscordRichPresenceManager.TerminatePresence();
+            LogManager.Log("Application exited successfully.", logFileName);
+        }
+        catch (Exception ex)
+        {
+            LogManager.Log($"Error during application exit: {ex.Message}", logFileName);
+        }
+    }
+}

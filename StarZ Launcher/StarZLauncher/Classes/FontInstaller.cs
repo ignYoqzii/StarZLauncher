@@ -9,7 +9,7 @@ using System.Windows;
 
 public class FontInstaller
 {
-    private const string FontUrl = "https://github.com/ignYoqzii/StarZLauncher/releases/download/font/Outfit-VariableFont.ttf"; // Replace with actual URL
+    private const string FontUrl = "https://github.com/ignYoqzii/StarZLauncher/releases/download/font/Outfit-VariableFont.ttf";
     private const string FontFileName = "Outfit-VariableFont.ttf";
     private static readonly string LogFileName = "FontInstaller.txt";
     private static readonly string LogFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Logs", LogFileName);

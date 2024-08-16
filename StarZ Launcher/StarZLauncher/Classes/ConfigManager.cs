@@ -17,7 +17,7 @@ namespace StarZLauncher.Classes
         private const string AccelerateLoadingTime = "0";
         private static string MINECRAFTINSTALLATIONPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions");
         private static bool OFFLINEMODE = false;
-        private static bool DEBUGHARDWAREMONITORING = false;
+        private static bool DEBUGHARDWAREMONITORING = true;
         private static bool DEBUGFONTINSTALLER = false;
 
         private static readonly string configFilePath;

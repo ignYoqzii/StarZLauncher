@@ -1868,12 +1868,13 @@
                 <Grid Margin="63,0,-2,0" Height="607">
 
                     <TextBlock x:Name="ComputerTextBlock" Text="My Computer" FontSize="50" FontFamily="Outfit" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Margin="275,35,243,504"/>
+                    <TextBlock x:Name="HardwareMonitorStatusTextBlock" TextWrapping="Wrap" Text="Hardware monitoring is disabled. This feature may cause problems. To enable it, go to the launcher's settings, open the launcher's folder, then edit 'Settings.txt' to change the 'DebugHardwareMonitoring' value from 'True' to 'False'." FontSize="20" FontFamily="Outfit" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Margin="145,283,0,0" Height="107" Width="581"/>
 
                     <Grid 
                         Height="607"
                         Visibility="Visible"
                         x:Name="AboutMenu" 
-                        Opacity="1.0">
+                        Opacity="0.0">
                         <Grid.Triggers>
                             <EventTrigger RoutedEvent="Loaded">
                                 <BeginStoryboard>

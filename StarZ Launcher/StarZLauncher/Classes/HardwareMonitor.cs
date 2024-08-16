@@ -1,6 +1,7 @@
 ﻿using LibreHardwareMonitor.Hardware;
 using StarZLauncher.Windows;
 using System;
+using System.IO;
 using System.Net;
 using System.Threading;
 using static StarZLauncher.Windows.MainWindow;
@@ -9,18 +10,27 @@ namespace StarZLauncher.Classes
 {
     class HardwareMonitor
     {
-        private readonly Computer computer;
+        private readonly Computer? computer;
+        private static readonly string logFileName = "HardwareMonitor.txt";
 
         public HardwareMonitor()
         {
-            computer = new Computer
+            try
             {
-                IsCpuEnabled = true,
-                IsMemoryEnabled = true,
-                IsMotherboardEnabled = true,
-                IsGpuEnabled = true
-            };
-            computer.Open();
+                computer = new Computer
+                {
+                    IsCpuEnabled = true,
+                    IsMemoryEnabled = true,
+                    IsMotherboardEnabled = true,
+                    IsGpuEnabled = true
+                };
+                computer.Open();
+                LogManager.Log("HardwareMonitor initialized successfully.", logFileName);
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"Error initializing HardwareMonitor: {ex.Message}", logFileName);
+            }
         }
 
         public void StartMonitoring()
@@ -29,8 +39,15 @@ namespace StarZLauncher.Classes
             {
                 while (true)
                 {
-                    UpdateInformation();
-                    UpdateNames();
+                    try
+                    {
+                        UpdateInformation();
+                        UpdateNames();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogManager.Log($"Error during hardware monitoring: {ex.Message}", logFileName);
+                    }
                     Thread.Sleep(1000); // Update every second
                 }
             });
@@ -38,64 +55,78 @@ namespace StarZLauncher.Classes
 
         private void UpdateInformation()
         {
-            foreach (var hardwareItem in computer.Hardware)
+            foreach (var hardwareItem in computer!.Hardware)
             {
-                hardwareItem.Update();
-
-                switch (hardwareItem.HardwareType)
+                try
                 {
-                    case HardwareType.Cpu:
-                        UpdateCpuInformation(hardwareItem);
-                        break;
-                    case HardwareType.GpuNvidia:
-                    case HardwareType.GpuAmd:
-                        UpdateGpuInformation(hardwareItem);
-                        break;
-                    case HardwareType.Memory:
-                        UpdateMemoryInformation(hardwareItem);
-                        break;
-                    default:
-                        break;
+                    hardwareItem.Update();
+
+                    switch (hardwareItem.HardwareType)
+                    {
+                        case HardwareType.Cpu:
+                            UpdateCpuInformation(hardwareItem);
+                            break;
+                        case HardwareType.GpuNvidia:
+                        case HardwareType.GpuAmd:
+                            UpdateGpuInformation(hardwareItem);
+                            break;
+                        case HardwareType.Memory:
+                            UpdateMemoryInformation(hardwareItem);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogManager.Log($"Error updating {hardwareItem.HardwareType}: {ex.Message}", logFileName);
                 }
             }
         }
 
         private void UpdateCpuInformation(IHardware hardwareItem)
         {
-            foreach (var sensor in hardwareItem.Sensors)
+            try
             {
-                switch (sensor.SensorType)
+                foreach (var sensor in hardwareItem.Sensors)
                 {
-                    case SensorType.Temperature:
-                        double temp = Math.Round(sensor.Value.GetValueOrDefault(), 0);
-                        cpuTempTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            cpuTempTextBlock!.Text = $"Temperature: {temp}°C";
-                        });
-                        break;
-                    case SensorType.Load when sensor.Name == "CPU Total":
-                        double load = Math.Round(sensor.Value.GetValueOrDefault(), 0);
-                        cpuLoadTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            cpuLoadTextBlock!.Text = $"Load: {load}%";
-                        });
-                        break;
-                }
-            }
-
-            foreach (var subHardware in hardwareItem.SubHardware)
-            {
-                foreach (var fan in subHardware.Sensors)
-                {
-                    if (fan.SensorType == SensorType.Fan && IsCpuFanSensor(fan))
+                    switch (sensor.SensorType)
                     {
-                        double fanSpeed = Math.Round(fan.Value.GetValueOrDefault(), 0);
-                        cpufanTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            cpufanTextBlock!.Text = $"CPU Fan: {fanSpeed} RPM";
-                        });
+                        case SensorType.Temperature:
+                            double temp = Math.Round(sensor.Value.GetValueOrDefault(), 0);
+                            cpuTempTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                cpuTempTextBlock!.Text = $"Temperature: {temp}°C";
+                            });
+                            break;
+                        case SensorType.Load when sensor.Name == "CPU Total":
+                            double load = Math.Round(sensor.Value.GetValueOrDefault(), 0);
+                            cpuLoadTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                cpuLoadTextBlock!.Text = $"Load: {load}%";
+                            });
+                            break;
                     }
                 }
+
+                foreach (var subHardware in hardwareItem.SubHardware)
+                {
+                    foreach (var fan in subHardware.Sensors)
+                    {
+                        if (fan.SensorType == SensorType.Fan && IsCpuFanSensor(fan))
+                        {
+                            double fanSpeed = Math.Round(fan.Value.GetValueOrDefault(), 0);
+                            cpufanTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                cpufanTextBlock!.Text = $"CPU Fan: {fanSpeed} RPM";
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"Error updating CPU information: {ex.Message}", logFileName);
             }
         }
 
@@ -109,77 +140,98 @@ namespace StarZLauncher.Classes
 
         private void UpdateGpuInformation(IHardware hardwareItem)
         {
-            foreach (var sensor in hardwareItem.Sensors)
+            try
             {
-                switch (sensor.SensorType)
+                foreach (var sensor in hardwareItem.Sensors)
                 {
-                    case SensorType.Temperature:
-                        double temp = Math.Round(sensor.Value.GetValueOrDefault(), 0);
-                        gpuTempTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            gpuTempTextBlock!.Text = $"Temperature: {temp}°C";
-                        });
-                        break;
-                    case SensorType.Load:
-                        double load = Math.Round(sensor.Value.GetValueOrDefault(), 0);
-                        gpuLoadTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            gpuLoadTextBlock!.Text = $"Load: {load}%";
-                        });
-                        break;
-                    case SensorType.Fan:
-                        double fanSpeed = Math.Round(sensor.Value.GetValueOrDefault(), 0);
-                        gpufanTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            gpufanTextBlock!.Text = $"GPU Fan: {fanSpeed} RPM";
-                        });
-                        break;
+                    switch (sensor.SensorType)
+                    {
+                        case SensorType.Temperature:
+                            double temp = Math.Round(sensor.Value.GetValueOrDefault(), 0);
+                            gpuTempTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                gpuTempTextBlock!.Text = $"Temperature: {temp}°C";
+                            });
+                            break;
+                        case SensorType.Load:
+                            double load = Math.Round(sensor.Value.GetValueOrDefault(), 0);
+                            gpuLoadTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                gpuLoadTextBlock!.Text = $"Load: {load}%";
+                            });
+                            break;
+                        case SensorType.Fan:
+                            double fanSpeed = Math.Round(sensor.Value.GetValueOrDefault(), 0);
+                            gpufanTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                gpufanTextBlock!.Text = $"GPU Fan: {fanSpeed} RPM";
+                            });
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"Error updating GPU information: {ex.Message}", logFileName);
             }
         }
 
         private void UpdateMemoryInformation(IHardware hardwareItem)
         {
-            foreach (var sensor in hardwareItem.Sensors)
+            try
             {
-                if (sensor.SensorType == SensorType.Load)
+                foreach (var sensor in hardwareItem.Sensors)
                 {
-                    double memoryUsage = Math.Round(sensor.Value.GetValueOrDefault(), 0);
-                    memoryTextBlock!.Dispatcher.Invoke(() =>
+                    if (sensor.SensorType == SensorType.Load)
                     {
-                        memoryTextBlock!.Text = $"Memory: {hardwareItem.Name} ({memoryUsage}%)";
-                    });
+                        double memoryUsage = Math.Round(sensor.Value.GetValueOrDefault(), 0);
+                        memoryTextBlock!.Dispatcher.Invoke(() =>
+                        {
+                            memoryTextBlock!.Text = $"Memory: {hardwareItem.Name} ({memoryUsage}%)";
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"Error updating Memory information: {ex.Message}", logFileName);
             }
         }
 
         private void UpdateNames()
         {
-            foreach (var hardwareItem in computer.Hardware)
+            foreach (var hardwareItem in computer!.Hardware)
             {
-                switch (hardwareItem.HardwareType)
+                try
                 {
-                    case HardwareType.Cpu:
-                        cpuNameTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            cpuNameTextBlock!.Text = $"{hardwareItem.Name}";
-                        });
-                        break;
-                    case HardwareType.GpuNvidia:
-                    case HardwareType.GpuAmd:
-                        gpuNameTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            gpuNameTextBlock!.Text = $"{hardwareItem.Name}";
-                        });
-                        break;
-                    case HardwareType.Motherboard:
-                        motherboardTextBlock!.Dispatcher.Invoke(() =>
-                        {
-                            motherboardTextBlock!.Text = $"Motherboard: {hardwareItem.Name}";
-                        });
-                        break;
-                    default:
-                        break;
+                    switch (hardwareItem.HardwareType)
+                    {
+                        case HardwareType.Cpu:
+                            cpuNameTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                cpuNameTextBlock!.Text = $"{hardwareItem.Name}";
+                            });
+                            break;
+                        case HardwareType.GpuNvidia:
+                        case HardwareType.GpuAmd:
+                            gpuNameTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                gpuNameTextBlock!.Text = $"{hardwareItem.Name}";
+                            });
+                            break;
+                        case HardwareType.Motherboard:
+                            motherboardTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                motherboardTextBlock!.Text = $"Motherboard: {hardwareItem.Name}";
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogManager.Log($"Error updating hardware names: {ex.Message}", logFileName);
                 }
             }
         }
@@ -213,13 +265,21 @@ namespace StarZLauncher.Classes
             }
             catch (Exception ex)
             {
-                StarZMessageBox.ShowDialog($"Error getting Local IP Address: {ex.Message}", "Error", false);
+                LogManager.Log($"Error getting Local IP Address: {ex.Message}", logFileName);
             }
         }
 
         ~HardwareMonitor()
         {
-            computer.Close();
+            try
+            {
+                computer!.Close();
+                LogManager.Log("HardwareMonitor closed successfully.", logFileName);
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"Error closing HardwareMonitor: {ex.Message}", logFileName);
+            }
         }
     }
 }

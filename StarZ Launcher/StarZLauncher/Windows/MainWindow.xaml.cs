@@ -26,6 +26,8 @@ namespace StarZLauncher.Windows
         public static Image? StarZLogoImage;
         public static Image? profilePictureImage;
         public static Image? ComputerTabImage;
+        public static Image? CloseImage;
+        public static Image? MinimizeImage;
 
         public static TabControl? MainTabControl;
         public static TabItem? HometabItem;
@@ -37,6 +39,7 @@ namespace StarZLauncher.Windows
 
         public static Border? WindowBackground;
         public static Border? DragAndDropZone;
+        public static Border? BackgroundForWindowsOnTop;
 
         public static CheckBox? DarkModeCheckBox;
         public static CheckBox? LightModeCheckBox;
@@ -55,41 +58,26 @@ namespace StarZLauncher.Windows
         public static TextBlock? memoryTextBlock;
         public static TextBlock? motherboardTextBlock;
         public static TextBlock? ipaddressTextBlock;
+        public static TextBlock? InstallStatusText;
 
         public static TextBox? URLTextBox;
         public static TextBox? VideoURLTextBox;
         public static TextBox? injectiondelayTextBox;
         public static TextBox? altTextBox;
 
-        public static Image? CloseImage;
-        public static Image? MinimizeImage;
-
         public static ListBox? DLLsListManager;
 
-        public static Border? BackgroundForWindowsOnTop;
-
         public static Label? DefaultDLLText;
-
         public static Label? CurrentMinecraftVersion;
         public static Label? CurrentLauncherVersion;
 
         public static StackPanel? FullVersionsListStackPanel;
-
-        public static TextBlock? InstallStatusText;
 
         private HardwareMonitor? hardwareMonitor;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            // Start the HardwareMonitoring
-            bool debug = ConfigManager.GetDebugHardwareMonitoring();
-            if (debug == false)
-            {
-                hardwareMonitor = new HardwareMonitor();
-                Task.Run(() => hardwareMonitor.StartMonitoring());
-            }
 
             // Images
             HomeTabImage = HomeTab;
@@ -156,9 +144,22 @@ namespace StarZLauncher.Windows
 
             // Loading part
             LoadSettingsFromFile();
-            Loader.CheckForThemes();
-            Loader.LoadMusicFiles();
             Loader.Load();
+            // Start the HardwareMonitoring
+            bool debug = ConfigManager.GetDebugHardwareMonitoring();
+            if (debug == false)
+            {
+                hardwareMonitor = new HardwareMonitor();
+                Task.Run(() => hardwareMonitor.StartMonitoring());
+                HardwareMonitorStatusTextBlock.Visibility = Visibility.Collapsed;
+                AboutMenu.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                HardwareMonitorStatusTextBlock.Visibility = Visibility.Visible;
+                AboutMenu.Visibility = Visibility.Collapsed;
+                LogManager.Log("Hardware Monitoring is disabled. To re-enable it, change 'DebugHardwareMonitoring' value in Settings.txt to 'False'.", "HardwareMonitor.txt");
+            }
         }
 
         // Animation on program's launch

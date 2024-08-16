@@ -14,25 +14,24 @@ namespace StarZLauncher.Classes
     public static class Injector
     {
         private static readonly SecurityIdentifier AppPackagesSid = new("S-1-15-2-1");
+        private static readonly string logFileName = "Injector.txt";
 
         public static async Task<bool> Inject(string path)
         {
-            string logFileName = $"{DateTime.Now:yyyy-MM-dd_HHmmss}.txt";
-            string logFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Logs", logFileName);
 
             try
             {
-                Log($"Injection process started at: {DateTime.Now}", logFilePath);
-                ApplyAppPackages(path, logFilePath);
+                LogManager.Log($"Injection process started at: {DateTime.Now}", logFileName);
+                ApplyAppPackages(path);
 
                 Process process = GetMinecraftProcess();
                 if (process == null)
                 {
-                    Log("Failed to find Minecraft process.", logFilePath);
+                    LogManager.Log("Failed to find Minecraft process.", logFileName);
                     return false;
                 }
 
-                Log($"Found Minecraft process with PID: {process.Id}", logFilePath);
+                LogManager.Log($"Found Minecraft process with PID: {process.Id}", logFileName);
 
                 IntPtr processHandle = IntPtr.Zero;
                 IntPtr threadHandle = IntPtr.Zero;
@@ -42,82 +41,82 @@ namespace StarZLauncher.Classes
                     processHandle = NativeMethods.OpenProcess(NativeMethods.PROCESS_ALL_ACCESS, false, process.Id);
                     if (processHandle == IntPtr.Zero)
                     {
-                        Log("Failed to open process handle.", logFilePath);
+                        LogManager.Log("Failed to open process handle.", logFileName);
                         return false;
                     }
 
-                    Log("Process handle opened successfully.", logFilePath);
+                    LogManager.Log("Process handle opened successfully.", logFileName);
 
                     IntPtr loadLibraryAddress = NativeMethods.GetProcAddress(NativeMethods.GetModuleHandle("kernel32.dll"), "LoadLibraryA");
                     if (loadLibraryAddress == IntPtr.Zero)
                     {
-                        Log("Failed to get address of LoadLibraryA.", logFilePath);
+                        LogManager.Log("Failed to get address of LoadLibraryA.", logFileName);
                         return false;
                     }
 
-                    Log("Address of LoadLibraryA obtained successfully.", logFilePath);
+                    LogManager.Log("Address of LoadLibraryA obtained successfully.", logFileName);
 
                     uint size = (uint)((path.Length + 1) * Marshal.SizeOf(typeof(char)));
                     IntPtr allocMemAddress = NativeMethods.VirtualAllocEx(processHandle, IntPtr.Zero, size, NativeMethods.MEM_COMMIT | NativeMethods.MEM_RESERVE, NativeMethods.PAGE_READWRITE);
                     if (allocMemAddress == IntPtr.Zero)
                     {
-                        Log("Failed to allocate memory in remote process.", logFilePath);
+                        LogManager.Log("Failed to allocate memory in remote process.", logFileName);
                         return false;
                     }
 
-                    Log("Memory allocated in remote process successfully.", logFilePath);
+                    LogManager.Log("Memory allocated in remote process successfully.", logFileName);
 
                     byte[] buffer = Encoding.Default.GetBytes(path); // Use ANSI encoding for LoadLibraryA
                     if (!NativeMethods.WriteProcessMemory(processHandle, allocMemAddress, buffer, (uint)buffer.Length, out IntPtr bytesWritten) || bytesWritten.ToInt32() != buffer.Length)
                     {
-                        Log($"Failed to write to allocated memory in remote process or partial write detected. Bytes written: {bytesWritten.ToInt32()}, Buffer length: {buffer.Length}", logFilePath);
+                        LogManager.Log($"Failed to write to allocated memory in remote process or partial write detected. Bytes written: {bytesWritten.ToInt32()}, Buffer length: {buffer.Length}", logFileName);
                         return false;
                     }
 
-                    Log($"Library path written to allocated memory in remote process. Bytes written: {bytesWritten.ToInt32()}, Buffer length: {buffer.Length}", logFilePath);
+                    LogManager.Log($"Library path written to allocated memory in remote process. Bytes written: {bytesWritten.ToInt32()}, Buffer length: {buffer.Length}", logFileName);
 
                     threadHandle = NativeMethods.CreateRemoteThread(processHandle, IntPtr.Zero, 0, loadLibraryAddress, allocMemAddress, 0, IntPtr.Zero);
                     if (threadHandle == IntPtr.Zero)
                     {
-                        Log("Failed to create remote thread.", logFilePath);
+                        LogManager.Log("Failed to create remote thread.", logFileName);
                         return false;
                     }
 
-                    Log("Remote thread created successfully.", logFilePath);
+                    LogManager.Log("Remote thread created successfully.", logFileName);
 
                     // Wait for the module to load asynchronously
-                    await WaitForModuleLoad(process, path, logFilePath);
+                    await WaitForModuleLoad(process, path);
 
                     // Wait for the remote thread to complete
                     uint waitResult = NativeMethods.WaitForSingleObject(threadHandle, 10000);
                     if (waitResult != 0)
                     {
-                        Log($"Remote thread did not complete in a timely manner. Wait result: {waitResult}", logFilePath);
+                        LogManager.Log($"Remote thread did not complete in a timely manner. Wait result: {waitResult}", logFileName);
                         return false;
                     }
 
-                    Log("Remote thread completed successfully.", logFilePath);
+                    LogManager.Log("Remote thread completed successfully.", logFileName);
                 }
                 finally
                 {
                     if (processHandle != IntPtr.Zero)
                     {
                         NativeMethods.CloseHandle(processHandle);
-                        Log("Process handle closed.", logFilePath);
+                        LogManager.Log("Process handle closed.", logFileName);
                     }
                     if (threadHandle != IntPtr.Zero)
                     {
                         NativeMethods.CloseHandle(threadHandle);
-                        Log("Thread handle closed.", logFilePath);
+                        LogManager.Log("Thread handle closed.", logFileName);
                     }
                 }
 
-                Log("Injection process completed successfully.", logFilePath);
+                LogManager.Log("Injection process completed successfully.", logFileName);
                 return true;
             }
             catch (Exception ex)
             {
-                LogError($"Error injecting library: {ex.Message}", logFilePath);
+                LogManager.Log($"ERROR: {ex.Message}", logFileName);
                 return false;
             }
         }
@@ -128,7 +127,7 @@ namespace StarZLauncher.Classes
             return processes.FirstOrDefault(p => !p.HasExited && p.Responding);
         }
 
-        private static void ApplyAppPackages(string path, string logFilePath)
+        private static void ApplyAppPackages(string path)
         {
             var fileInfo = new FileInfo(path);
             try
@@ -136,25 +135,25 @@ namespace StarZLauncher.Classes
                 var fileSecurity = fileInfo.GetAccessControl();
                 fileSecurity.AddAccessRule(new FileSystemAccessRule(AppPackagesSid, FileSystemRights.FullControl, AccessControlType.Allow));
                 fileInfo.SetAccessControl(fileSecurity);
-                Log("Applied AppPackages permissions to the DLL file.", logFilePath);
+                LogManager.Log("Applied AppPackages permissions to the DLL file.", logFileName);
             }
             catch (Exception ex)
             {
-                LogError($"Failed to apply AppPackages permissions: {ex.Message}", logFilePath);
+                LogManager.Log($"ERROR: Failed to apply AppPackages permissions: {ex.Message}", logFileName);
             }
         }
 
-        private static async Task WaitForModuleLoad(Process process, string path, string logFilePath)
+        private static async Task WaitForModuleLoad(Process process, string path)
         {
             int attempt = 0;
             while (!IsInjected(process, path))
             {
-                Log($"Checking if module is loaded, attempt {++attempt}", logFilePath);
+                LogManager.Log($"Checking if module is loaded, attempt {++attempt}", logFileName);
                 await Task.Delay(100);
                 process.Refresh();
             }
 
-            Log("Injected module detected in Minecraft process.", logFilePath);
+            LogManager.Log("Injected module detected in Minecraft process.", logFileName);
         }
 
         public static bool IsInjected(Process process, string path)
@@ -163,23 +162,6 @@ namespace StarZLauncher.Classes
                 return false;
 
             return process.Modules.Cast<ProcessModule>().Any(m => m.FileName.Equals(path, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private static void Log(string message, string logFilePath)
-        {
-            try
-            {
-                File.AppendAllText(logFilePath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss}: {message}{Environment.NewLine}");
-            }
-            catch (Exception ex)
-            {
-                StarZMessageBox.ShowDialog($"Failed to write to log file: {ex.Message}", "Error", false);
-            }
-        }
-
-        private static void LogError(string message, string logFilePath)
-        {
-            Log($"ERROR: {message}", logFilePath);
         }
     }
 
