@@ -16,7 +16,7 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        bool debug = ConfigManager.GetOfflineMode();
+        bool debug = ConfigManager.GetDebugFontInstaller();
         if (debug == false)
         {
             Task.Run(() => FontInstaller.FontInstallation());
