@@ -18,6 +18,7 @@ namespace StarZLauncher.Classes
         private static string MINECRAFTINSTALLATIONPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions");
         private static bool OFFLINEMODE = false;
         private static bool DEBUGHARDWAREMONITORING = false;
+        private static bool DEBUGFONTINSTALLER = false;
 
         private static readonly string configFilePath;
 
@@ -37,6 +38,7 @@ namespace StarZLauncher.Classes
             settings.Add("MinecraftInstallationPath", MINECRAFTINSTALLATIONPATH);
             settings.Add("OfflineMode", OFFLINEMODE);
             settings.Add("DebugHardwareMonitoring", DEBUGHARDWAREMONITORING);
+            settings.Add("DebugFontInstaller", DEBUGFONTINSTALLER);
 
             // Get the config file path in MyDocuments/StarZ Launcher
             string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -146,6 +148,11 @@ namespace StarZLauncher.Classes
         public static bool GetDebugHardwareMonitoring()
         {
             return (bool)settings["DebugHardwareMonitoring"];
+        }
+
+        public static bool GetDebugFontInstaller()
+        {
+            return (bool)settings["DebugFontInstaller"];
         }
 
         public static void SetDefaultDLL(string newDefaultDLL)
