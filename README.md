@@ -26,7 +26,7 @@ While the launcher itself will no longer receive updates, we encourage you to co
 
 Thank you for being a part of this journey.
 
-- yoqzii
+/- yoqzii
 ---
 
 ## 🌟 Features
