@@ -124,10 +124,12 @@ namespace StarZLauncher.Classes
             {
                 CurrentMinecraftVersion!.Content = $"{VersionNumber}";
                 bool debug = ConfigManager.GetOfflineMode();
-                if (debug == false)
+                if (!debug)
                 {
-                    CurrentLauncherVersion!.Content = $"{LauncherVersion}";
+                    string currentVersion = GetCurrentVersion();
+                    CurrentLauncherVersion!.Content = $"{currentVersion}";
                 }
+
             }
             else
             {
