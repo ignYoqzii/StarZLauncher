@@ -61,7 +61,7 @@
             Margin="465,10,0,0" 
             VerticalAlignment="Top" 
             RenderOptions.BitmapScalingMode="HighQuality" 
-            Width="25" Source="/Images/X.png" 
+            Width="25" Source="/Resources/X.png" 
             Cursor="Hand" 
             MouseLeftButtonDown="CloseButton_MouseLeftButtonDown" 
             RenderTransformOrigin="0.5, 0.5">
