@@ -16,6 +16,18 @@
 
 ---
 
+## 🚨 End of Life Announcement
+
+**StarZ Launcher** has officially reached the end of its development life. As of today, no further updates will be made to the launcher, with one important exception: new Minecraft versions will continue to be added to the Version Manager, allowing you to download and enjoy the latest releases.
+
+We want to extend our heartfelt thanks to everyone who has supported and used StarZ Launcher over the years. Your feedback, contributions, and enthusiasm have been invaluable to the project.
+
+While the launcher itself will no longer receive updates, we encourage you to continue using it to manage your Minecraft versions with ease.
+
+Thank you for being a part of this journey.
+
+---
+
 ## 🌟 Features
 
 - **Texture Pack Management**: Seamlessly manage your texture packs with ease.
