@@ -22,7 +22,7 @@ namespace StarZLauncher.Classes
         public static MediaPlayer MediaPlayer { get; private set; }
         public static bool IsPaused { get; private set; } = false;
         public static TimeSpan CurrentPosition { get; private set; } = TimeSpan.Zero;
-        private static readonly Random Random = new Random();
+        private static readonly Random Random = new();
 
         public static ObservableCollection<MusicItem> MusicItems { get; set; } = new ObservableCollection<MusicItem>();
 
