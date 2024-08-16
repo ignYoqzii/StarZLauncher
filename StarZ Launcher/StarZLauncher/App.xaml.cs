@@ -75,7 +75,8 @@ public partial class App : Application
         if (!HasRun)
         {
             bool discordRPC = ConfigManager.GetDiscordRPC();
-            if (discordRPC == true)
+            bool offlinemode = ConfigManager.GetOfflineMode();
+            if (discordRPC == true & offlinemode == false)
             {
                 DiscordRichPresenceManager.DiscordClient.Initialize();
                 DiscordRichPresenceManager.SetPresence();
