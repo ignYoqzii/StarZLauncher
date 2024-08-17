@@ -1,39 +1,42 @@
-﻿using Microsoft.Win32;
-using StarZLauncher.Windows;
+﻿using StarZLauncher.Windows;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
-using Windows.Foundation;
-using Windows.Management.Deployment;
 using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes
 {
-    public static class MinecraftVersionsListManager
+    public class MinecraftVersionsListManager
     {
         private static bool isRunning = false;
-        static MinecraftVersionsListManager()
-        {
-        }
 
         public static async void LoadVersionsManager()
         {
             await LoadVersionsAsync();
         }
 
-        private static async Task LoadVersionsAsync()
+        public static async Task LoadVersionsAsync()
         {
             string versionsUrl = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/MinecraftVersions.txt";
-            using WebClient client = new();
-            string versions = await client.DownloadStringTaskAsync(versionsUrl);
+            using HttpClient client = new();
+            string versions = await client.GetStringAsync(versionsUrl);
             string[] versionList = versions.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string installationPath = ConfigManager.GetMinecraftInstallationPath();
+            string currentVersion = await PackageHelper.GetVersion();
+
+            // Clear existing versions from the stack panel
+            if (FullVersionsListStackPanel?.Children.Count > 0)
+            {
+                FullVersionsListStackPanel.Children.Clear();
+            }
 
             // Create a grid to hold version borders
             Grid grid = new();
@@ -48,8 +51,19 @@ namespace StarZLauncher.Classes
             for (int i = 0; i < versionList.Length; i++)
             {
                 string version = versionList[i];
+                string versionFolderPath = Path.Combine(installationPath, $"Minecraft {version}");
+                bool isInstalled = Directory.Exists(versionFolderPath);
 
-                // Create a border with rounded corners
+                string displayVersion = version;
+                if (version == currentVersion)
+                {
+                    displayVersion += " - In use";
+                }
+                else if (isInstalled)
+                {
+                    displayVersion += " - Downloaded";
+                }
+
                 Border border = new()
                 {
                     Background = (i % 2 == 0) ? background1 : background2,
@@ -65,30 +79,28 @@ namespace StarZLauncher.Classes
                     }
                 };
 
-                // Create a grid inside the border for version details
                 Grid innerGrid = new();
                 innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
                 innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
-                // Create a text block with the version number
                 TextBlock textBlock = new()
                 {
-                    Text = version,
+                    Text = displayVersion,
                     Margin = new Thickness(10, 0, 0, 0),
                     VerticalAlignment = VerticalAlignment.Center,
                     Foreground = new SolidColorBrush(Colors.AliceBlue),
+                    FontFamily = new FontFamily("Outfit"),
                     FontSize = 20,
-                    FontWeight = FontWeights.Bold
+                    FontWeight = FontWeights.Medium
                 };
 
-                // Create a button to download the version
                 Button button = new()
                 {
-                    Content = "Download",
                     Foreground = new SolidColorBrush(Colors.AliceBlue),
                     FontSize = 10,
                     Margin = new Thickness(5, 0, 10, 0),
-                    FontWeight = FontWeights.Bold,
+                    FontWeight = FontWeights.Medium,
+                    FontFamily = new FontFamily("Outfit"),
                     Height = 30,
                     Width = 100,
                     HorizontalAlignment = HorizontalAlignment.Right,
@@ -104,7 +116,6 @@ namespace StarZLauncher.Classes
                     Visibility = Visibility.Collapsed
                 };
 
-                // Create a linear gradient brush
                 LinearGradientBrush gradientBrush = new()
                 {
                     StartPoint = new System.Windows.Point(0.5, 0),
@@ -114,17 +125,17 @@ namespace StarZLauncher.Classes
                 gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x00, 0x3E, 0x5D), 0.403));
                 gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x00, 0x15, 0x1F), 1));
 
-                // Set the linear gradient brush as the foreground of the progress bar
                 progressBar.Foreground = gradientBrush;
+
+                button.Content = version == currentVersion ? "Uninstall" : isInstalled ? "Switch" : "Install";
 
                 button.Click += async (s, e) =>
                 {
-                    progressBar.Visibility = Visibility.Visible;
                     await DownloadVersionAsync(version, progressBar);
                 };
+
                 button.Style = (Style)button.FindResource("DefaultDownloadButtons");
 
-                // Add the text block, button, and progress bar to the inner grid
                 innerGrid.Children.Add(textBlock);
                 innerGrid.Children.Add(button);
                 innerGrid.Children.Add(progressBar);
@@ -132,108 +143,155 @@ namespace StarZLauncher.Classes
                 Grid.SetColumn(button, 1);
                 Grid.SetColumnSpan(progressBar, 2);
 
-                // Add the inner grid to the border
                 border.Child = innerGrid;
 
-                // Add the border to the main grid
-                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(80) }); // Adjust the height as needed
+                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(80) });
                 grid.Children.Add(border);
                 Grid.SetRow(border, i);
                 Grid.SetColumn(border, 0);
                 Grid.SetColumnSpan(border, 2);
             }
 
-            // Add the grid to the stack panel
             FullVersionsListStackPanel?.Children.Add(grid);
         }
 
-
         private static async Task DownloadVersionAsync(string version, ProgressBar progressBar)
         {
-            string downloadUrl = $"https://github.com/bernarddesfosse/onix_compatible_appx/releases/download/{version}/{version}.appx";
 
-            string fileName = $"Minecraft-{version}.zip";
-            string folderPath = ConfigManager.GetMinecraftInstallationPath();
-            string filePath = System.IO.Path.Combine(folderPath, fileName);
-
-            using WebClient client = new();
-            client.DownloadProgressChanged += (s, e) =>
-            {
-                progressBar.Value = e.ProgressPercentage;
-            };
-
-            await client.DownloadFileTaskAsync(downloadUrl, filePath);
-
-            progressBar.Visibility = Visibility.Collapsed;
-
-            // Call InstallMinecraftPackage method
-            await InstallMinecraftPackage();
-        }
-
-        public static void RegisterAppPackage(string packagePath)
-        {
-            PackageManager packageManager = new();
-
-            var packageUri = new Uri(packagePath);
-            var deploymentOperation = packageManager.RegisterPackageAsync(packageUri, null, DeploymentOptions.DevelopmentMode);
-            string installationPath = ConfigManager.GetMinecraftInstallationPath();
-
-            deploymentOperation.Completed += (asyncInfo, asyncStatus) =>
-            {
-                Task.Run(() =>
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        if (asyncStatus == AsyncStatus.Completed)
-                        {
-                            StarZMessageBox.ShowDialog("App package registered successfully! Don't forget to apply your profile! Once done, please restart the launcher.", "Success !", false);
-                            InstallStatusText!.Foreground = Brushes.AliceBlue;
-                            InstallStatusText.Text = "";
-                            ConfigManager.SetMinecraftInstallationPath(installationPath);
-                            minecraftInstallationPathTextBlock!.Text = installationPath;
-                        }
-                        else
-                        {
-                            var errorText = asyncInfo.ErrorCode.Message;
-                            StarZMessageBox.ShowDialog($"Failed to register app package. {errorText}", "Failed !", false);
-                            InstallStatusText!.Foreground = Brushes.AliceBlue;
-                            InstallStatusText.Text = "";
-                        }
-                    });
-                });
-            };
-        }
-
-        public static void UnregisterMinecraftPackage()
-        {
-            string unregisterCommand = "Get-AppxPackage *minecraftUWP* | Remove-AppxPackage";
-            ProcessStartInfo psiUnregister = new("powershell.exe", unregisterCommand)
-            {
-                Verb = "runas", // Run PowerShell as administrator
-                CreateNoWindow = true, // Run without opening a window
-                WindowStyle = ProcessWindowStyle.Hidden // Hide the window
-            };
-
-            try
-            {
-                Process.Start(psiUnregister)?.WaitForExit();
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                // Handle the case where the user cancels the admin rights prompt
-                StarZMessageBox.ShowDialog("Admin rights required to unregister Minecraft package. Closing the launcher to avoid corruption...", "Error !", false);
-                Application.Current.Shutdown();
-            }
-        }
-
-        public static async Task InstallMinecraftPackage()
-        {
             if (isRunning) // check if installation is already in progress or not
             {
                 return;
             }
 
-            // show warning message box to the user
+            string downloadUrl = $"https://github.com/bernarddesfosse/onix_compatible_appx/releases/download/{version}/{version}.appx";
+            string folderPath = ConfigManager.GetMinecraftInstallationPath();
+            string versionFolderPath = Path.Combine(folderPath, $"Minecraft {version}");
+            string zipFilePath = Path.Combine(versionFolderPath, $"{version}.zip");
+
+            isRunning = true;
+            // Ensure the directory exists or handle the version switch/uninstall case
+            if (!Directory.Exists(versionFolderPath))
+            {
+                Directory.CreateDirectory(versionFolderPath);
+            }
+            else
+            {
+                string currentVersion = await PackageHelper.GetVersion();
+                bool? result;
+
+                if (currentVersion == version)
+                {
+                    result = StarZMessageBox.ShowDialog($"Minecraft {version} will be uninstalled from your computer. Click 'OK' to continue or 'CANCEL' if you changed your mind.", "Info", true);
+
+                    if (result == true)
+                    {
+                        await UnregisterAndDeleteVersionAsync(versionFolderPath);
+                        await LoadVersionsAsync();
+                        VersionHelper.LoadInstalledMinecraftVersion();
+                        isRunning = false;
+                    }
+                    return;
+                }
+                else
+                {
+                    result = StarZMessageBox.ShowDialog($"It appears that Minecraft {version} is already on your computer. If you want to switch to that version, click 'OK'. If you want to uninstall it, press 'CANCEL' or close this window.", "Info", true);
+
+                    if (result == true)
+                    {
+                        await SwitchMinecraftVersionAsync(versionFolderPath);
+                        isRunning = false;
+                    }
+                    else if (result == false)
+                    {
+                        await DeleteVersionAsync(versionFolderPath);
+                        await LoadVersionsAsync();
+                        VersionHelper.LoadInstalledMinecraftVersion();
+                        isRunning = false;
+                    }
+                    return;
+                }
+            }
+
+            // Download and install the new version
+            progressBar.Visibility = Visibility.Visible;
+
+            using WebClient client = new();
+            client.DownloadProgressChanged += (s, e) => progressBar.Value = e.ProgressPercentage;
+
+            await client.DownloadFileTaskAsync(downloadUrl, zipFilePath);
+
+            progressBar.Visibility = Visibility.Collapsed;
+
+            await InstallMinecraftPackage(versionFolderPath, zipFilePath);
+        }
+
+        private static async Task UnregisterAndDeleteVersionAsync(string versionFolderPath)
+        {
+            await Task.Run(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InstallStatusText!.Foreground = Brushes.Yellow;
+                    InstallStatusText.Text = "Unregistering and deleting Minecraft files...";
+                });
+
+                PackageHelper.UnregisterAppPackage();
+                Directory.Delete(versionFolderPath, true);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InstallStatusText!.Foreground = Brushes.AliceBlue;
+                    InstallStatusText.Text = "";
+                });
+            });
+        }
+
+        private static async Task DeleteVersionAsync(string versionFolderPath)
+        {
+            await Task.Run(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InstallStatusText!.Foreground = Brushes.Yellow;
+                    InstallStatusText.Text = "Deleting Minecraft files...";
+                });
+                Directory.Delete(versionFolderPath, true);
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InstallStatusText!.Foreground = Brushes.AliceBlue;
+                    InstallStatusText.Text = "";
+                });
+            });
+        }
+
+        private static async Task SwitchMinecraftVersionAsync(string versionFolderPath)
+        {
+            await Task.Run(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InstallStatusText!.Foreground = Brushes.Red;
+                    InstallStatusText.Text = "Unregistering current Minecraft version...";
+                });
+                PackageHelper.UnregisterAppPackage();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InstallStatusText!.Foreground = Brushes.Green;
+                    InstallStatusText.Text = $"Registering and finalizing Minecraft setup...";
+                });
+
+                string packagePath = Path.Combine(versionFolderPath, "AppxManifest.xml");
+                PackageHelper.RegisterAppPackage(packagePath);
+
+                VersionHelper.LoadInstalledMinecraftVersion();
+            });
+        }
+
+        public static async Task InstallMinecraftPackage(string versionFolderPath, string zipFilePath)
+        {
+            // Show warning message box to the user
             bool? result = StarZMessageBox.ShowDialog("This will uninstall your current Microsoft Store Minecraft version. You will be prompted to back-up your com.mojang folder if you continue.", "Warning !");
 
             if (result == false)
@@ -243,100 +301,51 @@ namespace StarZLauncher.Classes
 
             await ToolsManager.SaveProfile(); // ask the user to save the current profile before uninstalling
 
-            isRunning = true; // set installation in progress flag
-
-            // Unregister Minecraft from Microsoft Store
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                InstallStatusText!.Foreground = Brushes.Red;
-                InstallStatusText.Text = "Unregistering Minecraft...";
-            });
-            UnregisterMinecraftPackage();
-
-            // show file dialog to the user to select the zip file
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                InstallStatusText!.Foreground = Brushes.Yellow;
-                InstallStatusText.Text = "Waiting for user to select a version to install (.zip)...";
-            });
-
             await Task.Run(() =>
             {
-                OpenFileDialog openFileDialog = new()
-                {
-                    Filter = "Zip Files|*.zip",
-                    InitialDirectory = ConfigManager.GetMinecraftInstallationPath()
-                };
-                bool? dialogResult = openFileDialog.ShowDialog();
-
-                if (dialogResult != true)
-                {
-                    isRunning = false; // reset installation in progress flag
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        InstallStatusText!.Foreground = Brushes.AliceBlue;
-                        InstallStatusText.Text = "";
-                    });
-                    return;
-                }
-
-                string selectedZipFile = openFileDialog.FileName;
-                // Get the Minecraft installation path from the config manager
-                string installationPath = ConfigManager.GetMinecraftInstallationPath();
-
-                // Define the path for the StarZ X Minecraft folder
-                string starzXMinecraftFolderPath = System.IO.Path.Combine(installationPath, "StarZ X Minecraft");
-
-                // Update the UI to indicate the deletion of any previous installed version
+                // Unregister Minecraft from Microsoft Store
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     InstallStatusText!.Foreground = Brushes.Red;
-                    InstallStatusText.Text = "Deleting any previous installed version...";
+                    InstallStatusText.Text = "Unregistering Minecraft...";
                 });
+                PackageHelper.UnregisterAppPackage();
 
-                // Check if the StarZ X Minecraft folder exists
-                if (Directory.Exists(starzXMinecraftFolderPath))
-                {
-                    // Delete the existing StarZ X Minecraft folder if it exists
-                    Directory.Delete(starzXMinecraftFolderPath, true);
-                }
-
-                // Create a new StarZ X Minecraft folder
-                Directory.CreateDirectory(starzXMinecraftFolderPath);
-
-                // move the selected zip file to the StarZ X Minecraft folder
-                string newZipFileName = System.IO.Path.Combine(starzXMinecraftFolderPath, "StarZXMinecraft.zip");
-                File.Move(selectedZipFile, newZipFileName);
-
-                // extract the zip file
+                // Update UI to show "Extracting..." and ensure it has time to refresh
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     InstallStatusText!.Foreground = Brushes.Yellow;
-                    InstallStatusText.Text = "Extracting the selected version (.zip)...";
+                    InstallStatusText.Text = "Extracting...";
                 });
-                ZipFile.ExtractToDirectory(newZipFileName, starzXMinecraftFolderPath);
 
-                // delete AppxSignature.p7x so that the game can be installed with developer mode
-                var signature = System.IO.Path.Combine(starzXMinecraftFolderPath, "AppxSignature.p7x");
-                if (File.Exists(signature)) File.Delete(signature);
+                // Extract the downloaded version file
+                ZipFile.ExtractToDirectory(zipFilePath, versionFolderPath);
 
-                // register the app using sideloading method
+                // Delete AppxSignature.p7x so that the game can be installed with developer mode
+                var signature = System.IO.Path.Combine(versionFolderPath, "AppxSignature.p7x");
+                if (File.Exists(signature))
+                {
+                    File.Delete(signature);
+                }
+
+                // Register the app using sideloading method
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     InstallStatusText!.Foreground = Brushes.Green;
                     InstallStatusText.Text = "Registering and finalizing Minecraft installation...";
                 });
-                string manifestPath = System.IO.Path.Combine(starzXMinecraftFolderPath, "AppxManifest.xml");
-                RegisterAppPackage(manifestPath);
 
-                // delete the initial renamed zip file if it still exists
-                if (File.Exists(newZipFileName))
+                string manifestPath = System.IO.Path.Combine(versionFolderPath, "AppxManifest.xml");
+                PackageHelper.RegisterAppPackage(manifestPath);
+
+                // Delete the initial zip file if it still exists
+                if (File.Exists(zipFilePath))
                 {
-                    File.Delete(newZipFileName);
+                    File.Delete(zipFilePath);
                 }
             });
 
-            isRunning = false; // reset installation in progress flag
+            isRunning = false; // Reset installation in progress flag
         }
     }
 }

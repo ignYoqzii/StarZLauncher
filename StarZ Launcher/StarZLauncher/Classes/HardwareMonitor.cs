@@ -1,7 +1,5 @@
 ﻿using LibreHardwareMonitor.Hardware;
-using StarZLauncher.Windows;
 using System;
-using System.IO;
 using System.Net;
 using System.Threading;
 using static StarZLauncher.Windows.MainWindow;

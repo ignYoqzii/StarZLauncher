@@ -105,16 +105,25 @@ namespace StarZLauncher.Classes
             return extension.Equals(".zip", StringComparison.OrdinalIgnoreCase);
         }
 
-        public static void ShaderRemove()
+        public static async void ShaderRemove()
         {
-            string installationPath = ConfigManager.GetMinecraftInstallationPath();
-            string destinationPath = Path.Combine(installationPath, "data", "renderer", "materials");
+            string? exePath;
+            try
+            {
+                exePath = await PackageHelper.GetExecutablePath();
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog(ex.Message, "Error!", false);
+                return;
+            }
+            string destinationPath = Path.Combine(exePath, "data", "renderer", "materials");
             string backupPath = Path.Combine(destinationPath, "Backup");
 
             // Check if a MinecraftInstallationPath is set
             if (!Directory.Exists(destinationPath))
             {
-                StarZMessageBox.ShowDialog("Make sure the game is installed from a custom launcher and that you have set the correct installation path in the launcher's settings.", "Error !", false);
+                StarZMessageBox.ShowDialog("You are trying to remove shaders from a version of Minecraft that does't support them.", "Error !", false);
                 return;
             }
 
@@ -165,14 +174,23 @@ namespace StarZLauncher.Classes
 
         public static async Task ShaderApply()
         {
-            string installationPath = ConfigManager.GetMinecraftInstallationPath();
-            string destinationPath = Path.Combine(installationPath, "data", "renderer", "materials");
+            string? exePath;
+            try
+            {
+                exePath = await PackageHelper.GetExecutablePath();
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog(ex.Message, "Error!", false);
+                return;
+            }
+            string destinationPath = Path.Combine(exePath, "data", "renderer", "materials");
             string backupPath = Path.Combine(destinationPath, "Backup");
 
             // Check if destination directory exists
             if (!Directory.Exists(destinationPath))
             {
-                StarZMessageBox.ShowDialog("Make sure the game is installed from a custom launcher and that you have set the correct installation path in the launcher's settings.", "Error !", false);
+                StarZMessageBox.ShowDialog("You are trying to apply shaders to an unsuported version of Minecraft.", "Error !", false);
                 return;
             }
 
@@ -230,14 +248,23 @@ namespace StarZLauncher.Classes
             StarZMessageBox.ShowDialog("Shaders applied successfully!", "Success !", false);
         }
 
-        public static void CosmeticsSkinPackApply()
+        public static async void CosmeticsSkinPackApply()
         {
-            string installationPath = ConfigManager.GetMinecraftInstallationPath();
-            string destinationPath = Path.Combine(installationPath, "data", "skin_packs");
+            string? exePath;
+            try
+            {
+                exePath = await PackageHelper.GetExecutablePath();
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog(ex.Message, "Error!", false);
+                return;
+            }
+            string destinationPath = Path.Combine(exePath, "data", "skin_packs");
 
             if (!Directory.Exists(destinationPath))
             {
-                StarZMessageBox.ShowDialog("Make sure the game is installed from a custom launcher and that you have set the correct installation path in the launcher's settings.", "Error !", false);
+                StarZMessageBox.ShowDialog("It seems like the folder was deleted or is corrupted. For help, join our Discord server.", "Error !", false);
                 return;
             }
 

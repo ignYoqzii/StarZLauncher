@@ -3,6 +3,9 @@ using StarZLauncher.Windows;
 using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
+using System.Windows;
+using Windows.Management.Deployment;
 using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes
@@ -10,8 +13,6 @@ namespace StarZLauncher.Classes
     public static class VersionHelper
     {
         // class to handle the versions check for the game and the launcher
-        // Path to the telemetry_info.json file
-        public static string telemetryinfoPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftpe\telemetry_info.json";
 
         // Version number extracted from the JSON file
         public static string? VersionNumber { get; private set; }
@@ -21,27 +22,11 @@ namespace StarZLauncher.Classes
         private const string? VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
         private const string? DOWNLOAD_URL = "https://github.com/ignYoqzii/StarZLauncher/releases/download/{0}/StarZLauncher.exe";
 
+        /// <summary>
+        /// Launcher Updater code
+        /// </summary>
         static VersionHelper()
         {
-            // get the installed minecraft version
-            try
-            {
-                // Read the JSON file as a string
-                string? json = File.ReadAllText(telemetryinfoPath);
-
-                // Parse the JSON string into a JObject
-                JObject jObject = JObject.Parse(json);
-
-                // Extract the version number from the "lastsession_Build" property
-                VersionNumber = (string?)jObject["lastsession_Build"];
-            }
-            catch (Exception)
-            {
-                // Set a default value for the version number or take other appropriate action
-                VersionNumber = "Launch the game and restart the launcher!";
-            }
-
-            // get the launcher's version from github
             string? url = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
 
             try
@@ -56,7 +41,6 @@ namespace StarZLauncher.Classes
             }
         }
 
-        // Updater part of the launcher
         public static void CheckForUpdates()
         {
             string? currentVersion = GetCurrentVersion();
@@ -68,7 +52,7 @@ namespace StarZLauncher.Classes
             }
             else
             {
-                bool? result = StarZMessageBox.ShowDialog("A new update is available. Click OK to update the launcher to the latest, or CANCEL to ignore and keep using an outdated version.", "New update available !");
+                bool? result = StarZMessageBox.ShowDialog("A new update is available. Click 'OK' to update the launcher to the latest, or 'CANCEL' to ignore and keep using an outdated version.", "New update available !");
 
                 if (result == true)
                 {
@@ -116,26 +100,25 @@ namespace StarZLauncher.Classes
             System.Windows.Application.Current.Shutdown();
         }
 
-        // End of updater part
+        /// <summary>
+        /// End of Launcher Updater code
+        /// </summary>
+
+        public static void LoadInstalledMinecraftVersion()
+        {
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                VersionNumber = await PackageHelper.GetVersion();
+                CurrentMinecraftVersion!.Content = $"{VersionNumber}";
+            });
+        }
 
         public static void LoadCurrentVersions()
         {
-            if (telemetryinfoPath != null)
-            {
-                CurrentMinecraftVersion!.Content = $"{VersionNumber}";
-                bool debug = ConfigManager.GetOfflineMode();
-                if (!debug)
-                {
-                    string currentVersion = GetCurrentVersion();
-                    CurrentLauncherVersion!.Content = $"{currentVersion}";
-                }
+            LoadInstalledMinecraftVersion();
 
-            }
-            else
-            {
-                CurrentMinecraftVersion!.Content = "Launch the game and restart the launcher!";
-                CurrentLauncherVersion!.Content = "Error";
-            }
+            string currentVersion = GetCurrentVersion();
+            CurrentLauncherVersion!.Content = $"{currentVersion}";
         }
     }
 }
