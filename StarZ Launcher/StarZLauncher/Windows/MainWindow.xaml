@@ -556,7 +556,7 @@
 
 
 
-                            <TextBlock x:Name="FullVersionsListText" Text="Full Versions List" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Opacity="1" Margin="255,2,255,350" TextAlignment="Center"/>
+                            <TextBlock x:Name="FullVersionsListText" Text="Versions Manager" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Opacity="1" Margin="255,2,255,350" TextAlignment="Center"/>
 
 
 
