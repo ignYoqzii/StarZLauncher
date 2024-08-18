@@ -124,6 +124,19 @@ namespace StarZLauncher.Classes
 
         public static void RegisterAppPackage(string packagePath)
         {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                try
+                {
+                    DeveloperModeManager.EnableDeveloperMode();
+                }
+                catch (Exception ex)
+                {
+                    StarZMessageBox.ShowDialog($"Closing application to avoid corruption. Try enabling Developer Mode manually. {ex.Message}", "Error !", false);
+                    Application.Current.Shutdown();
+                }
+            });
+
             var packageUri = new Uri(packagePath);
             var deploymentOperation = PackageManager.RegisterPackageAsync(packageUri, null, DeploymentOptions.DevelopmentMode);
 

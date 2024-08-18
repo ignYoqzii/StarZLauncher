@@ -188,8 +188,8 @@ namespace StarZLauncher.Classes
                         await UnregisterAndDeleteVersionAsync(versionFolderPath);
                         await LoadVersionsAsync();
                         VersionHelper.LoadInstalledMinecraftVersion();
-                        isRunning = false;
                     }
+                    isRunning = false;
                     return;
                 }
                 else

@@ -456,6 +456,5 @@ namespace StarZLauncher.Classes
 
             StarZMessageBox.ShowDialog("V-Sync is now disabled!", "Success !", false);
         }
-
     }
 }
