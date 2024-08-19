@@ -66,11 +66,26 @@ namespace StarZLauncher.Classes
                 MediaPlayer.Position = CurrentPosition;
                 MediaPlayer.Play();
                 IsPaused = false;
+                bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+                if (DiscordRPCisEnabled == true)
+                {
+                    string title = Path.GetFileNameWithoutExtension(filepath);
+                    DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
+                    DiscordRichPresenceManager.DiscordClient.UpdateState("Using the Music Player");
+                }
             }
             else
             {
                 MediaPlayer.Open(new Uri(filepath));
                 MediaPlayer.Play();
+
+                bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+                if (DiscordRPCisEnabled == true)
+                {
+                    string title = Path.GetFileNameWithoutExtension(filepath);
+                    DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
+                    DiscordRichPresenceManager.DiscordClient.UpdateState("Using the Music Player");
+                }
             }
         }
 
@@ -79,6 +94,11 @@ namespace StarZLauncher.Classes
             MediaPlayer.Pause();
             CurrentPosition = MediaPlayer.Position;
             IsPaused = true;
+            bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+            if (DiscordRPCisEnabled == true)
+            {
+                DiscordRichPresenceManager.IdlePresence();
+            }
         }
 
         public static void StopMusic()
@@ -87,6 +107,11 @@ namespace StarZLauncher.Classes
             MediaPlayer.Close();
             IsPaused = false;
             CurrentPosition = TimeSpan.Zero;
+            bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+            if (DiscordRPCisEnabled == true)
+            {
+                DiscordRichPresenceManager.IdlePresence();
+            }
         }
 
         private static void ShuffleAndPlayNext()
