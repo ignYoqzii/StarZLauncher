@@ -39,7 +39,7 @@ Thank you for being a part of this journey.
 - **Cosmetics & Skin Packs**: Handle and apply skin packs and cosmetics (personas) with simplicity.
 - **V-Sync Toggler**: Easily enable or disable V-Sync.
 - **Version Control**: Effortlessly manage your Minecraft versions.
-- **Music Player & Downloader**: Play musics from your computer or download them from YouTube!
+- **Music Player & Downloader**: Play musics from your computer or download them from YouTube. Build your own playlist and enjoy the auto shuffle technique!
 - **Hardware Monitoring**: View useful informations about your computer, like GPU & CPU names, temperatures, loads and fans speed, Motherboard name, Local IP Address and more!
 - **Clean & Intuitive UI**: Enjoy a user-friendly and aesthetically pleasing interface.
 - **Compatibility**: Many debbuging techniques to handle many cases and scenarios.
