@@ -85,7 +85,8 @@ namespace StarZLauncher.Classes
         private static void IfMinecraftExited(object sender, EventArgs e)
         {
             bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-            if (DiscordRPCisEnabled == true)
+            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
+            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
             {
                 DiscordRichPresenceManager.IdlePresence();
             }
@@ -122,9 +123,10 @@ namespace StarZLauncher.Classes
                 string filenameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
                 DllNameLaunchOnRightClick = filenameWithoutExtension;
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+                bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
                 bool DiscordShowGameVersionisEnabled = ConfigManager.GetDiscordRPCShowGameVersion();
                 bool DiscordShowDLLNameisEnabled = ConfigManager.GetDiscordRPCShowDLLName();
-                if (DiscordRPCisEnabled == true)
+                if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
                 {
                     if (DiscordShowGameVersionisEnabled == true)
                     {
@@ -198,9 +200,10 @@ namespace StarZLauncher.Classes
                             string filenameWithoutExtension = Path.GetFileNameWithoutExtension(dllFilePath);
                             DllNameLaunchOnLeftClick = filenameWithoutExtension;
                             bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+                            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
                             bool DiscordShowGameVersionisEnabled = ConfigManager.GetDiscordRPCShowGameVersion();
                             bool DiscordShowDLLNameisEnabled = ConfigManager.GetDiscordRPCShowDLLName();
-                            if (DiscordRPCisEnabled == true)
+                            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
                             {
                                 if (DiscordShowGameVersionisEnabled == true)
                                 {

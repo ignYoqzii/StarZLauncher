@@ -67,7 +67,8 @@ namespace StarZLauncher.Classes
                 MediaPlayer.Play();
                 IsPaused = false;
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-                if (DiscordRPCisEnabled == true)
+                bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
+                if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
                 {
                     string title = Path.GetFileNameWithoutExtension(filepath);
                     DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
@@ -80,7 +81,8 @@ namespace StarZLauncher.Classes
                 MediaPlayer.Play();
 
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-                if (DiscordRPCisEnabled == true)
+                bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
+                if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
                 {
                     string title = Path.GetFileNameWithoutExtension(filepath);
                     DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
@@ -95,7 +97,8 @@ namespace StarZLauncher.Classes
             CurrentPosition = MediaPlayer.Position;
             IsPaused = true;
             bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-            if (DiscordRPCisEnabled == true)
+            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
+            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
             {
                 DiscordRichPresenceManager.IdlePresence();
             }
@@ -108,7 +111,8 @@ namespace StarZLauncher.Classes
             IsPaused = false;
             CurrentPosition = TimeSpan.Zero;
             bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-            if (DiscordRPCisEnabled == true)
+            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
+            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
             {
                 DiscordRichPresenceManager.IdlePresence();
             }
