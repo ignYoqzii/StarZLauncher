@@ -118,11 +118,19 @@ namespace StarZLauncher.Classes
             }
         }
 
+        private static int lastPlayedIndex = -1;
+
         private static void ShuffleAndPlayNext()
         {
             if (MusicItems.Count > 1)
             {
-                var nextIndex = Random.Next(MusicItems.Count);
+                int nextIndex;
+                do
+                {
+                    nextIndex = Random.Next(MusicItems.Count);
+                } while (nextIndex == lastPlayedIndex);
+
+                lastPlayedIndex = nextIndex;
                 PlayMusic(MusicItems[nextIndex].FilePath);
             }
             else if (MusicItems.Count == 1)
