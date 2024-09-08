@@ -1,17 +1,17 @@
-﻿using System;
-using Windows.Management.Deployment;
-using System.Threading.Tasks;
-using System.Windows;
-using Windows.Foundation;
-using StarZLauncher.Windows;
-using static StarZLauncher.Windows.MainWindow;
-using System.Windows.Media;
-using System.IO;
-using Windows.System;
-using System.Diagnostics;
+﻿using StarZLauncher.Windows;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using Windows.Foundation;
+using Windows.Management.Deployment;
+using Windows.System;
+using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes
 {
@@ -94,7 +94,7 @@ namespace StarZLauncher.Classes
         {
             var package = await GetPackage() ?? throw new Exception("Minecraft is not installed.");
 
-            if (!package.AppInfo.Package.IsDevelopmentMode) 
+            if (!package.AppInfo.Package.IsDevelopmentMode)
             {
                 throw new Exception("Minecraft is installed from either the Xbox App or Microsoft Store. Install it from a custom version switcher.");
             }
@@ -132,7 +132,7 @@ namespace StarZLauncher.Classes
                 }
                 catch (Exception ex)
                 {
-                    StarZMessageBox.ShowDialog($"Closing application to avoid corruption. Try enabling Developer Mode manually. {ex.Message}", "Error !", false);
+                    StarZMessageBox.ShowDialog($"Closing application to avoid corruption. Try enabling Developer Mode manually. {ex.Message}", "Error!", false);
                     Application.Current.Shutdown();
                 }
             });
@@ -148,14 +148,24 @@ namespace StarZLauncher.Classes
                     {
                         if (asyncStatus == AsyncStatus.Completed)
                         {
-                            StarZMessageBox.ShowDialog("App package registered successfully! Don't forget to apply your profile!", "Success !", false);
+                            StarZMessageBox.ShowDialog("App package registered successfully! Don't forget to apply your profile!", "Success!", false);
                             InstallStatusText!.Foreground = Brushes.AliceBlue;
                             InstallStatusText.Text = "";
                             VersionHelper.LoadInstalledMinecraftVersion();
                         }
                         else
                         {
-                            StarZMessageBox.ShowDialog($"Failed to register app package. Please enable Developer Mode. For help, join or Discord server.", "Failed !", false);
+                            string detailedError = "";
+                            if (asyncInfo.ErrorCode != null)
+                            {
+                                detailedError = $"Error code: {asyncInfo.ErrorCode.HResult}, Message: {asyncInfo.ErrorCode.Message}";
+                            }
+
+                            StarZMessageBox.ShowDialog($"Failed to register app package. {detailedError} Please enable Developer Mode. For help, join our Discord server.", "Failed!", false);
+
+                            // You can log this error for further debugging.
+                            LogManager.Log($"Failed to register package: {detailedError}", "PackageRegistration.txt");
+
                             InstallStatusText!.Foreground = Brushes.AliceBlue;
                             InstallStatusText.Text = "";
                         }

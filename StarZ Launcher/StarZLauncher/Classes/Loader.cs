@@ -1,5 +1,4 @@
-﻿using StarZLauncher.Windows;
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using static StarZLauncher.Classes.MusicPlayer;

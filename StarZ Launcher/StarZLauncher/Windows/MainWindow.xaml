@@ -1395,8 +1395,293 @@
                         </Button>
 
 
+                        <Border x:Name="CurrentlyPlayingBar" BorderThickness="0" Style="{DynamicResource SecondaryBorder}" CornerRadius="10" Margin="79,458,50,83">
 
-                        <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{x:Static classes:MusicPlayer.MusicItems}" Margin="56,190,26,77" d:ItemsSource="{d:SampleData ItemCount=5}">
+
+                            <Border.Effect>
+
+
+                                <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
+
+
+                            </Border.Effect>
+
+                        </Border>
+
+                        <Border Width="50" Height="50" CornerRadius="10" Margin="88,466,701,91">
+                            <Border.Background>
+                                <VisualBrush Stretch="Fill">
+                                    <VisualBrush.Visual>
+                                        <Grid>
+                                            <Image x:Name="SongImage" Source="/Resources/Unknow.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Grid>
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <TextBlock x:Name="CurrentlyPlayingTitle" Text="No Song Playing" TextAlignment="Left" FontFamily="Outfit" FontWeight="Medium" FontSize="15" Style="{DynamicResource TextBlockStyle}" Margin="146,474,145,111"/>
+                        <TextBlock x:Name="CurrentlyPlayingArtist" Text="From Artist" TextAlignment="Left" FontFamily="Outfit" FontWeight="Medium" FontSize="10" Style="{DynamicResource TextBlockStyle}" Margin="146,493,145,102"/>
+                        <TextBlock x:Name="CurrentlyPlayingTime" Text="00:00" TextAlignment="Right" FontFamily="Outfit" FontWeight="Medium" FontSize="8" Style="{DynamicResource TextBlockStyle}" Margin="274,508,525,89"/>
+
+                        <Border Style="{DynamicResource ProgressBarBorder}" CornerRadius="2" BorderThickness="1" Margin="319,509,70,90">
+
+
+                            <ProgressBar x:Name="CurrentlyPlayingProgress" Minimum="0" Maximum="100" Value="0" Background="Transparent" BorderThickness="0" Margin="0,0,0,0">
+
+
+                                <ProgressBar.Foreground>
+
+
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+
+
+                                        <GradientStop Color="#FF00BCFB"/>
+
+
+                                        <GradientStop Color="#FF003E5D" Offset="0.403"/>
+
+
+                                        <GradientStop Color="#FF00151F" Offset="1"/>
+
+
+                                    </LinearGradientBrush>
+
+
+                                </ProgressBar.Foreground>
+
+
+                            </ProgressBar>
+
+
+                        </Border>
+
+                        <Image x:Name="PlayButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="20" Margin="699,481,0,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="20" Source="/Resources/Play.png" Cursor="Hand" MouseLeftButtonDown="PlayARandomSong_Click" RenderTransformOrigin="0.5, 0.5">
+
+
+                            <Image.RenderTransform>
+
+
+                                <ScaleTransform x:Name="ImageTransform81"/>
+
+
+                            </Image.RenderTransform>
+
+
+                            <Image.Triggers>
+
+
+                                <EventTrigger RoutedEvent="Image.MouseEnter">
+
+
+                                    <BeginStoryboard>
+
+
+                                        <Storyboard>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform81" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform81" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="PlayButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+
+
+                                        </Storyboard>
+
+
+                                    </BeginStoryboard>
+
+
+                                </EventTrigger>
+
+
+                                <EventTrigger RoutedEvent="Image.MouseLeave">
+
+
+                                    <BeginStoryboard>
+
+
+                                        <Storyboard>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform81" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform81" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="PlayButton" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2"/>
+
+
+                                        </Storyboard>
+
+
+                                    </BeginStoryboard>
+
+
+                                </EventTrigger>
+
+
+                            </Image.Triggers>
+
+
+                        </Image>
+
+
+                        <Image x:Name="PauseButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="20" Margin="724,481,0,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="20" Source="/Resources/Pause.png" Cursor="Hand" MouseLeftButtonDown="PauseButton_Click" RenderTransformOrigin="0.5, 0.5">
+
+
+                            <Image.RenderTransform>
+
+
+                                <ScaleTransform x:Name="ImageTransform100"/>
+
+
+                            </Image.RenderTransform>
+
+
+                            <Image.Triggers>
+
+
+                                <EventTrigger RoutedEvent="Image.MouseEnter">
+
+
+                                    <BeginStoryboard>
+
+
+                                        <Storyboard>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform100" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform100" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="PauseButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+
+
+                                        </Storyboard>
+
+
+                                    </BeginStoryboard>
+
+
+                                </EventTrigger>
+
+
+                                <EventTrigger RoutedEvent="Image.MouseLeave">
+
+
+                                    <BeginStoryboard>
+
+
+                                        <Storyboard>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform100" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform100" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="PauseButton" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2"/>
+
+
+                                        </Storyboard>
+
+
+                                    </BeginStoryboard>
+
+
+                                </EventTrigger>
+
+
+                            </Image.Triggers>
+
+
+                        </Image>
+
+
+                        <Image x:Name="StopButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="20" Margin="749,481,0,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="20" Source="/Resources/Stop.png" Cursor="Hand" MouseLeftButtonDown="StopButton_Click" RenderTransformOrigin="0.5, 0.5">
+
+
+                            <Image.RenderTransform>
+
+
+                                <ScaleTransform x:Name="ImageTransform200"/>
+
+
+                            </Image.RenderTransform>
+
+
+                            <Image.Triggers>
+
+
+                                <EventTrigger RoutedEvent="Image.MouseEnter">
+
+
+                                    <BeginStoryboard>
+
+
+                                        <Storyboard>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform200" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform200" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="StopButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+
+
+                                        </Storyboard>
+
+
+                                    </BeginStoryboard>
+
+
+                                </EventTrigger>
+
+
+                                <EventTrigger RoutedEvent="Image.MouseLeave">
+
+
+                                    <BeginStoryboard>
+
+
+                                        <Storyboard>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform200" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="ImageTransform200" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
+
+
+                                            <DoubleAnimation Storyboard.TargetName="StopButton" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2"/>
+
+
+                                        </Storyboard>
+
+
+                                    </BeginStoryboard>
+
+
+                                </EventTrigger>
+
+
+                            </Image.Triggers>
+
+
+                        </Image>
+
+
+                        <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{x:Static classes:MusicPlayer.MusicItems}" Margin="56,190,26,151" d:ItemsSource="{d:SampleData ItemCount=2}">
 
 
                             <ListBox.ItemContainerStyle>
@@ -1438,7 +1723,7 @@
                                 <ControlTemplate TargetType="ListBox">
 
 
-                                    <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled">
+                                    <ScrollViewer x:Name="CustomScrollViewer" VerticalScrollBarVisibility="Hidden" CanContentScroll="True" IsDeferredScrollingEnabled="True" PreviewMouseWheel="MusicScrollViewer_MouseWheel">
 
 
                                         <ItemsPresenter/>
@@ -1486,7 +1771,7 @@
                                             </Grid.ColumnDefinitions>
 
 
-                                            <Image Source="{Binding Image}" RenderOptions.BitmapScalingMode="HighQuality" Width="100" Height="100" Stretch="Uniform"/>
+                                            <Image Source="{Binding Image}" RenderOptions.BitmapScalingMode="HighQuality" Width="100" Height="100" Stretch="Fill"/>
 
 
                                             <StackPanel Grid.Column="1" Margin="10">
@@ -1501,7 +1786,7 @@
                                                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
 
 
-                                                    <Image x:Name="PlayButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="30" Margin="-5,0,5,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Source="/Resources/Play.png" Cursor="Hand" MouseLeftButtonDown="PlayButton_Click" RenderTransformOrigin="0.5, 0.5">
+                                                    <Image x:Name="PlayButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="30" Margin="-5,0,530,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Source="/Resources/Play.png" Cursor="Hand" MouseLeftButtonDown="PlayButton_Click" RenderTransformOrigin="0.5, 0.5">
 
 
                                                         <Image.RenderTransform>
@@ -1576,157 +1861,7 @@
                                                     </Image>
 
 
-                                                    <Image x:Name="PauseButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="30" Margin="0,0,5,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Source="/Resources/Pause.png" Cursor="Hand" MouseLeftButtonDown="PauseButton_Click" RenderTransformOrigin="0.5, 0.5">
-
-
-                                                        <Image.RenderTransform>
-
-
-                                                            <ScaleTransform x:Name="ImageTransform1"/>
-
-
-                                                        </Image.RenderTransform>
-
-
-                                                        <Image.Triggers>
-
-
-                                                            <EventTrigger RoutedEvent="Image.MouseEnter">
-
-
-                                                                <BeginStoryboard>
-
-
-                                                                    <Storyboard>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform1" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform1" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="PauseButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
-
-
-                                                                    </Storyboard>
-
-
-                                                                </BeginStoryboard>
-
-
-                                                            </EventTrigger>
-
-
-                                                            <EventTrigger RoutedEvent="Image.MouseLeave">
-
-
-                                                                <BeginStoryboard>
-
-
-                                                                    <Storyboard>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform1" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform1" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="PauseButton" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2"/>
-
-
-                                                                    </Storyboard>
-
-
-                                                                </BeginStoryboard>
-
-
-                                                            </EventTrigger>
-
-
-                                                        </Image.Triggers>
-
-
-                                                    </Image>
-
-
-                                                    <Image x:Name="StopButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="30" Margin="0,0,5,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Source="/Resources/Stop.png" Cursor="Hand" MouseLeftButtonDown="StopButton_Click" RenderTransformOrigin="0.5, 0.5">
-
-
-                                                        <Image.RenderTransform>
-
-
-                                                            <ScaleTransform x:Name="ImageTransform2"/>
-
-
-                                                        </Image.RenderTransform>
-
-
-                                                        <Image.Triggers>
-
-
-                                                            <EventTrigger RoutedEvent="Image.MouseEnter">
-
-
-                                                                <BeginStoryboard>
-
-
-                                                                    <Storyboard>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform2" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform2" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="StopButton" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
-
-
-                                                                    </Storyboard>
-
-
-                                                                </BeginStoryboard>
-
-
-                                                            </EventTrigger>
-
-
-                                                            <EventTrigger RoutedEvent="Image.MouseLeave">
-
-
-                                                                <BeginStoryboard>
-
-
-                                                                    <Storyboard>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform2" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="ImageTransform2" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.2"/>
-
-
-                                                                        <DoubleAnimation Storyboard.TargetName="StopButton" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2"/>
-
-
-                                                                    </Storyboard>
-
-
-                                                                </BeginStoryboard>
-
-
-                                                            </EventTrigger>
-
-
-                                                        </Image.Triggers>
-
-
-                                                    </Image>
-
-
-                                                    <Image x:Name="DeleteButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="30" Margin="440,0,5,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Source="/Resources/Delete.png" Cursor="Hand" MouseLeftButtonDown="DeleteButton_Click" RenderTransformOrigin="0.5, 0.5">
+                                                    <Image x:Name="DeleteButton" Panel.ZIndex="3" HorizontalAlignment="Left" Opacity="0.8" Height="30" Margin="0,0,5,0" VerticalAlignment="Top" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Source="/Resources/Delete.png" Cursor="Hand" MouseLeftButtonDown="DeleteButton_Click" RenderTransformOrigin="0.5, 0.5">
 
 
                                                         <Image.RenderTransform>
@@ -1823,7 +1958,7 @@
 
 
 
-                        <TextBlock x:Name="MusicPlayerInfoTextBlock" Text="There's nothing here. Add musics to get started!" TextAlignment="Center" FontFamily="Outfit" FontWeight="Medium" FontSize="15" Style="{DynamicResource TextBlockStyle}" Margin="56,336,26,249"/>
+                        <TextBlock x:Name="MusicPlayerInfoTextBlock" Text="There's nothing here. Add musics to get started!" TextAlignment="Center" FontFamily="Outfit" FontWeight="Medium" FontSize="15" Style="{DynamicResource TextBlockStyle}" Margin="56,312,26,273"/>
 
 
 

@@ -28,6 +28,7 @@ namespace StarZLauncher.Windows
         public static Image? ComputerTabImage;
         public static Image? CloseImage;
         public static Image? MinimizeImage;
+        public static Image? CurrentlyPlayingSongImage;
 
         public static TabControl? MainTabControl;
         public static TabItem? HometabItem;
@@ -59,6 +60,11 @@ namespace StarZLauncher.Windows
         public static TextBlock? motherboardTextBlock;
         public static TextBlock? ipaddressTextBlock;
         public static TextBlock? InstallStatusText;
+        public static TextBlock? CurrentlyPlayingSongTitle;
+        public static TextBlock? CurrentlyPlayingSongArtist;
+        public static TextBlock? CurrentlyPlayingSongTime;
+
+        public static ProgressBar? CurrentlyPlayingSongProgress;
 
         public static TextBox? URLTextBox;
         public static TextBox? VideoURLTextBox;
@@ -87,6 +93,7 @@ namespace StarZLauncher.Windows
             SettingsTabImage = SettingsTab;
             StarZLogoImage = StarZLogo;
             ComputerTabImage = ComputerTab;
+            CurrentlyPlayingSongImage = SongImage;
 
             // TabControl and Items
             MainTabControl = SideBarTabControl;
@@ -118,6 +125,12 @@ namespace StarZLauncher.Windows
             memoryTextBlock = MemoryTextBlock;
             motherboardTextBlock = MotherboardTextBlock;
             ipaddressTextBlock = IPAddressTextBlock;
+            CurrentlyPlayingSongTitle = CurrentlyPlayingTitle;
+            CurrentlyPlayingSongArtist = CurrentlyPlayingArtist;
+            CurrentlyPlayingSongTime = CurrentlyPlayingTime;
+
+            // Progress Bar
+            CurrentlyPlayingSongProgress = CurrentlyPlayingProgress;
 
             // Buttons
             CloseImage = CloseButton;
@@ -160,6 +173,8 @@ namespace StarZLauncher.Windows
                 AboutMenu.Visibility = Visibility.Collapsed;
                 LogManager.Log("Hardware Monitoring is disabled. To re-enable it, change 'DebugHardwareMonitoring' value in Settings.txt to 'False'.", "HardwareMonitor.txt");
             }
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+            GC.WaitForPendingFinalizers();
         }
 
         // Animation on program's launch
@@ -228,6 +243,11 @@ namespace StarZLauncher.Windows
             MusicItem musicItem = (MusicItem)playButton.DataContext;
             string filePath = musicItem.FilePath;
             MusicPlayer.PlayMusic(filePath);
+        }
+
+        private void PlayARandomSong_Click(object sender, RoutedEventArgs e)
+        {
+            MusicPlayer.ShuffleAndPlayNext();
         }
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
@@ -646,6 +666,17 @@ namespace StarZLauncher.Windows
             else
             {
                 ConfigManager.SetOfflineMode(false);
+            }
+        }
+
+        private void MusicScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scrollViewer = sender as ScrollViewer;
+            if (scrollViewer != null)
+            {
+                double scrollAmount = e.Delta > 0 ? -1 : 1; // Adjust the scroll amount as needed
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + scrollAmount);
+                e.Handled = true; // Mark the event as handled
             }
         }
     }

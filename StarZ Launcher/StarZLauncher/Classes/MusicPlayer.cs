@@ -1,6 +1,7 @@
 ﻿using NReco.VideoConverter;
 using StarZLauncher.Windows;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -13,6 +14,7 @@ using System.Windows.Media.Imaging;
 using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Videos;
+using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes
 {
@@ -22,6 +24,7 @@ namespace StarZLauncher.Classes
         public static MediaPlayer MediaPlayer { get; private set; }
         public static bool IsPaused { get; private set; } = false;
         public static TimeSpan CurrentPosition { get; private set; } = TimeSpan.Zero;
+        public static bool IsStopped { get; private set; } = true;
         private static readonly Random Random = new();
 
         public static ObservableCollection<MusicItem> MusicItems { get; set; } = new ObservableCollection<MusicItem>();
@@ -33,6 +36,44 @@ namespace StarZLauncher.Classes
             MediaPlayer = new MediaPlayer();
             MediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
         }
+
+        private static async Task UpdateSongTime()
+        {
+
+            try
+            {
+                while (!IsStopped)
+                {
+                    TimeSpan currentPosition = MediaPlayer.Position;
+                    Duration duration = MediaPlayer.NaturalDuration;
+
+                    // Update UI elements on the main thread
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        // Format the TimeSpan as MM:SS
+                        CurrentlyPlayingSongTime!.Text = currentPosition.ToString(@"mm\:ss");
+
+                        if (duration.HasTimeSpan)
+                        {
+                            TimeSpan totalDuration = duration.TimeSpan;
+                            double progressPercentage = (currentPosition.TotalSeconds / totalDuration.TotalSeconds) * 100;
+                            CurrentlyPlayingSongProgress!.Value = progressPercentage;
+                        }
+                        else
+                        {
+                            CurrentlyPlayingSongProgress!.Value = 0;
+                        }
+                    });
+
+                    await Task.Delay(1000);
+                }
+            }
+            catch (Exception)
+            {
+                IsStopped = true; // Avoid crashing
+            }
+        }
+
 
         private static void MediaPlayer_MediaEnded(object sender, EventArgs e)
         {
@@ -59,13 +100,54 @@ namespace StarZLauncher.Classes
             }
         }
 
-        public static void PlayMusic(string filepath)
+        public static string GetArtistFromSongFile(string filePath)
+        {
+            try
+            {
+                var file = TagLib.File.Create(filePath);
+                var artist = file.Tag.FirstPerformer;
+                return string.IsNullOrEmpty(artist) ? "Unknown" : artist;
+            }
+            catch (Exception)
+            {
+                return "Unknown";
+            }
+        }
+
+        public static ImageSource GetImageFromSongFile(string filePath)
+        {
+            var defaultImage = new BitmapImage(new Uri("/Resources/Unknow.png", UriKind.Relative));
+            try
+            {
+                var file = TagLib.File.Create(filePath);
+                var picture = file.Tag.Pictures.FirstOrDefault();
+                if (picture != null)
+                {
+                    using var memoryStream = new MemoryStream(picture.Data.Data);
+                    var bitmapImage = new BitmapImage();
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = memoryStream;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.EndInit();
+                    return bitmapImage;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return defaultImage;
+        }
+
+        public static async void PlayMusic(string filepath)
         {
             if (IsPaused)
             {
                 MediaPlayer.Position = CurrentPosition;
                 MediaPlayer.Play();
                 IsPaused = false;
+                IsStopped = false;
+                await UpdateSongTime();
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
                 bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
                 if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
@@ -79,6 +161,11 @@ namespace StarZLauncher.Classes
             {
                 MediaPlayer.Open(new Uri(filepath));
                 MediaPlayer.Play();
+                CurrentlyPlayingSongTitle!.Text = Path.GetFileNameWithoutExtension(filepath);
+                CurrentlyPlayingSongArtist!.Text = GetArtistFromSongFile(filepath);
+                CurrentlyPlayingSongImage!.Source = GetImageFromSongFile(filepath);
+                IsStopped = false;
+                await UpdateSongTime();
 
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
                 bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
@@ -96,6 +183,7 @@ namespace StarZLauncher.Classes
             MediaPlayer.Pause();
             CurrentPosition = MediaPlayer.Position;
             IsPaused = true;
+            IsStopped = true;
             bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
             bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
             if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
@@ -106,37 +194,58 @@ namespace StarZLauncher.Classes
 
         public static void StopMusic()
         {
+            // Stop and close the MediaPlayer
             MediaPlayer.Stop();
             MediaPlayer.Close();
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+            GC.WaitForPendingFinalizers();
+
+            // Reset music-related state
+            IsStopped = true;
             IsPaused = false;
             CurrentPosition = TimeSpan.Zero;
-            bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
-            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
+
+            // Update UI elements
+            CurrentlyPlayingSongTime!.Text = "00:00";
+            CurrentlyPlayingSongProgress!.Value = 0;
+            CurrentlyPlayingSongTitle!.Text = "No Song Playing";
+            CurrentlyPlayingSongArtist!.Text = "From Artist";
+            CurrentlyPlayingSongImage!.Source = new BitmapImage(new Uri("/Resources/Unknow.png", UriKind.Relative));
+
+            // Handle Discord RPC based on configuration
+            bool discordRPCisEnabled = ConfigManager.GetDiscordRPC();
+            bool offlineModeIsEnabled = ConfigManager.GetOfflineMode();
+
+            if (discordRPCisEnabled && !offlineModeIsEnabled)
             {
                 DiscordRichPresenceManager.IdlePresence();
             }
         }
 
-        private static int lastPlayedIndex = -1;
+        private static Queue<int> shuffledIndices = new();
 
-        private static void ShuffleAndPlayNext()
+        public static void ShuffleAndPlayNext()
         {
-            if (MusicItems.Count > 1)
+            // If the queue is empty, reshuffle
+            if (shuffledIndices.Count == 0)
             {
-                int nextIndex;
-                do
-                {
-                    nextIndex = Random.Next(MusicItems.Count);
-                } while (nextIndex == lastPlayedIndex);
+                // Create a new list of indices and shuffle them
+                var indices = Enumerable.Range(0, MusicItems.Count).OrderBy(x => Random.Next()).ToList();
+                shuffledIndices = new Queue<int>(indices);
+            }
 
-                lastPlayedIndex = nextIndex;
-                PlayMusic(MusicItems[nextIndex].FilePath);
-            }
-            else if (MusicItems.Count == 1)
+            // If the queue is still empty, exit
+            if (shuffledIndices.Count == 0)
             {
-                PlayMusic(MusicItems[0].FilePath);
+                // Optionally, handle the case where there are no items to play
+                return;
             }
+
+            // Dequeue the next index
+            int nextIndex = shuffledIndices.Dequeue();
+
+            // Play the selected song
+            PlayMusic(MusicItems[nextIndex].FilePath);
         }
 
         public static void DeleteMusic(MusicItem musicItem)
@@ -145,11 +254,11 @@ namespace StarZLauncher.Classes
             Loader.LoadMusicFiles();
         }
 
-        public static event PropertyChangedEventHandler PropertyChanged;
+        public static event PropertyChangedEventHandler? PropertyChanged;
 
         private static void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(null, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged!.Invoke(null, new PropertyChangedEventArgs(propertyName));
         }
 
         public static async Task DownloadMusicAsync(string videoUrl)
@@ -199,7 +308,7 @@ namespace StarZLauncher.Classes
             finally
             {
                 // Force garbage collection
-                GC.Collect();
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
                 GC.WaitForPendingFinalizers();
             }
         }
@@ -291,47 +400,8 @@ namespace StarZLauncher.Classes
         {
             FilePath = filePath;
             Title = Path.GetFileNameWithoutExtension(filePath);
-            Artist = GetArtistFromAudio(filePath);
-            Image = LoadImageFromAudio(filePath);
-        }
-
-        private ImageSource LoadImageFromAudio(string filePath)
-        {
-            var defaultImage = new BitmapImage(new Uri("/Resources/Unknow.png", UriKind.Relative));
-            try
-            {
-                var file = TagLib.File.Create(filePath);
-                var picture = file.Tag.Pictures.FirstOrDefault();
-                if (picture != null)
-                {
-                    using var memoryStream = new MemoryStream(picture.Data.Data);
-                    var bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = memoryStream;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
-                    return bitmapImage;
-                }
-            }
-            catch (Exception)
-            {
-            }
-
-            return defaultImage;
-        }
-
-        private static string GetArtistFromAudio(string filePath)
-        {
-            try
-            {
-                var file = TagLib.File.Create(filePath);
-                var artist = file.Tag.FirstPerformer;
-                return string.IsNullOrEmpty(artist) ? "Unknown" : artist;
-            }
-            catch (Exception)
-            {
-                return "Unknown";
-            }
+            Artist = MusicPlayer.GetArtistFromSongFile(filePath);
+            Image = MusicPlayer.GetImageFromSongFile(filePath);
         }
     }
 }

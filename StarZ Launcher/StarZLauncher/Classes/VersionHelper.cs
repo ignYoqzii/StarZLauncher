@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using StarZLauncher.Windows;
+﻿using StarZLauncher.Windows;
 using System;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using System.Windows;
-using Windows.Management.Deployment;
 using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes

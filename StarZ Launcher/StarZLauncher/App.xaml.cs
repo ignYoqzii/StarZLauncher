@@ -1,5 +1,4 @@
 ﻿using StarZLauncher.Classes;
-using StarZLauncher.Windows;
 using System;
 using System.IO;
 using System.Net;

@@ -67,6 +67,8 @@ namespace StarZLauncher.Classes
                 ComputerTabImage!.Source = new BitmapImage(new Uri("/Resources/ComputerGray.png", UriKind.Relative));
                 SettingsTabImage!.Source = new BitmapImage(new Uri("/Resources/SettingsWhite.png", UriKind.Relative));
             }
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+            GC.WaitForPendingFinalizers();
         }
 
         public static void LoadTheme(string theme)
@@ -75,8 +77,10 @@ namespace StarZLauncher.Classes
             var uri = new Uri("/Themes/" + theme, UriKind.RelativeOrAbsolute);
 
             // Load the resource dictionary
-            ResourceDictionary resourceDict = new();
-            resourceDict.Source = uri;
+            ResourceDictionary resourceDict = new()
+            {
+                Source = uri
+            };
 
             // Clear existing merged dictionaries and add the new one
             Application.Current.Resources.MergedDictionaries.Clear();

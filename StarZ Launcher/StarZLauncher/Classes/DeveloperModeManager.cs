@@ -1,5 +1,4 @@
 ﻿using Microsoft.Win32;
-using StarZLauncher.Windows;
 using System;
 using System.Diagnostics;
 

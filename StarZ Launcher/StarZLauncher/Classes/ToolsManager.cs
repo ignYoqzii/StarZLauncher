@@ -137,10 +137,10 @@ namespace StarZLauncher.Classes
             // Delete 4 files from destination folder
             string[] filesToDelete = new string[]
             {
-        "Sky.material.bin",
-        "RenderChunk.material.bin",
-        "Stars.material.bin",
-        "SunMoon.material.bin",
+                "Sky.material.bin",
+                "Actor.material.bin",
+                "Stars.material.bin",
+                "SunMoon.material.bin",
             };
             foreach (string file in filesToDelete)
             {
@@ -154,10 +154,10 @@ namespace StarZLauncher.Classes
             // Move 4 files from backup folder to destination folder
             string[] filesToMove = new string[]
             {
-        "Sky.material.bin",
-        "RenderChunk.material.bin",
-        "Stars.material.bin",
-        "SunMoon.material.bin",
+                "Sky.material.bin",
+                "Actor.material.bin",
+                "Stars.material.bin",
+                "SunMoon.material.bin",
             };
             foreach (string file in filesToMove)
             {
@@ -209,10 +209,10 @@ namespace StarZLauncher.Classes
             // Move 4 files to backup directory
             string[] filesToMove = new string[]
             {
-        "Sky.material.bin",
-        "RenderChunk.material.bin",
-        "Stars.material.bin",
-        "SunMoon.material.bin",
+                "Sky.material.bin",
+                "Actor.material.bin",
+                "Stars.material.bin",
+                "SunMoon.material.bin",
             };
 
             await Task.Run(() =>
@@ -231,10 +231,10 @@ namespace StarZLauncher.Classes
             // Download 4 files
             string[] filesToDownload = new string[]
             {
-        "Sky.material.bin",
-        "RenderChunk.material.bin",
-        "Stars.material.bin",
-        "SunMoon.material.bin",
+                "Sky.material.bin",
+                "Actor.material.bin",
+                "Stars.material.bin",
+                "SunMoon.material.bin",
             };
 
             using WebClient client = new();
