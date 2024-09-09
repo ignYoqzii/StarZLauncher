@@ -63,6 +63,8 @@ namespace StarZLauncher.Windows
         public static TextBlock? CurrentlyPlayingSongTitle;
         public static TextBlock? CurrentlyPlayingSongArtist;
         public static TextBlock? CurrentlyPlayingSongTime;
+        public static TextBlock? WelcomeUsername;
+        public static TextBlock? WelcomeBack;
 
         public static ProgressBar? CurrentlyPlayingSongProgress;
 
@@ -79,7 +81,7 @@ namespace StarZLauncher.Windows
 
         public static StackPanel? FullVersionsListStackPanel;
 
-        private HardwareMonitor? hardwareMonitor;
+        private readonly HardwareMonitor? hardwareMonitor;
 
         public MainWindow()
         {
@@ -128,6 +130,8 @@ namespace StarZLauncher.Windows
             CurrentlyPlayingSongTitle = CurrentlyPlayingTitle;
             CurrentlyPlayingSongArtist = CurrentlyPlayingArtist;
             CurrentlyPlayingSongTime = CurrentlyPlayingTime;
+            WelcomeUsername = WelcomeUsernameTextBlock;
+            WelcomeBack = WelcomeBackTextBlock;
 
             // Progress Bar
             CurrentlyPlayingSongProgress = CurrentlyPlayingProgress;
@@ -173,8 +177,6 @@ namespace StarZLauncher.Windows
                 AboutMenu.Visibility = Visibility.Collapsed;
                 LogManager.Log("Hardware Monitoring is disabled. To re-enable it, change 'DebugHardwareMonitoring' value in Settings.txt to 'False'.", "HardwareMonitor.txt");
             }
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
-            GC.WaitForPendingFinalizers();
         }
 
         // Animation on program's launch

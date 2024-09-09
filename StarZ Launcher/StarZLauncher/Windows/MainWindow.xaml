@@ -31,16 +31,13 @@
                     <ProgressBar.Foreground>
 
 
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <LinearGradientBrush EndPoint="0.5,25" StartPoint="0,0">
 
 
-                            <GradientStop Color="#FF00BCFB"/>
+                            <GradientStop Color="#FF00C7ED" Offset="0"/>
 
 
-                            <GradientStop Color="#FF003E5D" Offset="0.403"/>
-
-
-                            <GradientStop Color="#FF00151F" Offset="1"/>
+                            <GradientStop Color="#FF0044EA" Offset="1"/>
 
 
                         </LinearGradientBrush>
@@ -511,8 +508,13 @@
                             </Border>
 
 
+                            <Viewbox Stretch="Uniform" Margin="107,175,344,390">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock x:Name="WelcomeBackTextBlock" Text="Greetings" FontSize="30" FontFamily="Outfit" Style="{DynamicResource TextBlockStyle}" FontWeight="Medium" TextAlignment="Center" Margin="0,0,0,0"/>
+                                    <TextBlock x:Name="WelcomeUsernameTextBlock" Text=" !" FontSize="30" FontFamily="Outfit" Style="{DynamicResource TextBlockStyle}" FontWeight="Medium" TextAlignment="Center" Margin="0,0,0,0"/>
+                                </StackPanel>
+                            </Viewbox>
 
-                            <TextBlock x:Name="WelcomeTextBlock" Text="Welcome to StarZ Launcher !" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Margin="107,175,344,390"/>
 
 
                             <TextBlock x:Name="DiscordServerTextBlock" Text="Join our Discord server !" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Margin="208,388,287,177"/>
@@ -1433,16 +1435,13 @@
                                 <ProgressBar.Foreground>
 
 
-                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <LinearGradientBrush EndPoint="0.5,25" StartPoint="0,0">
 
 
-                                        <GradientStop Color="#FF00BCFB"/>
+                                        <GradientStop Color="#FF00C7ED" Offset="0"/>
 
 
-                                        <GradientStop Color="#FF003E5D" Offset="0.403"/>
-
-
-                                        <GradientStop Color="#FF00151F" Offset="1"/>
+                                        <GradientStop Color="#FF0044EA" Offset="1"/>
 
 
                                     </LinearGradientBrush>
@@ -2661,7 +2660,6 @@
 
 
     </Grid>
-
 
 
 </Window>

@@ -13,8 +13,8 @@
 	<AssemblyName>StarZLauncher</AssemblyName>
     <Description>A Minecraft Bedrock Edition Launcher</Description>
 	<Copyright>StarZ Team ©</Copyright>
-	<FileVersion>5.1.5.0</FileVersion>
-	<AssemblyVersion>5.1.5.0</AssemblyVersion>
+	<FileVersion>5.1.6.0</FileVersion>
+	<AssemblyVersion>5.1.6.0</AssemblyVersion>
 	<PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
@@ -133,6 +133,7 @@
 		<PackageReference Include="TagLibSharp" Version="2.3.0" />
 		<PackageReference Include="YoutubeExplode" Version="6.4.0" />
 		<Reference Include="Accessibility" />
+		<Reference Include="System.DirectoryServices.AccountManagement" />
 		<Reference Include="System.IO.Compression" />
 		<Reference Include="System.Net.Http" />
 		<Reference Include="System.Windows" />

@@ -67,8 +67,6 @@ namespace StarZLauncher.Classes
                 ComputerTabImage!.Source = new BitmapImage(new Uri("/Resources/ComputerGray.png", UriKind.Relative));
                 SettingsTabImage!.Source = new BitmapImage(new Uri("/Resources/SettingsWhite.png", UriKind.Relative));
             }
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
-            GC.WaitForPendingFinalizers();
         }
 
         public static void LoadTheme(string theme)

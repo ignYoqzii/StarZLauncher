@@ -147,7 +147,6 @@ namespace StarZLauncher.Classes
                 MediaPlayer.Play();
                 IsPaused = false;
                 IsStopped = false;
-                await UpdateSongTime();
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
                 bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
                 if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
@@ -156,6 +155,7 @@ namespace StarZLauncher.Classes
                     DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
                     DiscordRichPresenceManager.DiscordClient.UpdateState("Using the Music Player");
                 }
+                await UpdateSongTime();
             }
             else
             {
@@ -165,8 +165,6 @@ namespace StarZLauncher.Classes
                 CurrentlyPlayingSongArtist!.Text = GetArtistFromSongFile(filepath);
                 CurrentlyPlayingSongImage!.Source = GetImageFromSongFile(filepath);
                 IsStopped = false;
-                await UpdateSongTime();
-
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
                 bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
                 if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
@@ -175,6 +173,7 @@ namespace StarZLauncher.Classes
                     DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
                     DiscordRichPresenceManager.DiscordClient.UpdateState("Using the Music Player");
                 }
+                await UpdateSongTime();
             }
         }
 
