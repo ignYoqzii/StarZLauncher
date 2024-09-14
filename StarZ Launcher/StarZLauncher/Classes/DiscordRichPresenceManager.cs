@@ -1,5 +1,6 @@
 ﻿using DiscordRPC;
-
+using System;
+using System.Windows.Forms;
 
 namespace StarZLauncher.Classes
 {
@@ -17,36 +18,56 @@ namespace StarZLauncher.Classes
             }
         }
 
-        public static void SetPresence()
+        public static void SetPresence(string state = "In the launcher", string details = "")
         {
-            DiscordClient.SetPresence(new RichPresence
+            try
             {
-                State = "In the launcher",
-                Details = "",
-                Timestamps = Timestamps.Now,
-                Assets = new Assets
+                DiscordClient.SetPresence(new RichPresence
                 {
-                    LargeImageKey = "starz",
-                    LargeImageText = "StarZ Launcher",
-                    SmallImageKey = "minecraft",
-                    SmallImageText = "Minecraft For Windows"
-                }
-            });
+                    State = state,
+                    Details = details,
+                    Timestamps = Timestamps.Now,
+                    Assets = new Assets
+                    {
+                        LargeImageKey = "starz",
+                        LargeImageText = "StarZ Launcher",
+                        SmallImageKey = "minecraft",
+                        SmallImageText = "Minecraft For Windows"
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"{ex.Message}", "DiscordClient.txt");
+            }
         }
-
 
         public static void IdlePresence()
         {
-            DiscordClient.UpdateState("In the launcher");
-            DiscordClient.UpdateDetails("");
+            try
+            {
+                DiscordClient.UpdateState("In the launcher");
+                DiscordClient.UpdateDetails("");
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"{ex.Message}", "DiscordClient.txt");
+            }
         }
 
         public static void TerminatePresence()
         {
-            if (discordClient == null || discordClient.IsDisposed) return;
-            discordClient.ClearPresence();
-            discordClient.Deinitialize();
-            discordClient.Dispose();
+            if (DiscordClient.IsDisposed) return;
+            try
+            {
+                DiscordClient.ClearPresence();
+                DiscordClient.Deinitialize();
+                DiscordClient.Dispose();
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"{ex.Message}", "DiscordClient.txt");
+            }
         }
     }
 }

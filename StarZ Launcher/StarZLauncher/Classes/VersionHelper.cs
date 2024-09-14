@@ -1,7 +1,9 @@
 ﻿using StarZLauncher.Windows;
 using System;
+using System.Diagnostics;
 using System.IO;
-using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 using static StarZLauncher.Windows.MainWindow;
 
@@ -9,103 +11,96 @@ namespace StarZLauncher.Classes
 {
     public static class VersionHelper
     {
-        // class to handle the versions check for the game and the launcher
-
-        // Version number extracted from the JSON file
         public static string? VersionNumber { get; private set; }
-        public static string? LauncherVersion { get; private set; }
 
-        private const string? VERSION_FILE_PATH = @"StarZ Launcher\LauncherVersion.txt";
-        private const string? VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
-        private const string? DOWNLOAD_URL = "https://github.com/ignYoqzii/StarZLauncher/releases/download/{0}/StarZLauncher.exe";
+        private const string VERSION_FILE_PATH = @"StarZ Launcher\LauncherVersion.txt";
+        private const string VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
+        private const string DOWNLOAD_URL = "https://github.com/ignYoqzii/StarZLauncher/releases/download/{0}/StarZLauncher.exe";
 
-        /// <summary>
-        /// Launcher Updater code
-        /// </summary>
-        static VersionHelper()
+        public static async void CheckForUpdates()
         {
-            string? url = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
+            string currentVersion = GetCurrentVersion();
+            string latestVersion = await GetLatestVersion();
 
-            try
+            if (currentVersion != latestVersion)
             {
-                WebClient client = new();
-                var getlauncherVersion = client.DownloadString(url);
-                LauncherVersion = getlauncherVersion?.Replace("\n", "");
-            }
-            catch (Exception)
-            {
-                LauncherVersion = "Error";
-            }
-        }
-
-        public static void CheckForUpdates()
-        {
-            string? currentVersion = GetCurrentVersion();
-            string? latestVersion = GetLatestVersion();
-
-            if (currentVersion == latestVersion)
-            {
-                // Do nothing - launcher is up to date
-            }
-            else
-            {
-                bool? result = StarZMessageBox.ShowDialog("A new update is available. Click 'OK' to update the launcher to the latest, or 'CANCEL' to ignore and keep using an outdated version.", "New update available !");
+                bool? result = StarZMessageBox.ShowDialog("A new update is available. Click 'OK' to update the launcher to the latest or 'CANCEL' to ignore and keep using an outdated version.", "New update available!");
 
                 if (result == true)
                 {
                     string downloadLink = string.Format(DOWNLOAD_URL, latestVersion);
-                    DownloadLatestLauncher(downloadLink);
+                    DownloadLatestLauncher(downloadLink, latestVersion);
                 }
             }
         }
 
         private static string GetCurrentVersion()
         {
-            string? versionFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), VERSION_FILE_PATH);
-            return File.ReadAllText(versionFilePath).Trim();
+            string versionFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), VERSION_FILE_PATH);
+            return File.Exists(versionFilePath) ? File.ReadAllText(versionFilePath).Trim() : "Unknown";
         }
 
-        private static string GetLatestVersion()
+        private static async Task<string> GetLatestVersion()
         {
-            using WebClient client = new();
-            string? versionString = client.DownloadString(VERSION_URL);
+            using HttpClient client = new();
+            string versionString = await client.GetStringAsync(VERSION_URL);
             return versionString.Trim();
         }
 
-        private static void DownloadLatestLauncher(string url)
+        private static async void DownloadLatestLauncher(string url, string latestVersion)
         {
-            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
-            var fileName = $"StarZ Launcher ({LauncherVersion}).exe";
-            string filePath = Path.Combine(downloadPath, fileName);
+            string downloadPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), $"StarZ Launcher ({latestVersion}).exe");
 
-            // Check if the file exists on the desktop and delete it if it does
-            if (File.Exists(filePath))
+            if (File.Exists(downloadPath))
             {
-                File.Delete(filePath);
+                File.Delete(downloadPath);
             }
 
-            // Download the latest version of StarZ Launcher
-            using WebClient client = new();
-            client.DownloadFile(new Uri(url), filePath);
+            using HttpClient client = new();
+            using var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode(); // Ensure the request was successful
 
-            // Update the version file with the latest version number
-            string versionFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), VERSION_FILE_PATH);
-            string latestVersion = client.DownloadString(VERSION_URL).Trim();
-            File.WriteAllText(versionFilePath, latestVersion);
+            using (var fs = new FileStream(downloadPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            {
+                await response.Content.CopyToAsync(fs);
+            }
 
-            // Close the application
-            System.Windows.Application.Current.Shutdown();
+            // Optional: Check if the file was downloaded completely
+            if (File.Exists(downloadPath) && new FileInfo(downloadPath).Length > 0)
+            {
+                // Update the version file
+                UpdateVersionFile(latestVersion);
+
+                // Start the new launcher
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = downloadPath,
+                    UseShellExecute = true // To ensure it runs properly
+                });
+
+                // Give some time for the new process to start
+                await Task.Delay(1000);
+
+                // Close the current application
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                StarZMessageBox.ShowDialog("Failed to download the new launcher. Please try again later.", "Download Error");
+            }
         }
 
-        /// <summary>
-        /// End of Launcher Updater code
-        /// </summary>
-
-        public static void LoadInstalledMinecraftVersion()
+        private static void UpdateVersionFile(string latestVersion)
         {
-            Application.Current.Dispatcher.Invoke(async () =>
+            string versionFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), VERSION_FILE_PATH);
+            File.WriteAllText(versionFilePath, latestVersion);
+        }
+
+        public static async void LoadInstalledMinecraftVersion()
+        {
+            VersionNumber = await PackageHelper.GetVersion();
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                VersionNumber = await PackageHelper.GetVersion();
                 CurrentMinecraftVersion!.Content = $"{VersionNumber}";
             });
         }
@@ -113,10 +108,7 @@ namespace StarZLauncher.Classes
         public static void LoadCurrentVersions()
         {
             LoadInstalledMinecraftVersion();
-
-            string currentVersion = GetCurrentVersion();
-            CurrentLauncherVersion!.Content = $"{currentVersion}";
+            CurrentLauncherVersion!.Content = $"{GetCurrentVersion()}";
         }
     }
 }
-

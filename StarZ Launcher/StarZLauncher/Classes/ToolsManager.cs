@@ -105,96 +105,49 @@ namespace StarZLauncher.Classes
             return extension.Equals(".zip", StringComparison.OrdinalIgnoreCase);
         }
 
-        public static async void ShaderRemove()
+        public static async Task ShaderRemove()
         {
-            string? exePath;
-            try
-            {
-                exePath = await PackageHelper.GetExecutablePath();
-            }
-            catch (Exception ex)
-            {
-                StarZMessageBox.ShowDialog(ex.Message, "Error!", false);
-                return;
-            }
+            string? exePath = await GetExecutablePath();
+            if (exePath == null) return;
+
             string destinationPath = Path.Combine(exePath, "data", "renderer", "materials");
             string backupPath = Path.Combine(destinationPath, "Backup");
 
-            // Check if a MinecraftInstallationPath is set
             if (!Directory.Exists(destinationPath))
             {
-                StarZMessageBox.ShowDialog("You are trying to remove shaders from a version of Minecraft that does't support them.", "Error !", false);
+                StarZMessageBox.ShowDialog("You are trying to remove shaders from a version of Minecraft that doesn't support them.", "Error!", false);
                 return;
             }
 
-            // Check if Backup folder exists
             if (!Directory.Exists(backupPath))
             {
-                StarZMessageBox.ShowDialog("No Shaders were previously installed!", "Warning !", false);
+                StarZMessageBox.ShowDialog("No Shaders were previously installed!", "Warning!", false);
                 return;
             }
 
-            // Delete 4 files from destination folder
-            string[] filesToDelete = new string[]
+            await Task.Run(() =>
             {
-                "Sky.material.bin",
-                "Actor.material.bin",
-                "Stars.material.bin",
-                "SunMoon.material.bin",
-            };
-            foreach (string file in filesToDelete)
-            {
-                string filePath = Path.Combine(destinationPath, file);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+                DeleteFiles(destinationPath, new[] { "Sky.material.bin", "Actor.material.bin", "Stars.material.bin", "SunMoon.material.bin" });
+                MoveFiles(backupPath, destinationPath, new[] { "Sky.material.bin", "Actor.material.bin", "Stars.material.bin", "SunMoon.material.bin" });
+            });
 
-            // Move 4 files from backup folder to destination folder
-            string[] filesToMove = new string[]
-            {
-                "Sky.material.bin",
-                "Actor.material.bin",
-                "Stars.material.bin",
-                "SunMoon.material.bin",
-            };
-            foreach (string file in filesToMove)
-            {
-                string sourceFilePath = Path.Combine(backupPath, file);
-                string destinationFilePath = Path.Combine(destinationPath, file);
-                if (File.Exists(sourceFilePath))
-                {
-                    File.Move(sourceFilePath, destinationFilePath);
-                }
-            }
-
-            StarZMessageBox.ShowDialog("Shaders removed successfuly!", "Success !", false);
+            StarZMessageBox.ShowDialog("Shaders removed successfully!", "Success!", false);
         }
 
         public static async Task ShaderApply()
         {
-            string? exePath;
-            try
-            {
-                exePath = await PackageHelper.GetExecutablePath();
-            }
-            catch (Exception ex)
-            {
-                StarZMessageBox.ShowDialog(ex.Message, "Error!", false);
-                return;
-            }
+            string? exePath = await GetExecutablePath();
+            if (exePath == null) return;
+
             string destinationPath = Path.Combine(exePath, "data", "renderer", "materials");
             string backupPath = Path.Combine(destinationPath, "Backup");
 
-            // Check if destination directory exists
             if (!Directory.Exists(destinationPath))
             {
-                StarZMessageBox.ShowDialog("You are trying to apply shaders to an unsuported version of Minecraft.", "Error !", false);
+                StarZMessageBox.ShowDialog("You are trying to apply shaders to an unsupported version of Minecraft.", "Error!", false);
                 return;
             }
 
-            // Create backup directory if it doesn't exist
             if (!Directory.Exists(backupPath))
             {
                 Directory.CreateDirectory(backupPath);
@@ -202,50 +155,73 @@ namespace StarZLauncher.Classes
 
             if (Directory.GetFiles(backupPath).Length > 0)
             {
-                StarZMessageBox.ShowDialog("Shaders are already installed!", "Warning !", false);
+                StarZMessageBox.ShowDialog("Shaders are already installed!", "Warning!", false);
                 return;
             }
 
-            // Move 4 files to backup directory
-            string[] filesToMove = new string[]
-            {
-                "Sky.material.bin",
-                "Actor.material.bin",
-                "Stars.material.bin",
-                "SunMoon.material.bin",
-            };
-
             await Task.Run(() =>
             {
-                foreach (string file in filesToMove)
-                {
-                    string sourceFilePath = Path.Combine(destinationPath, file);
-                    string destinationFilePath = Path.Combine(backupPath, file);
-                    if (File.Exists(sourceFilePath))
-                    {
-                        File.Move(sourceFilePath, destinationFilePath);
-                    }
-                }
+                MoveFiles(destinationPath, backupPath, new[] { "Sky.material.bin", "Actor.material.bin", "Stars.material.bin", "SunMoon.material.bin" });
             });
 
-            // Download 4 files
-            string[] filesToDownload = new string[]
+            await DownloadFilesAsync(destinationPath, new[]
             {
                 "Sky.material.bin",
                 "Actor.material.bin",
                 "Stars.material.bin",
-                "SunMoon.material.bin",
-            };
+                "SunMoon.material.bin"
+            });
 
-            using WebClient client = new();
-            foreach (string file in filesToDownload)
+            StarZMessageBox.ShowDialog("Shaders applied successfully!", "Success!", false);
+        }
+
+        private static async Task<string?> GetExecutablePath()
+        {
+            try
             {
-                string url = $"https://github.com/ignYoqzii/StarZLauncher/releases/download/shadersinstaller/{file}";
-                string destinationFilePath = Path.Combine(destinationPath, file);
+                return await PackageHelper.GetExecutablePath();
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog(ex.Message, "Error !", false);
+                return null;
+            }
+        }
+
+        private static void DeleteFiles(string directoryPath, string[] fileNames)
+        {
+            foreach (string fileName in fileNames)
+            {
+                string filePath = Path.Combine(directoryPath, fileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+        }
+
+        private static void MoveFiles(string sourceDirectoryPath, string destinationDirectoryPath, string[] fileNames)
+        {
+            foreach (string fileName in fileNames)
+            {
+                string sourceFilePath = Path.Combine(sourceDirectoryPath, fileName);
+                string destinationFilePath = Path.Combine(destinationDirectoryPath, fileName);
+                if (File.Exists(sourceFilePath))
+                {
+                    File.Move(sourceFilePath, destinationFilePath);
+                }
+            }
+        }
+
+        private static async Task DownloadFilesAsync(string destinationPath, string[] fileNames)
+        {
+            using WebClient client = new();
+            foreach (string fileName in fileNames)
+            {
+                string url = $"https://github.com/ignYoqzii/StarZLauncher/releases/download/shadersinstaller/{fileName}";
+                string destinationFilePath = Path.Combine(destinationPath, fileName);
                 await client.DownloadFileTaskAsync(new Uri(url), destinationFilePath);
             }
-
-            StarZMessageBox.ShowDialog("Shaders applied successfully!", "Success !", false);
         }
 
         public static async void CosmeticsSkinPackApply()

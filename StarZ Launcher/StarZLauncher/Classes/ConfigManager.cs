@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace StarZLauncher.Classes
 {
@@ -8,269 +9,108 @@ namespace StarZLauncher.Classes
     public static class ConfigManager
     {
         // Default values for settings
-        private const string DEFAULT_DLL = "None";
-        private const bool DEFAULT_DISCORD_RPC = true;
-        private const bool DEFAULT_DISCORD_RPC_SHOW_GAME_VERSION = true;
-        private const bool DEFAULT_DISCORD_RPC_SHOW_DLL_NAME = true;
-        private const string THEME = "Light";
-        private const string InjectionDelay = "0";
-        private const string AccelerateLoadingTime = "0";
-        private static string MINECRAFTINSTALLATIONPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions");
-        private static bool OFFLINEMODE = false;
-        private static bool DEBUGHARDWAREMONITORING = true;
-        private static bool DEBUGFONTINSTALLER = false;
+        private static readonly Dictionary<string, object> DefaultSettings = new()
+        {
+            { "DefaultDLL", "None" },
+            { "DiscordRPC", true },
+            { "DiscordRPCShowGameVersion", true },
+            { "DiscordRPCShowDLLName", true },
+            { "Theme", "Light" },
+            { "InjectionDelay", "0" },
+            { "AccelerateLoadingTime", "0" },
+            { "MinecraftInstallationPath", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions") },
+            { "OfflineMode", false },
+            { "DebugHardwareMonitoring", true },
+            { "DebugFontInstaller", false }
+        };
 
-        private static readonly string configFilePath;
-
-        // Settings and their values
-        private static readonly Dictionary<string, object> settings = new();
+        private static readonly string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Settings.txt");
+        private static readonly Dictionary<string, object> settings = new(DefaultSettings);
 
         static ConfigManager()
         {
-            // Set default values for settings
-            settings.Add("DefaultDLL", DEFAULT_DLL);
-            settings.Add("DiscordRPC", DEFAULT_DISCORD_RPC);
-            settings.Add("DiscordRPCShowGameVersion", DEFAULT_DISCORD_RPC_SHOW_GAME_VERSION);
-            settings.Add("DiscordRPCShowDLLName", DEFAULT_DISCORD_RPC_SHOW_DLL_NAME);
-            settings.Add("Theme", THEME);
-            settings.Add("InjectionDelay", InjectionDelay);
-            settings.Add("AccelerateLoadingTime", AccelerateLoadingTime);
-            settings.Add("MinecraftInstallationPath", MINECRAFTINSTALLATIONPATH);
-            settings.Add("OfflineMode", OFFLINEMODE);
-            settings.Add("DebugHardwareMonitoring", DEBUGHARDWAREMONITORING);
-            settings.Add("DebugFontInstaller", DEBUGFONTINSTALLER);
-
-            // Get the config file path in MyDocuments/StarZ Launcher
-            string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            configFilePath = Path.Combine(myDocumentsPath, "StarZ Launcher", "Settings.txt");
-
-            // Create the config file if it doesn't already exist
             if (!File.Exists(configFilePath))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(configFilePath));
                 File.Create(configFilePath).Close();
-                WriteDefaultSettingsToFile();
+                WriteSettingsToFile(DefaultSettings);
             }
-
-            // Wait for a short time to give the file creation process a chance to complete
-            System.Threading.Thread.Sleep(100);
-
-            // Load settings from the config file
-            LoadSettings();
+            else
+            {
+                LoadSettingsFromFile();
+            }
         }
 
-        private static void WriteDefaultSettingsToFile()
+        private static void WriteSettingsToFile(Dictionary<string, object> settingsToWrite)
         {
             using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
+            foreach (var kvp in settingsToWrite)
             {
                 writer.WriteLine($"{kvp.Key} = {kvp.Value}");
             }
         }
 
-        private static void LoadSettings()
+        private static void LoadSettingsFromFile()
         {
-            // Read the config file line by line
+            if (!File.Exists(configFilePath)) return;
+
             using StreamReader reader = new(configFilePath);
             string line;
             while ((line = reader.ReadLine()) != null)
             {
-                // Split each line into key and value
-                string[] parts = line.Split('=');
-                if (parts.Length == 2)
+                var parts = line.Split('=').Select(part => part.Trim()).ToArray();
+                if (parts.Length == 2 && settings.ContainsKey(parts[0]))
                 {
-                    // Trim whitespace from key and value
-                    string key = parts[0].Trim();
-                    string value = parts[1].Trim();
+                    var key = parts[0];
+                    var value = parts[1];
 
-                    // Convert value to correct type and add to settings
-                    if (settings.ContainsKey(key))
-                    {
-                        if (settings[key] is bool)
-                        {
-                            settings[key] = bool.Parse(value);
-                        }
-                        else if (settings[key] is string)
-                        {
-                            settings[key] = value;
-                        }
-                    }
+                    settings[key] = ConvertValue(settings[key].GetType(), value);
                 }
             }
         }
 
-        public static string GetDefaultDLL()
+        private static object ConvertValue(Type targetType, string value)
         {
-            return (string)settings["DefaultDLL"];
-        }
-
-        public static bool GetDiscordRPC()
-        {
-            return (bool)settings["DiscordRPC"];
-        }
-
-        public static bool GetDiscordRPCShowGameVersion()
-        {
-            return (bool)settings["DiscordRPCShowGameVersion"];
-        }
-
-        public static bool GetDiscordRPCShowDLLName()
-        {
-            return (bool)settings["DiscordRPCShowDLLName"];
-        }
-
-        public static string GetTheme()
-        {
-            return (string)settings["Theme"];
-        }
-
-        public static string GetInjectionDelay()
-        {
-            return (string)settings["InjectionDelay"];
-        }
-
-        public static string GetAccelerateLoadingTime()
-        {
-            return (string)settings["AccelerateLoadingTime"];
-        }
-
-        public static string GetMinecraftInstallationPath()
-        {
-            return (string)settings["MinecraftInstallationPath"];
-        }
-
-        public static bool GetOfflineMode()
-        {
-            return (bool)settings["OfflineMode"];
-        }
-
-        // This is only for debugging purpose
-        public static bool GetDebugHardwareMonitoring()
-        {
-            return (bool)settings["DebugHardwareMonitoring"];
-        }
-
-        public static bool GetDebugFontInstaller()
-        {
-            return (bool)settings["DebugFontInstaller"];
-        }
-
-        public static void SetDefaultDLL(string newDefaultDLL)
-        {
-            // Update the value in the settings dictionary
-            settings["DefaultDLL"] = newDefaultDLL;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
+            if (targetType == typeof(bool))
             {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
+                return bool.Parse(value);
+            }
+            if (targetType == typeof(string))
+            {
+                return value;
+            }
+            throw new InvalidOperationException($"Unsupported type {targetType}");
+        }
+
+        private static void UpdateSetting(string key, object newValue)
+        {
+            if (settings.ContainsKey(key))
+            {
+                settings[key] = newValue;
+                WriteSettingsToFile(settings);
             }
         }
 
-        public static void SetTheme(string newTheme)
-        {
-            // Update the value in the settings dictionary
-            settings["Theme"] = newTheme;
+        public static string GetDefaultDLL() => (string)settings["DefaultDLL"];
+        public static bool GetDiscordRPC() => (bool)settings["DiscordRPC"];
+        public static bool GetDiscordRPCShowGameVersion() => (bool)settings["DiscordRPCShowGameVersion"];
+        public static bool GetDiscordRPCShowDLLName() => (bool)settings["DiscordRPCShowDLLName"];
+        public static string GetTheme() => (string)settings["Theme"];
+        public static string GetInjectionDelay() => (string)settings["InjectionDelay"];
+        public static string GetAccelerateLoadingTime() => (string)settings["AccelerateLoadingTime"];
+        public static string GetMinecraftInstallationPath() => (string)settings["MinecraftInstallationPath"];
+        public static bool GetOfflineMode() => (bool)settings["OfflineMode"];
+        public static bool GetDebugHardwareMonitoring() => (bool)settings["DebugHardwareMonitoring"];
+        public static bool GetDebugFontInstaller() => (bool)settings["DebugFontInstaller"];
 
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetDiscordRPC(bool value)
-        {
-            // Update the value in the settings dictionary
-            settings["DiscordRPC"] = value;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetDiscordRPCShowGameVersion(bool value)
-        {
-            // Update the value in the settings dictionary
-            settings["DiscordRPCShowGameVersion"] = value;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetDiscordRPCShowDLLName(bool value)
-        {
-            // Update the value in the settings dictionary
-            settings["DiscordRPCShowDLLName"] = value;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetInjectionDelay(string newInjectionDelay)
-        {
-            // Update the value in the settings dictionary
-            settings["InjectionDelay"] = newInjectionDelay;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetAccelerateLoadingTime(string newAccelerateLoadingTime)
-        {
-            // Update the value in the settings dictionary
-            settings["AccelerateLoadingTime"] = newAccelerateLoadingTime;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetMinecraftInstallationPath(string newMinecraftInstallationPath)
-        {
-            // Update the value in the settings dictionary
-            settings["MinecraftInstallationPath"] = newMinecraftInstallationPath;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
-
-        public static void SetOfflineMode(bool value)
-        {
-            // Update the value in the settings dictionary
-            settings["OfflineMode"] = value;
-
-            // Write the updated settings to the config file
-            using StreamWriter writer = new(configFilePath);
-            foreach (KeyValuePair<string, object> kvp in settings)
-            {
-                writer.WriteLine($"{kvp.Key} = {kvp.Value}");
-            }
-        }
+        public static void SetDefaultDLL(string newDefaultDLL) => UpdateSetting("DefaultDLL", newDefaultDLL);
+        public static void SetTheme(string newTheme) => UpdateSetting("Theme", newTheme);
+        public static void SetDiscordRPC(bool value) => UpdateSetting("DiscordRPC", value);
+        public static void SetDiscordRPCShowGameVersion(bool value) => UpdateSetting("DiscordRPCShowGameVersion", value);
+        public static void SetDiscordRPCShowDLLName(bool value) => UpdateSetting("DiscordRPCShowDLLName", value);
+        public static void SetInjectionDelay(string newInjectionDelay) => UpdateSetting("InjectionDelay", newInjectionDelay);
+        public static void SetAccelerateLoadingTime(string newAccelerateLoadingTime) => UpdateSetting("AccelerateLoadingTime", newAccelerateLoadingTime);
+        public static void SetMinecraftInstallationPath(string newMinecraftInstallationPath) => UpdateSetting("MinecraftInstallationPath", newMinecraftInstallationPath);
+        public static void SetOfflineMode(bool value) => UpdateSetting("OfflineMode", value);
     }
 }
-

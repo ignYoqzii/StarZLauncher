@@ -6,7 +6,6 @@ using System.DirectoryServices.AccountManagement;
 using System.Windows.Media.Animation;
 using static StarZLauncher.Classes.MusicPlayer;
 using static StarZLauncher.Windows.MainWindow;
-using System.Windows.Media;
 
 namespace StarZLauncher.Classes
 {

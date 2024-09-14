@@ -3,96 +3,73 @@ using StarZLauncher.Windows;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using static StarZLauncher.Classes.DLLsManager;
-using static System.WindowsRuntimeSystemExtensions;
 
 namespace StarZLauncher.Classes
 {
-    /// <summary>
-    /// Class used to launch Minecraft and manage everything related to the game launching event.
-    /// </summary>
     public static class Launch
     {
         public static Process? Minecraft;
-        public static bool IsMinecraftRunning;
         private static readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
-        public static string? DllNameLaunchOnLeftClick { get; private set; }
         public static string? DllNameLaunchOnRightClick { get; private set; }
-        readonly static string? versionNumber = VersionHelper.VersionNumber;
-        static Launch()
-        {
-        }
+        private static readonly string? versionNumber = VersionHelper.VersionNumber;
 
-        // Load the default dll name on launch to display on the mainwindow
-        private static void LoadDefaultDLL()
-        {
-            defaultDll = ConfigManager.GetDefaultDLL();
-        }
+        // Check if Minecraft is opened
+        public static bool IsMinecraftOpened => (Minecraft = Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault()) != null;
 
-        public static void OpenGame()
+        // Launch Minecraft if it's not already opened
+        public static async Task OpenGame()
         {
-            Process.Start("minecraft:");
-            MinimizeFix();
-            LoadGameFaster();
-        }
-
-        // Fix to make the game launch faster
-        private async static void LoadGameFaster()
-        {
-            string AccelerateLoadingTimeValue = ConfigManager.GetAccelerateLoadingTime();
-            if (AccelerateLoadingTimeValue == "0")
+            if (!IsMinecraftOpened)
             {
-                return;
-            }
-            else if (int.TryParse(AccelerateLoadingTimeValue, out int delayMilliseconds))
-            {
-                // Add the delay using the parsed value
-                await Task.Delay(delayMilliseconds);
+                var MinecraftApplication = await PackageHelper.GetPackage();
+                if (MinecraftApplication == null) return;
 
-                var brokers = Process.GetProcessesByName("RuntimeBroker");
-                if (brokers.Length <= 0) return;
+                await MinecraftApplication.LaunchAsync();
+                Minecraft = Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
 
-                foreach (var broker in brokers)
-                {
-                    try
-                    {
-                        // Attempt to kill the process
-                        broker.Kill();
-                    }
-                    catch (Exception ex)
-                    {
-                        StarZMessageBox.ShowDialog($"{ex.Message}", "Error !", false);
-                    }
-                }
+                MinimizeFix();
+                await LoadGameFaster();
             }
         }
 
-        // I was to lazy to make the code myself, as I don't really know how to code it properly.
-        static void MinimizeFix()
+        // Accelerate game loading by killing RuntimeBroker processes
+        private static async Task LoadGameFaster()
+        {
+            if (!int.TryParse(ConfigManager.GetAccelerateLoadingTime(), out int delayMilliseconds) || delayMilliseconds == 0) return;
+
+            await Task.Delay(delayMilliseconds);
+
+            foreach (var broker in Process.GetProcessesByName("RuntimeBroker"))
+            {
+                try { broker.Kill(); }
+                catch (Exception ex) { StarZMessageBox.ShowDialog(ex.Message, "Error!", false); }
+            }
+        }
+
+        // Fix for minimizing the game
+        private static void MinimizeFix()
         {
             string exePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), "Programs", "AppLifecycleOptOut.exe");
             string packageName = "Microsoft.MinecraftUWP_8wekyb3d8bbwe";
 
             if (File.Exists(exePath))
             {
-                string arguments = $"\"{exePath}\" \"{packageName}\"";
-                Process.Start(exePath, arguments);
+               Process.Start(exePath, $"\"{exePath}\" \"{packageName}\"");
             }
         }
 
         // Handle the game closing event
         private static void IfMinecraftExited(object sender, EventArgs e)
         {
-            bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
-            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
+            if (ConfigManager.GetDiscordRPC() && !ConfigManager.GetOfflineMode())
             {
                 DiscordRichPresenceManager.IdlePresence();
             }
-            IsMinecraftRunning = false;
         }
 
+        // Launch game and inject DLL on right-click
         public async static void LaunchGameOnRightClick()
         {
             OpenFileDialog openFileDialog = new()
@@ -102,159 +79,81 @@ namespace StarZLauncher.Classes
                 InitialDirectory = DllsFolderPath
             };
 
-            if (openFileDialog.ShowDialog() != true)
+            if (openFileDialog.ShowDialog() != true) return;
+
+            await OpenGame();
+            await InjectAndHandlePresence(openFileDialog.FileName);
+        }
+
+        // Launch game and inject default DLL on left-click
+        public async static void LaunchGameOnLeftClick()
+        {
+            await OpenGame();
+
+            string DefaultDLLName = DLLsManager.DefaultDLL!;
+
+            if (string.IsNullOrEmpty(DefaultDLLName) || DefaultDLLName == "None")
             {
-                return;
-            }
+                Minecraft!.EnableRaisingEvents = true;
+                Minecraft.Exited += IfMinecraftExited;
 
-            if (Process.GetProcessesByName("Minecraft.Windows").Length != 0) return;
-
-            OpenGame();
-
-            while (true)
-            {
-                if (Process.GetProcessesByName("Minecraft.Windows").Length == 0) continue;
-                Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
-                break;
-            }
-
-            try
-            {
-                string filenameWithoutExtension = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
-                DllNameLaunchOnRightClick = filenameWithoutExtension;
                 bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
                 bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
                 bool DiscordShowGameVersionisEnabled = ConfigManager.GetDiscordRPCShowGameVersion();
-                bool DiscordShowDLLNameisEnabled = ConfigManager.GetDiscordRPCShowDLLName();
-                if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
-                {
-                    if (DiscordShowGameVersionisEnabled == true)
-                    {
-                        DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Playing Minecraft {versionNumber}");
-                    }
-                    else if (DiscordShowGameVersionisEnabled == false)
-                    {
-                        DiscordRichPresenceManager.DiscordClient.UpdateDetails("Playing Minecraft");
-                    }
-                    if (DiscordShowDLLNameisEnabled == true)
-                    {
-                        DiscordRichPresenceManager.DiscordClient.UpdateState($"With {DllNameLaunchOnRightClick}");
-                    }
-                    else if (DiscordShowDLLNameisEnabled == false)
-                    {
-                        DiscordRichPresenceManager.DiscordClient.UpdateState("");
-                    }
-                }
 
-                string InjectionDelayValue = ConfigManager.GetInjectionDelay();
+                if (!DiscordRPCisEnabled || OfflineModeisEnabled) return;
 
-                if (int.TryParse(InjectionDelayValue, out int delayMilliseconds))
+                DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {versionNumber}" : "Playing Minecraft");
+
+                return;
+            }
+
+            string dllFilePath = Path.Combine(DllsFolderPath, DefaultDLLName);
+            if (File.Exists(dllFilePath))
+            {
+                await InjectAndHandlePresence(dllFilePath);
+            }
+            else
+            {
+                StarZMessageBox.ShowDialog("The DLL you provided couldn't be found!", "Error !", false);
+            }
+        }
+
+        // Common method to inject DLL and handle Discord presence
+        private static async Task InjectAndHandlePresence(string dllPath)
+        {
+            try
+            {
+                string filenameWithoutExtension = Path.GetFileNameWithoutExtension(dllPath);
+                SetDiscordPresence(filenameWithoutExtension);
+
+                if (int.TryParse(ConfigManager.GetInjectionDelay(), out int delayMilliseconds))
                 {
-                    // Add the delay using the parsed value
                     await Task.Delay(delayMilliseconds);
-
-                    await Injector.Inject(openFileDialog.FileName);
+                    await Injector.Inject(dllPath);
                 }
-                IsMinecraftRunning = true;
-                Minecraft.EnableRaisingEvents = true;
+
+                Minecraft!.EnableRaisingEvents = true;
                 Minecraft.Exited += IfMinecraftExited;
             }
             catch (Exception ex)
             {
-                StarZMessageBox.ShowDialog($"Injection failed! {ex.Message}", "Error !", false);
+                StarZMessageBox.ShowDialog($"Injection failed! {ex.Message}", "Error!", false);
             }
         }
 
-        public async static void LaunchGameOnLeftClick()
+        // Handle Discord Rich Presence updates
+        private static void SetDiscordPresence(string dllName)
         {
-            if (Process.GetProcessesByName("Minecraft.Windows").Length != 0) return;
+            bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
+            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
+            bool DiscordShowGameVersionisEnabled = ConfigManager.GetDiscordRPCShowGameVersion();
+            bool DiscordShowDLLNameisEnabled = ConfigManager.GetDiscordRPCShowDLLName();
 
-            OpenGame();
+            if (!DiscordRPCisEnabled || OfflineModeisEnabled) return;
 
-            while (true)
-            {
-                if (Process.GetProcessesByName("Minecraft.Windows").Length == 0) continue;
-                Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
-                break;
-            }
-
-            try
-            {
-                LoadDefaultDLL();
-                if (defaultDll == "None")
-                {
-                    // Launch the game without injecting
-                    IsMinecraftRunning = true;
-                    Minecraft.EnableRaisingEvents = true;
-                    Minecraft.Exited += IfMinecraftExited;
-                }
-                else if (!string.IsNullOrEmpty(defaultDll))
-                {
-                    // Check if the DLL file exists in the specified location
-                    string dllFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs", defaultDll);
-                    if (File.Exists(dllFilePath))
-                    {
-                        try
-                        {
-                            // Inject the specified DLL file
-                            string filenameWithoutExtension = Path.GetFileNameWithoutExtension(dllFilePath);
-                            DllNameLaunchOnLeftClick = filenameWithoutExtension;
-                            bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
-                            bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
-                            bool DiscordShowGameVersionisEnabled = ConfigManager.GetDiscordRPCShowGameVersion();
-                            bool DiscordShowDLLNameisEnabled = ConfigManager.GetDiscordRPCShowDLLName();
-                            if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
-                            {
-                                if (DiscordShowGameVersionisEnabled == true)
-                                {
-                                    DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Playing Minecraft {versionNumber}");
-                                }
-                                else if (DiscordShowGameVersionisEnabled == false)
-                                {
-                                    DiscordRichPresenceManager.DiscordClient.UpdateDetails("Playing Minecraft");
-                                }
-                                if (DiscordShowDLLNameisEnabled == true)
-                                {
-                                    DiscordRichPresenceManager.DiscordClient.UpdateState($"With {DllNameLaunchOnLeftClick}");
-                                }
-                                else if (DiscordShowDLLNameisEnabled == false)
-                                {
-                                    DiscordRichPresenceManager.DiscordClient.UpdateState("");
-                                }
-                            }
-
-                            string InjectionDelayValue = ConfigManager.GetInjectionDelay();
-
-                            if (int.TryParse(InjectionDelayValue, out int delayMilliseconds))
-                            {
-                                // Add the delay using the parsed value
-                                await Task.Delay(delayMilliseconds);
-
-                                await Injector.Inject(dllFilePath);
-                            }
-                            IsMinecraftRunning = true;
-                            Minecraft.EnableRaisingEvents = true;
-                            Minecraft.Exited += IfMinecraftExited;
-                        }
-                        catch (Exception ex)
-                        {
-                            StarZMessageBox.ShowDialog($"Injection failed! {ex.Message}", "Error !", false);
-                        }
-                    }
-                    else
-                    {
-                        StarZMessageBox.ShowDialog("The DLL you provided couldn't be found!", "Error !", false);
-                    }
-                }
-                else
-                {
-                    StarZMessageBox.ShowDialog($"Settings.txt error on line 1 of the file.", "Error !", false);
-                }
-            }
-            catch (Exception ex)
-            {
-                StarZMessageBox.ShowDialog($"Failed to read Settings.txt. {ex.Message}", "Error !", false);
-            }
+            DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {versionNumber}" : "Playing Minecraft");
+            DiscordRichPresenceManager.DiscordClient.UpdateState(DiscordShowDLLNameisEnabled ? $"With {dllName}" : "");
         }
     }
 }
