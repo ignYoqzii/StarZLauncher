@@ -390,9 +390,9 @@ namespace StarZLauncher.Windows
         }
 
         // remove any installed shader
-        private void ShaderRemove_Click(object sender, RoutedEventArgs e)
+        private async void ShaderRemove_Click(object sender, RoutedEventArgs e)
         {
-            ToolsManager.ShaderRemove();
+            await ToolsManager.ShaderRemove();
         }
 
         private async void ProfileSave_Click(object sender, RoutedEventArgs e)
