@@ -37,6 +37,11 @@ namespace StarZLauncher.Classes
             MediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
         }
 
+        public static void UpdateVolume(double newVolume)
+        {
+            MediaPlayer.Volume = newVolume;
+        }
+
         private static async Task UpdateSongTime()
         {
 
@@ -155,6 +160,7 @@ namespace StarZLauncher.Classes
                     DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
                     DiscordRichPresenceManager.DiscordClient.UpdateState("Using the Music Player");
                 }
+                MediaPlayer.Volume = CurrentlyPlayingSongVolumeSlider!.Value;
                 await UpdateSongTime();
             }
             else
@@ -173,6 +179,7 @@ namespace StarZLauncher.Classes
                     DiscordRichPresenceManager.DiscordClient.UpdateDetails($"Listening to {title}");
                     DiscordRichPresenceManager.DiscordClient.UpdateState("Using the Music Player");
                 }
+                MediaPlayer.Volume = CurrentlyPlayingSongVolumeSlider!.Value;
                 await UpdateSongTime();
             }
         }

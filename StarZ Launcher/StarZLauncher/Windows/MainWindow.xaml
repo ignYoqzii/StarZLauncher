@@ -1424,9 +1424,9 @@
 
                         <TextBlock x:Name="CurrentlyPlayingTitle" Text="No Song Playing" TextAlignment="Left" FontFamily="Outfit" FontWeight="Medium" FontSize="15" Style="{DynamicResource TextBlockStyle}" Margin="146,474,145,111"/>
                         <TextBlock x:Name="CurrentlyPlayingArtist" Text="From Artist" TextAlignment="Left" FontFamily="Outfit" FontWeight="Medium" FontSize="10" Style="{DynamicResource TextBlockStyle}" Margin="146,493,145,102"/>
-                        <TextBlock x:Name="CurrentlyPlayingTime" Text="00:00" TextAlignment="Right" FontFamily="Outfit" FontWeight="Medium" FontSize="8" Style="{DynamicResource TextBlockStyle}" Margin="274,508,525,89"/>
+                        <TextBlock x:Name="CurrentlyPlayingTime" Text="00:00" TextAlignment="Right" FontFamily="Outfit" FontWeight="Medium" FontSize="8" Style="{DynamicResource TextBlockStyle}" Margin="266,508,533,89"/>
 
-                        <Border Style="{DynamicResource ProgressBarBorder}" CornerRadius="2" BorderThickness="1" Margin="319,509,70,90">
+                        <Border Style="{DynamicResource ProgressBarBorder}" CornerRadius="2" BorderThickness="1" Margin="308,509,279,90">
 
 
                             <ProgressBar x:Name="CurrentlyPlayingProgress" Minimum="0" Maximum="100" Value="0" Background="Transparent" BorderThickness="0" Margin="0,0,0,0">
@@ -1678,6 +1678,9 @@
 
 
                         </Image>
+
+
+                        <Slider x:Name="VolumeSlider" ValueChanged="VolumeSlider_ValueChanged" Style="{StaticResource Horizontal_Slider}" Minimum="0.0" Maximum="1.0" Value="0.5" Width="100" TickFrequency="0.1" IsSnapToTickEnabled="True" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="1" Margin="664,502,71,83"/>
 
 
                         <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{x:Static classes:MusicPlayer.MusicItems}" Margin="56,190,26,151" d:ItemsSource="{d:SampleData ItemCount=2}">
@@ -1961,26 +1964,21 @@
 
 
 
-                        <TextBlock x:Name="URLTextBlock" Text="YouTube URL :" TextAlignment="Center" FontSize="15" FontFamily="Outfit" FontWeight="Medium" Style="{DynamicResource TextBlockStyle}" Margin="71,158,659,429"/>
-
-
-
-                        <Border x:Name="URLBackground" Style="{DynamicResource SecondaryBorder}" Height="40" CornerRadius="15" Margin="180,148,138,419">
-
-
+                        <Border x:Name="URLBackground" Style="{DynamicResource SecondaryBorder}" CornerRadius="15" Margin="79,153,138,424">
                             <Border.Effect>
-
-
                                 <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
-
-
                             </Border.Effect>
 
+                            <!-- Grid to overlay the TextBox and the placeholder TextBlock -->
+                            <Grid>
+                                <!-- Placeholder TextBlock -->
+                                <TextBlock x:Name="URLTextBlock" Text="Paste in a YouTube URL and press 'Enter' on your keyboard." FontSize="15" FontWeight="Medium" FontFamily="Outfit" Style="{DynamicResource TextBlockStyle}" VerticalAlignment="Center" Opacity="0.3" Padding="10,5,10,5" HorizontalAlignment="Left" IsHitTestVisible="False" Visibility="Visible"/>
 
-                            <TextBox x:Name="urlTextBox" KeyDown="urlTextBox_KeyDown" Background="Transparent" BorderThickness="0" Padding="10,6" Style="{DynamicResource TextBoxStyle}" FontWeight="Medium" FontFamily="Outfit" FontSize="20" Margin="0,0,10,0"/>
-
-
+                                <!-- TextBox -->
+                                <TextBox x:Name="urlTextBox" KeyDown="urlTextBox_KeyDown" Background="Transparent" BorderThickness="0" Padding="10,5,10,5" Style="{DynamicResource TextBoxStyle}" FontWeight="Medium" FontFamily="Outfit" FontSize="15" Width="622" Height="30" TextChanged="urlTextBox_TextChanged" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Grid>
                         </Border>
+
 
 
 

@@ -68,6 +68,8 @@ namespace StarZLauncher.Windows
 
         public static ProgressBar? CurrentlyPlayingSongProgress;
 
+        public static Slider? CurrentlyPlayingSongVolumeSlider;
+
         public static TextBox? URLTextBox;
         public static TextBox? VideoURLTextBox;
         public static TextBox? injectiondelayTextBox;
@@ -135,6 +137,9 @@ namespace StarZLauncher.Windows
 
             // Progress Bar
             CurrentlyPlayingSongProgress = CurrentlyPlayingProgress;
+
+            // Slider
+            CurrentlyPlayingSongVolumeSlider = VolumeSlider;
 
             // Buttons
             CloseImage = CloseButton;
@@ -282,9 +287,26 @@ namespace StarZLauncher.Windows
                 string videoUrl = URLTextBox!.Text;
                 URLTextBox!.Clear();
                 MusicPlayerInformationTextBlock!.Text = "Your music file is being downloaded. This may take a while...";
+                URLTextBlock!.Text = "Your music file is being downloaded. This may take a while...";
                 await MusicPlayer.DownloadMusicAsync(videoUrl);
+
+                // When the download is done, reset the placeholder textblock
+                URLTextBlock!.Text = "Paste in a YouTube URL and press 'Enter' on your keyboard.";
             }
         }
+
+        private void urlTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(urlTextBox.Text))
+            {
+                URLTextBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                URLTextBlock.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void JoinDiscordServer_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("https://discord.gg/ScR9MGbRSY");
@@ -680,6 +702,11 @@ namespace StarZLauncher.Windows
                 scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset + scrollAmount);
                 e.Handled = true; // Mark the event as handled
             }
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            MusicPlayer.UpdateVolume(e.NewValue);
         }
     }
 }
