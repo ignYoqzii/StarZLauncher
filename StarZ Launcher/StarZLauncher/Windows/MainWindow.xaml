@@ -1773,7 +1773,17 @@
                                             </Grid.ColumnDefinitions>
 
 
-                                            <Image Source="{Binding Image}" RenderOptions.BitmapScalingMode="HighQuality" Width="100" Height="100" Stretch="Fill"/>
+                                            <Border Height="100" Width="100" CornerRadius="10">
+                                                <Border.Background>
+                                                    <VisualBrush Stretch="Fill">
+                                                        <VisualBrush.Visual>
+                                                            <Grid>
+                                                                <Image Source="{Binding Image}" RenderOptions.BitmapScalingMode="HighQuality" Width="100" Height="100" Stretch="Fill"/>
+                                                            </Grid>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
+                                                </Border.Background>
+                                            </Border>
 
 
                                             <StackPanel Grid.Column="1" Margin="10">
