@@ -109,25 +109,25 @@
             </Rectangle.OpacityMask>
         </Rectangle>
 
-        <Rectangle x:Name="ChangeBGColor1" ToolTip="Select the first color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,66,16,212" MouseLeftButtonDown="SelectBGColor1_Click" Panel.ZIndex="3">
+        <Rectangle x:Name="ChangeBGColor1" ToolTip="Select a color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,66,16,212" MouseLeftButtonDown="SelectBGColor1_Click" Panel.ZIndex="3">
             <Rectangle.OpacityMask>
                 <ImageBrush ImageSource="/Resources/ColorPicker.png" RenderOptions.BitmapScalingMode="HighQuality" />
             </Rectangle.OpacityMask>
         </Rectangle>
 
-        <Rectangle x:Name="ChangeBGColor2" ToolTip="Select the first color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,108,16,170" MouseLeftButtonDown="SelectBGColor2_Click" Panel.ZIndex="3">
+        <Rectangle x:Name="ChangeBGColor2" ToolTip="Select a color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,108,16,170" MouseLeftButtonDown="SelectBGColor2_Click" Panel.ZIndex="3">
             <Rectangle.OpacityMask>
                 <ImageBrush ImageSource="/Resources/ColorPicker.png" RenderOptions.BitmapScalingMode="HighQuality" />
             </Rectangle.OpacityMask>
         </Rectangle>
 
-        <Rectangle x:Name="ChangeTextColor" ToolTip="Select the second color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,150,16,128" MouseLeftButtonDown="SelectTextColor_Click" Panel.ZIndex="3">
+        <Rectangle x:Name="ChangeTextColor" ToolTip="Select a color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,150,16,128" MouseLeftButtonDown="SelectTextColor_Click" Panel.ZIndex="3">
             <Rectangle.OpacityMask>
                 <ImageBrush ImageSource="/Resources/ColorPicker.png" RenderOptions.BitmapScalingMode="HighQuality" />
             </Rectangle.OpacityMask>
         </Rectangle>
 
-        <Rectangle x:Name="ChangeIconColor" ToolTip="Select the second color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,192,16,86" MouseLeftButtonDown="SelectIconColor_Click" Panel.ZIndex="3">
+        <Rectangle x:Name="ChangeIconColor" ToolTip="Select a color." Style="{DynamicResource IconsStyle}" Height="22" Width="22" Margin="462,192,16,86" MouseLeftButtonDown="SelectIconColor_Click" Panel.ZIndex="3">
             <Rectangle.OpacityMask>
                 <ImageBrush ImageSource="/Resources/ColorPicker.png" RenderOptions.BitmapScalingMode="HighQuality" />
             </Rectangle.OpacityMask>
