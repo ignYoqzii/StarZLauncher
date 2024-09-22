@@ -24,12 +24,16 @@ namespace StarZLauncher.Classes
 
             if (currentVersion != latestVersion)
             {
-                bool? result = StarZMessageBox.ShowDialog("A new update is available. Click 'OK' to update the launcher to the latest or 'CANCEL' to ignore and keep using an outdated version.", "New update available!");
+                bool? result = StarZMessageBox.ShowDialog("A new update is available! Click 'OK' to upgrade the launcher to the latest version, or 'CANCEL' to dismiss this notification and continue using the outdated version without future update alerts.", "New update available!");
 
                 if (result == true)
                 {
                     string downloadLink = string.Format(DOWNLOAD_URL, latestVersion);
                     DownloadLatestLauncher(downloadLink, latestVersion);
+                }
+                else 
+                {
+                    ConfigManager.SetDoNotAskForUpdates(true);
                 }
             }
         }

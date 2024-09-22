@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarZLauncher.Windows;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -145,6 +146,11 @@ namespace StarZLauncher.Classes
             catch (Exception ex)
             {
                 LogManager.Log($"Error applying theme: {ex.Message}", logFileName);
+                bool? result = StarZMessageBox.ShowDialog("It seems that one or more themes contain invalid values, which has caused an error. Would you like to reset the themes? Click 'OK' to reset, or 'Cancel' to continue using the corrupted theme file.", "Warning!", true);
+                if (result == true)
+                {
+                    ResetThemesToDefault();
+                }
             }
         }
 

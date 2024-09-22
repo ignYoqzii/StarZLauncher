@@ -20,6 +20,7 @@ namespace StarZLauncher.Classes
             { "AccelerateLoadingTime", "0" },
             { "MinecraftInstallationPath", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions") },
             { "OfflineMode", false },
+            { "DoNotAskForUpdates", false },
             { "DebugHardwareMonitoring", true },
             { "DebugFontInstaller", false }
         };
@@ -100,9 +101,10 @@ namespace StarZLauncher.Classes
         public static string GetAccelerateLoadingTime() => (string)settings["AccelerateLoadingTime"];
         public static string GetMinecraftInstallationPath() => (string)settings["MinecraftInstallationPath"];
         public static bool GetOfflineMode() => (bool)settings["OfflineMode"];
+        public static bool GetDoNotAskForUpdates() => (bool)settings["DoNotAskForUpdates"];
         public static bool GetDebugHardwareMonitoring() => (bool)settings["DebugHardwareMonitoring"];
         public static bool GetDebugFontInstaller() => (bool)settings["DebugFontInstaller"];
-
+        
         public static void SetDefaultDLL(string newDefaultDLL) => UpdateSetting("DefaultDLL", newDefaultDLL);
         public static void SetTheme(string newTheme) => UpdateSetting("Theme", newTheme);
         public static void SetDiscordRPC(bool value) => UpdateSetting("DiscordRPC", value);
@@ -112,5 +114,6 @@ namespace StarZLauncher.Classes
         public static void SetAccelerateLoadingTime(string newAccelerateLoadingTime) => UpdateSetting("AccelerateLoadingTime", newAccelerateLoadingTime);
         public static void SetMinecraftInstallationPath(string newMinecraftInstallationPath) => UpdateSetting("MinecraftInstallationPath", newMinecraftInstallationPath);
         public static void SetOfflineMode(bool value) => UpdateSetting("OfflineMode", value);
+        public static void SetDoNotAskForUpdates(bool value) => UpdateSetting("DoNotAskForUpdates", value);
     }
 }

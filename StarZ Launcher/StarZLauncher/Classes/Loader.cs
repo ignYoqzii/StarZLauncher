@@ -7,6 +7,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Windows.Media.Animation;
 using static StarZLauncher.Classes.MusicPlayer;
 using static StarZLauncher.Windows.MainWindow;
+using StarZLauncher.Windows;
 
 namespace StarZLauncher.Classes
 {
@@ -101,7 +102,8 @@ namespace StarZLauncher.Classes
             }
 
             bool debug = ConfigManager.GetOfflineMode();
-            if (!debug)
+            bool askForUpdates = ConfigManager.GetDoNotAskForUpdates();
+            if (!debug || !askForUpdates)
             {
                 try
                 {
@@ -115,7 +117,7 @@ namespace StarZLauncher.Classes
             }
             else
             {
-                LogManager.Log("Offline mode is enabled. Skipping update check.", logFileName);
+                LogManager.Log("Offline mode is enabled or 'DoNotAskForUpdates' is set to 'True'. Skipping update check.", logFileName);
             }
         }
 
