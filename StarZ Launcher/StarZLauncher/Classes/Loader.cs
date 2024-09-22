@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.DirectoryServices.AccountManagement;
 using System.Windows.Media.Animation;
 using static StarZLauncher.Classes.MusicPlayer;
@@ -62,12 +63,12 @@ namespace StarZLauncher.Classes
 
             try
             {
-                CheckForThemes();
-                LogManager.Log("Theme loaded.", logFileName);
+                ThemesManager.SetAndInitializeThemes();
+                LogManager.Log("Themes loaded and initialized.", logFileName);
             }
             catch (Exception ex)
             {
-                LogManager.Log($"Error loading the theme: {ex.Message}", logFileName);
+                LogManager.Log($"Error loading themes: {ex.Message}", logFileName);
             }
 
             try
@@ -115,23 +116,6 @@ namespace StarZLauncher.Classes
             else
             {
                 LogManager.Log("Offline mode is enabled. Skipping update check.", logFileName);
-            }
-        }
-
-        public static void CheckForThemes()
-        {
-            string Mode = ConfigManager.GetTheme();
-            if (Mode == "Light")
-            {
-                ThemesManager.LoadTheme("LightMode.xaml");
-                LightModeCheckBox!.IsChecked = true;
-                LightModeCheckBox!.IsEnabled = false;
-            }
-            else if (Mode == "Dark")
-            {
-                ThemesManager.LoadTheme("DarkMode.xaml");
-                DarkModeCheckBox!.IsChecked = true;
-                DarkModeCheckBox!.IsEnabled = false;
             }
         }
 

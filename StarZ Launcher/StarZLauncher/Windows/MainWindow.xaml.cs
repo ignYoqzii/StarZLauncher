@@ -4,10 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using WK.Libraries.BetterFolderBrowserNS;
+using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace StarZLauncher.Windows
 {
@@ -18,16 +21,14 @@ namespace StarZLauncher.Windows
         private static bool isVersionsListLoaded;
 
         // Making them public to be used somewhere else
-        public static Image? HomeTabImage;
-        public static Image? ModulesTabImage;
-        public static Image? ToolsTabImage;
-        public static Image? MusicPlayerTabImage;
-        public static Image? SettingsTabImage;
-        public static Image? StarZLogoImage;
-        public static Image? profilePictureImage;
-        public static Image? ComputerTabImage;
-        public static Image? CloseImage;
-        public static Image? MinimizeImage;
+        public static Rectangle? HomeTabImage;
+        public static Rectangle? ModulesTabImage;
+        public static Rectangle? ToolsTabImage;
+        public static Rectangle? MusicPlayerTabImage;
+        public static Rectangle? SettingsTabImage;
+        public static Rectangle? ComputerTabImage;
+        public static Rectangle? CloseImage;
+        public static Rectangle? MinimizeImage;
         public static Image? CurrentlyPlayingSongImage;
 
         public static TabControl? MainTabControl;
@@ -44,6 +45,7 @@ namespace StarZLauncher.Windows
 
         public static CheckBox? DarkModeCheckBox;
         public static CheckBox? LightModeCheckBox;
+        public static CheckBox? CustomThemeCheckBox;
 
         public static TextBlock? MusicPlayerInformationTextBlock;
         public static TextBlock? discordUsernameTextBlock;
@@ -95,7 +97,6 @@ namespace StarZLauncher.Windows
             ToolsTabImage = ToolsTab;
             MusicPlayerTabImage = MusicPlayerTab;
             SettingsTabImage = SettingsTab;
-            StarZLogoImage = StarZLogo;
             ComputerTabImage = ComputerTab;
             CurrentlyPlayingSongImage = SongImage;
 
@@ -114,6 +115,7 @@ namespace StarZLauncher.Windows
             // Themes checkboxes
             DarkModeCheckBox = CheckBoxDarkMode;
             LightModeCheckBox = CheckBoxLightMode;
+            CustomThemeCheckBox = CheckBoxCustomTheme;
 
             // Individual TextBlocks
             MusicPlayerInformationTextBlock = MusicPlayerInfoTextBlock;
@@ -219,7 +221,7 @@ namespace StarZLauncher.Windows
 
         private void SideBarTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ThemesManager.TabItemsSelectionChanged();
+            ThemesManager.UpdateAllTabIcons();
         }
 
         // move the window on screen
@@ -229,14 +231,28 @@ namespace StarZLauncher.Windows
         }
 
         // Settings section
-        private void CheckBoxLightMode_Checked(object sender, RoutedEventArgs e)
-        {
-            ThemesManager.LightModeChecked();
-        }
 
-        private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
+        private void CheckBoxTheme_Checked(object sender, RoutedEventArgs e)
         {
-            ThemesManager.DarkModeChecked();
+            if (sender is CheckBox checkBox)
+            {
+                string theme = checkBox.Tag.ToString(); // Use Tag to determine the theme
+
+                // Load the theme colors
+                var colors = ThemesManager.LoadThemeColors(theme);
+
+                // Validate color values using ThemesManager
+                if (colors == null || !ThemesManager.AreColorValuesValid(colors))
+                {
+                    string message = theme == "CustomTheme" ? "Please create a custom theme using the Themes Manager before applying it." : "Invalid color values for the selected theme.";
+
+                    StarZMessageBox.ShowDialog(message, "Error!", false);
+                    checkBox.IsChecked = false;
+                    return;
+                }
+
+                ThemesManager.ApplyTheme(theme);
+            }
         }
 
         private void AddMusic_Click(object sender, RoutedEventArgs e)
@@ -246,7 +262,7 @@ namespace StarZLauncher.Windows
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            Image playButton = (Image)sender;
+            Rectangle playButton = (Rectangle)sender;
             MusicItem musicItem = (MusicItem)playButton.DataContext;
             string filePath = musicItem.FilePath;
             MusicPlayer.PlayMusic(filePath);
@@ -269,7 +285,7 @@ namespace StarZLauncher.Windows
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            Image deleteButton = (Image)sender;
+            Rectangle deleteButton = (Rectangle)sender;
             MusicItem musicItem = (MusicItem)deleteButton.DataContext;
             string filePath = musicItem.FilePath;
 
@@ -399,22 +415,22 @@ namespace StarZLauncher.Windows
             }
         }
 
-        // persona skin pack installer if StarZ X Minecraft is installed
+        // persona skin pack installer if Minecraft is installed
         private void Persona_Click(object sender, RoutedEventArgs e)
         {
             ToolsManager.CosmeticsSkinPackApply();
         }
 
-        // shader materials.bin installer if StarZ X Minecraft is installed
+        // shader .material.bin installer if Minecraft is installed
         private async void ShaderInstall_Click(object sender, RoutedEventArgs e)
         {
-            await ToolsManager.ShaderApply();
+            await ToolsManager.ManageShaders(true);
         }
 
         // remove any installed shader
         private async void ShaderRemove_Click(object sender, RoutedEventArgs e)
         {
-            await ToolsManager.ShaderRemove();
+            await ToolsManager.ManageShaders(false);
         }
 
         private async void ProfileSave_Click(object sender, RoutedEventArgs e)
@@ -638,7 +654,7 @@ namespace StarZLauncher.Windows
 
         private void LauncherFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            string folderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher");
+            string folderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher");
 
             if (Directory.Exists(folderPath))
             {
@@ -649,6 +665,28 @@ namespace StarZLauncher.Windows
             {
                 StarZMessageBox.ShowDialog("The launcher's folder was deleted. Please close the launcher and reopen it.", "Error !", false); // If this happens, the launcher would'nt even work.
             }
+        }
+
+        private void OpenThemesManager_Click(object sender, RoutedEventArgs e)
+        {
+            // Create an instance of the color dialog
+            StarZColorDialog colorDialog = new();
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
+
+            // Show the dialog and wait for user response
+            if (colorDialog.ShowDialog() == true)
+            {
+                // Apply the theme
+                string theme = "CustomTheme";
+                ThemesManager.ApplyTheme(theme);
+                ThemesManager.UpdateCheckBoxes(theme);
+            }
+            BackgroundForWindowsOnTop.Visibility = Visibility.Collapsed;
+        }
+
+        private void ResetAllThemes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ThemesManager.ResetThemesToDefault();
         }
 
         private void MinecraftInstallationButton_Click(object sender, RoutedEventArgs e)
@@ -669,7 +707,7 @@ namespace StarZLauncher.Windows
 
         private void MinecraftInstallationPathReset_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions");
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions");
 
             // Create the directory if it does not exist
             if (!Directory.Exists(path))

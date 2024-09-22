@@ -18,6 +18,7 @@ namespace StarZLauncher.Windows
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            Close();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -25,6 +26,7 @@ namespace StarZLauncher.Windows
             NewNameProfile = NewNameTextBox.Text.Trim();
             NewNameDLLs = NewNameProfile + ".dll";
             DialogResult = true;
+            Close();
         }
     }
 }

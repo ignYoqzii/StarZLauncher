@@ -116,16 +116,7 @@ namespace StarZLauncher.Classes
                     Visibility = Visibility.Collapsed
                 };
 
-                LinearGradientBrush gradientBrush = new()
-                {
-                    StartPoint = new System.Windows.Point(0.5, 0),
-                    EndPoint = new System.Windows.Point(0.5, 1)
-                };
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x00, 0xBC, 0xFB), 0));
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x00, 0x3E, 0x5D), 0.403));
-                gradientBrush.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x00, 0x15, 0x1F), 1));
-
-                progressBar.Foreground = gradientBrush;
+                progressBar.Foreground = (LinearGradientBrush)progressBar.FindResource("AccentColorGradientBrush");
 
                 button.Content = version == currentVersion ? "Uninstall" : isInstalled ? "Switch" : "Install";
 

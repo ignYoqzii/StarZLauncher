@@ -7,32 +7,59 @@
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/LightMode.xaml" />
-                <ResourceDictionary Source="/Themes/DarkMode.xaml" />
+                <ResourceDictionary Source="/Themes/ColorsManager.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <SolidColorBrush x:Key="LightMode1" Color="#ccd0d1" />
-            <SolidColorBrush x:Key="LightMode2" Color="#f6f8fa" />
-            <SolidColorBrush x:Key="LightTextColor1" Color="#242c35" />
+            <Style TargetType="Rectangle" x:Key="IconsStyle">
+                <Setter Property="Opacity" Value="0.8"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Fill" Value="{DynamicResource IconColor}"/>
+                <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
 
-            <SolidColorBrush x:Key="DarkMode1" Color="#171d22" />
-            <SolidColorBrush x:Key="DarkMode2" Color="#242c35" />
-            <SolidColorBrush x:Key="DarkTextColor1" Color="#f6f8fa" />
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform x:Name="ImageTransform"/>
+                    </Setter.Value>
+                </Setter>
 
-            <LinearGradientBrush x:Key="MyGradientBrush" StartPoint="0.5,0" EndPoint="0.5,1" SpreadMethod="Pad" MappingMode="RelativeToBoundingBox" >
-                <GradientStop Color="{Binding GradientColor1}" />
-                <GradientStop Color="{Binding GradientColor2}" Offset="1" />
-            </LinearGradientBrush>
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" 
+                                     To="1.05" 
+                                     Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" 
+                                     To="1.05" 
+                                     Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                     To="1" 
+                                     Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" 
+                                     To="1" 
+                                     Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" 
+                                     To="1" 
+                                     Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                     To="0.8" 
+                                     Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
 
             <ControlTemplate x:Key="DefaultButtons" TargetType="Button">
                 <Border Name="RootElement" RenderTransformOrigin="0.5,0.5">
-                    <Border BorderBrush="AliceBlue" BorderThickness="0,0,0,0" CornerRadius="10">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" SpreadMethod="Pad" MappingMode="RelativeToBoundingBox">
-                                <GradientStop x:Name="GradientStop1" Color="#FF0044EA"/>
-                                <GradientStop x:Name="GradientStop2" Color="#FF00C7ED" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Border.Background>
+                    <Border BorderBrush="AliceBlue" BorderThickness="0,0,0,0" CornerRadius="10" Background="{DynamicResource AccentColorGradientBrush}">
                         <ContentPresenter Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <VisualStateManager.VisualStateGroups>
@@ -47,16 +74,14 @@
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.02" Duration="0:0:0.3"/>
                                     <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.05" Duration="0:0:0.3"/>
-                                    <ColorAnimation Storyboard.TargetName="GradientStop1" Storyboard.TargetProperty="Color" To="#FF00171F" Duration="0:0:0.3"/>
-                                    <ColorAnimation Storyboard.TargetName="GradientStop2" Storyboard.TargetProperty="Color" To="#FF00BFFF" Duration="0:0:0.3"/>
+                                    <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="Opacity" To="0.7" Duration="0:0:0.3"/>
                                 </Storyboard>
                             </VisualState>
                             <VisualState x:Name="Pressed">
                                 <Storyboard>
                                     <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="RenderTransform.ScaleX" To="0.98" Duration="0:0:0.05"/>
                                     <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="RenderTransform.ScaleY" To="0.98" Duration="0:0:0.05"/>
-                                    <ColorAnimation Storyboard.TargetName="GradientStop1" Storyboard.TargetProperty="Color" To="#111111" Duration="0:0:0.05"/>
-                                    <ColorAnimation Storyboard.TargetName="GradientStop2" Storyboard.TargetProperty="Color" To="#FF0080FF" Duration="0:0:0.05"/>
+                                    <DoubleAnimation Storyboard.TargetName="RootElement" Storyboard.TargetProperty="Opacity" To="0.5" Duration="0:0:0.05"/>
                                 </Storyboard>
                             </VisualState>
                         </VisualStateGroup>
@@ -74,19 +99,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="border" CornerRadius="7" BorderThickness="{TemplateBinding BorderThickness}">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                        <GradientStop Color="#FF0044EA"/>
-                                        <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Border.BorderBrush>
-                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                        <GradientStop Color="#FF0044EA"/>
-                                        <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.BorderBrush>
+                            <Border x:Name="border" CornerRadius="7" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource AccentColorGradientBrush}" Background="{DynamicResource AccentColorGradientBrush}">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                             <ControlTemplate.Triggers>
@@ -107,13 +120,7 @@
                             x:Name="border"
                             BorderBrush="#FF00C7ED"
                             BorderThickness="0,1,1,1"
-                            CornerRadius="0,10,10,0">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                        <GradientStop Color="#FF0044EA"/>
-                                        <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
+                            CornerRadius="0,10,10,0" Background="{DynamicResource AccentColorGradientBrush}">
                                 <ContentPresenter />
                             </Border>
                         </ControlTemplate>
@@ -161,13 +168,7 @@
                                 Foreground="AliceBlue"
                                 IsEnabled="False"
                                 SelectionBrush="#FF00C7ED"
-                                Style="{StaticResource ComboboxTextBoxStyle}" >
-                                    <TextBox.Background>
-                                        <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                            <GradientStop Color="#FF0044EA"/>
-                                            <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </TextBox.Background>
+                                Style="{StaticResource ComboboxTextBoxStyle}" Background="{DynamicResource AccentColorGradientBrush}" >
                                 </TextBox>
                                 <ToggleButton
                                 Grid.Column="1"
@@ -210,13 +211,7 @@
                                         Name="DropDown"
                                         MinWidth="{TemplateBinding ActualWidth}"
                                         MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                        SnapsToDevicePixels="True">
-                                            <Grid.Background>
-                                                <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                                    <GradientStop Color="#FF0044EA"/>
-                                                    <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                                </LinearGradientBrush>
-                                            </Grid.Background>
+                                        SnapsToDevicePixels="True" Background="{DynamicResource AccentColorGradientBrush}">
                                             <Border
                                             x:Name="DropDownBorder"
                                             BorderBrush="#6D6D6D"
@@ -261,10 +256,7 @@
                                     <Setter TargetName="SwitchCircle" Property="Margin" Value="20,1,1,1" />
                                     <Setter TargetName="border" Property="Background" >
                                         <Setter.Value>
-                                            <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                                <GradientStop Color="#FF0044EA"/>
-                                                <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                            </LinearGradientBrush>
+                                            <DynamicResource ResourceKey="AccentColorGradientBrush"/>
                                         </Setter.Value>
                                     </Setter>
                                 </Trigger>
@@ -286,7 +278,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RepeatButton">
-                            <Border  BorderThickness="0" CornerRadius="2" Style="{DynamicResource ProgressBarBorder}" Height="3"/>
+                            <Border  BorderThickness="0" CornerRadius="2" Background="{DynamicResource ProgressBarColor}" Height="3"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -298,13 +290,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RepeatButton">
-                            <Border SnapsToDevicePixels="True" CornerRadius="2" Height="3">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                        <GradientStop Color="#FF0044EA"/>
-                                        <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
+                            <Border SnapsToDevicePixels="True" CornerRadius="2" Height="3" Background="{DynamicResource AccentColorGradientBrush}">
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -318,23 +304,17 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="Thumb">
                             <!--Add name to ellipse to use in  controltemplate triggers-->
-                            <Ellipse x:Name="Ellipse" Cursor="Hand" Height="10" Width="10">
-                                <Ellipse.Fill>
-                                    <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                        <GradientStop Color="#FF0044EA"/>
-                                        <GradientStop Color="#FF00C7ED" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Ellipse.Fill>
+                            <Ellipse x:Name="Ellipse" Cursor="Hand" Height="10" Width="10" Fill="{DynamicResource AccentColorGradientBrush}">
                             </Ellipse>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
                                     <Setter TargetName="Ellipse" Property="Fill">
                                         <Setter.Value>
-                                            <LinearGradientBrush EndPoint="0,2" StartPoint="1,1">
-                                                <GradientStop Color="#FF00154A"/>
-                                                <GradientStop Color="#FF006073" Offset="1"/>
-                                            </LinearGradientBrush>
+                                            <DynamicResource ResourceKey="AccentColorGradientBrush"/>
                                         </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="Ellipse" Property="Opacity">
+                                        <Setter.Value>0.5</Setter.Value>
                                     </Setter>
                                 </Trigger>
                             </ControlTemplate.Triggers>

@@ -15,7 +15,7 @@ namespace StarZLauncher.Classes
             { "DiscordRPC", true },
             { "DiscordRPCShowGameVersion", true },
             { "DiscordRPCShowDLLName", true },
-            { "Theme", "Light" },
+            { "Theme", "LightTheme" },
             { "InjectionDelay", "0" },
             { "AccelerateLoadingTime", "0" },
             { "MinecraftInstallationPath", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Versions") },

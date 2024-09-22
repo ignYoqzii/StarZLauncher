@@ -31,6 +31,8 @@
 		<None Remove="Resources/SettingsWhite.png" />
 		<None Remove="Resources/StarZLogoDark.png" />
 		<None Remove="Resources/StarZLogoLight.png" />
+		<None Remove="Resources/StarZLogoColoredPart.png" />
+		<None Remove="Resources/StarZLogo.png" />
 		<None Remove="Resources/Search.png" />
 		<None Remove="Resources/Delete.png" />
 		<None Remove="Resources/Play.png" />
@@ -58,6 +60,8 @@
 		<None Remove="Resources/InfoGray.png" />
 		<None Remove="Resources/ComputerGray.png" />
 		<None Remove="Resources/ComputerWhite.png" />
+		<None Remove="Resources/ColorPicker.png" />
+		<None Remove="Resources/Custom.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -73,6 +77,8 @@
 		<Resource Include="Resources/SettingsWhite.png" />
 		<Resource Include="Resources/StarZLogoDark.png" />
 		<Resource Include="Resources/StarZLogoLight.png" />
+		<Resource Include="Resources/StarZLogoColoredPart.png" />
+		<Resource Include="Resources/StarZLogo.png" />
 		<Resource Include="Resources/Search.png" />
 		<Resource Include="Resources/Delete.png" />
 		<Resource Include="Resources/Play.png" />
@@ -100,6 +106,8 @@
 		<Resource Include="Resources/InfoGray.png" />
 		<Resource Include="Resources/ComputerGray.png" />
 		<Resource Include="Resources/ComputerWhite.png" />
+		<Resource Include="Resources/ColorPicker.png" />
+		<Resource Include="Resources/Custom.png" />
 	</ItemGroup>
 
 	<ItemGroup>

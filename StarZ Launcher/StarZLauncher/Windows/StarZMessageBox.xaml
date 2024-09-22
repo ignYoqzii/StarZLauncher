@@ -52,68 +52,11 @@
             Height="35" 
             Width="35" Margin="10,10,455,180" />
 
-        <Image 
-            x:Name="CloseButton" 
-            Panel.ZIndex="3" 
-            HorizontalAlignment="Left" 
-            Opacity="0.8" 
-            Height="25" 
-            Margin="465,10,0,0" 
-            VerticalAlignment="Top" 
-            RenderOptions.BitmapScalingMode="HighQuality" 
-            Width="25" Source="/Resources/CloseGray.png" 
-            Cursor="Hand" 
-            MouseLeftButtonDown="CloseButton_MouseLeftButtonDown" 
-            RenderTransformOrigin="0.5, 0.5">
-            <Image.RenderTransform>
-                <ScaleTransform 
-                    x:Name="ImageTransform8" />
-            </Image.RenderTransform>
-            <Image.Triggers>
-                <EventTrigger 
-                    RoutedEvent="Image.MouseEnter">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation 
-                                Storyboard.TargetName="ImageTransform8" 
-                                Storyboard.TargetProperty="ScaleX" 
-                                To="1.05" 
-                                Duration="0:0:0.2"/>
-                            <DoubleAnimation 
-                                Storyboard.TargetName="ImageTransform8" 
-                                Storyboard.TargetProperty="ScaleY" 
-                                To="1.05" 
-                                Duration="0:0:0.2"/>
-                            <DoubleAnimation 
-                                Storyboard.TargetName="CloseButton" 
-                                Storyboard.TargetProperty="Opacity" 
-                                To="1" 
-                                Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-                <EventTrigger 
-                    RoutedEvent="Image.MouseLeave">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation 
-                                Storyboard.TargetName="ImageTransform8" 
-                                Storyboard.TargetProperty="ScaleX" 
-                                To="1" Duration="0:0:0.2"/>
-                            <DoubleAnimation 
-                                Storyboard.TargetName="ImageTransform8" 
-                                Storyboard.TargetProperty="ScaleY" 
-                                To="1" Duration="0:0:0.2"/>
-                            <DoubleAnimation 
-                                Storyboard.TargetName="CloseButton" 
-                                Storyboard.TargetProperty="Opacity" 
-                                To="0.8" 
-                                Duration="0:0:0.2"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
+        <Rectangle x:Name="CloseButton" Style="{DynamicResource IconsStyle}" Height="25" Width="25" Margin="465,10,10,190" MouseLeftButtonDown="CloseButton_MouseLeftButtonDown" Panel.ZIndex="3">
+            <Rectangle.OpacityMask>
+                <ImageBrush ImageSource="/Resources/CloseGray.png" RenderOptions.BitmapScalingMode="HighQuality" />
+            </Rectangle.OpacityMask>
+        </Rectangle>
 
         <Rectangle 
             Panel.ZIndex="-1" 
