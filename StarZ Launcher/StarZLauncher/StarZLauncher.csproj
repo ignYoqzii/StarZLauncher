@@ -13,8 +13,8 @@
 	<AssemblyName>StarZLauncher</AssemblyName>
     <Description>A Minecraft Bedrock Edition Launcher</Description>
 	<Copyright>StarZ Team ©</Copyright>
-	<FileVersion>5.1.7.0</FileVersion>
-	<AssemblyVersion>5.1.7.0</AssemblyVersion>
+	<FileVersion>5.1.8.0</FileVersion>
+	<AssemblyVersion>5.1.8.0</AssemblyVersion>
 	<PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
