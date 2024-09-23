@@ -169,7 +169,7 @@ namespace StarZLauncher.Classes
                             InstallStatusText!.Foreground = Brushes.AliceBlue;
                             InstallStatusText.Text = "";
                         }
-                        await MinecraftVersionsListManager.LoadVersionsAsync();
+                        await MinecraftVersionsListManager.RefreshVersions();
                     });
                 });
             };

@@ -10,6 +10,23 @@
                 <ResourceDictionary Source="/Themes/ColorsManager.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <Style TargetType="TextBlock" x:Key="MinecraftVersionsListTextBlockColor">
+                <Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+            </Style>
+
+            <Style TargetType="Border" x:Key="MinecraftVersionsListPrimaryBorderBackgroundColor">
+                <Setter Property="Background" Value="{DynamicResource PrimaryBackgroundColor}"/>
+            </Style>
+
+            <Style TargetType="Border" x:Key="MinecraftVersionsListSecondaryBorderBackgroundColor">
+                <Setter Property="Background" Value="{DynamicResource SecondaryBackgroundColor}"/>
+            </Style>
+
+            <Style TargetType="ProgressBar" x:Key="MinecraftVersionsListProgressBarColor">
+                <Setter Property="Foreground" Value="{DynamicResource AccentColorGradientBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource IconColor}"/>
+            </Style>
+
             <Style TargetType="Rectangle" x:Key="IconsStyle">
                 <Setter Property="Opacity" Value="0.8"/>
                 <Setter Property="Cursor" Value="Hand"/>

@@ -1,5 +1,6 @@
 ﻿using StarZLauncher.Windows;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -22,30 +23,28 @@ namespace StarZLauncher.Classes
             await LoadVersionsAsync();
         }
 
+        private static readonly List<(TextBlock TextBlock, Button Button)> versionControls = new();
+        private static string[] versionList = Array.Empty<string>(); // Store the version list
+
         public static async Task LoadVersionsAsync()
         {
             string versionsUrl = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/MinecraftVersions.txt";
             using HttpClient client = new();
             string versions = await client.GetStringAsync(versionsUrl);
-            string[] versionList = versions.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            versionList = versions.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
             string installationPath = ConfigManager.GetMinecraftInstallationPath();
             string currentVersion = await PackageHelper.GetVersion();
 
             // Clear existing versions from the stack panel
-            if (FullVersionsListStackPanel?.Children.Count > 0)
-            {
-                FullVersionsListStackPanel.Children.Clear();
-            }
+            FullVersionsListStackPanel?.Children.Clear();
 
             // Create a grid to hold version borders
             Grid grid = new();
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
-            // Create background colors for alternating rows
-            Brush background1 = new SolidColorBrush(Color.FromArgb(255, 36, 44, 53));
-            Brush background2 = new SolidColorBrush(Color.FromArgb(255, 23, 29, 34));
+            versionControls.Clear(); // Clear previous controls
 
             // Add versions to the grid
             for (int i = 0; i < versionList.Length; i++)
@@ -54,87 +53,14 @@ namespace StarZLauncher.Classes
                 string versionFolderPath = Path.Combine(installationPath, $"Minecraft {version}");
                 bool isInstalled = Directory.Exists(versionFolderPath);
 
-                string displayVersion = version;
-                if (version == currentVersion)
-                {
-                    displayVersion += " - In use";
-                }
-                else if (isInstalled)
-                {
-                    displayVersion += " - Downloaded";
-                }
+                Border border = CreateVersionBorder(i, version, currentVersion, isInstalled, out TextBlock textBlock, out Button button, out ProgressBar progressBar);
 
-                Border border = new()
-                {
-                    Background = (i % 2 == 0) ? background1 : background2,
-                    CornerRadius = new CornerRadius(10),
-                    Margin = new Thickness(5),
-                    BorderThickness = new Thickness(0),
-                    Effect = new DropShadowEffect
-                    {
-                        BlurRadius = 20,
-                        Opacity = 0.3,
-                        RenderingBias = RenderingBias.Performance,
-                        ShadowDepth = 5
-                    }
-                };
-
-                Grid innerGrid = new();
-                innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-
-                TextBlock textBlock = new()
-                {
-                    Text = displayVersion,
-                    Margin = new Thickness(10, 0, 0, 0),
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Foreground = new SolidColorBrush(Colors.AliceBlue),
-                    FontFamily = new FontFamily("Outfit"),
-                    FontSize = 20,
-                    FontWeight = FontWeights.Medium
-                };
-
-                Button button = new()
-                {
-                    Foreground = new SolidColorBrush(Colors.AliceBlue),
-                    FontSize = 10,
-                    Margin = new Thickness(5, 0, 10, 0),
-                    FontWeight = FontWeights.Medium,
-                    FontFamily = new FontFamily("Outfit"),
-                    Height = 30,
-                    Width = 100,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Center
-                };
-
-                ProgressBar progressBar = new()
-                {
-                    Height = 7,
-                    Margin = new Thickness(10, 5, 10, 7),
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Bottom,
-                    Visibility = Visibility.Collapsed
-                };
-
-                progressBar.Foreground = (LinearGradientBrush)progressBar.FindResource("AccentColorGradientBrush");
-
-                button.Content = version == currentVersion ? "Uninstall" : isInstalled ? "Switch" : "Install";
+                versionControls.Add((textBlock, button));
 
                 button.Click += async (s, e) =>
                 {
                     await DownloadVersionAsync(version, progressBar);
                 };
-
-                button.Style = (Style)button.FindResource("DefaultDownloadButtons");
-
-                innerGrid.Children.Add(textBlock);
-                innerGrid.Children.Add(button);
-                innerGrid.Children.Add(progressBar);
-                Grid.SetColumn(textBlock, 0);
-                Grid.SetColumn(button, 1);
-                Grid.SetColumnSpan(progressBar, 2);
-
-                border.Child = innerGrid;
 
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(80) });
                 grid.Children.Add(border);
@@ -144,6 +70,142 @@ namespace StarZLauncher.Classes
             }
 
             FullVersionsListStackPanel?.Children.Add(grid);
+
+            // Initial update of the controls
+            UpdateVersionControls(currentVersion);
+        }
+
+        private static Border CreateVersionBorder(int index, string version, string currentVersion, bool isInstalled,
+                                                   out TextBlock textBlock, out Button button, out ProgressBar progressBar)
+        {
+            string displayVersion = version;
+            if (version == currentVersion)
+            {
+                displayVersion += " - In use";
+            }
+            else if (isInstalled)
+            {
+                displayVersion += " - Downloaded";
+            }
+
+            Border border = new()
+            {
+                CornerRadius = new CornerRadius(10),
+                Margin = new Thickness(5),
+                BorderThickness = new Thickness(0),
+                Effect = new DropShadowEffect
+                {
+                    BlurRadius = 20,
+                    Opacity = 0.3,
+                    RenderingBias = RenderingBias.Performance,
+                    ShadowDepth = 5
+                },
+            };
+
+            Grid innerGrid = new();
+            innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+
+            textBlock = new TextBlock
+            {
+                Text = displayVersion,
+                Margin = new Thickness(10, 0, 0, 0),
+                VerticalAlignment = VerticalAlignment.Center,
+                FontFamily = new FontFamily("Outfit"),
+                FontSize = 20,
+                FontWeight = FontWeights.Medium
+            };
+
+            button = new Button
+            {
+                Foreground = new SolidColorBrush(Colors.AliceBlue),
+                FontSize = 10,
+                Margin = new Thickness(5, 0, 10, 0),
+                FontWeight = FontWeights.Medium,
+                FontFamily = new FontFamily("Outfit"),
+                Height = 30,
+                Width = 100,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Content = version == currentVersion ? "Uninstall" : isInstalled ? "Switch" : "Install"
+            };
+
+            progressBar = new ProgressBar
+            {
+                Height = 7,
+                Margin = new Thickness(10, 5, 10, 7),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                Visibility = Visibility.Collapsed
+            };
+
+            // Dynamic styles for the color values
+            border.Style = (Style)(index % 2 == 0 ? border.FindResource("MinecraftVersionsListPrimaryBorderBackgroundColor") : border.FindResource("MinecraftVersionsListSecondaryBorderBackgroundColor"));
+
+            textBlock.Style = (Style)textBlock.FindResource("MinecraftVersionsListTextBlockColor");
+
+            button.Style = (Style)button.FindResource("DefaultDownloadButtons");
+
+            progressBar.Style = (Style)progressBar.FindResource("MinecraftVersionsListProgressBarColor");
+
+            innerGrid.Children.Add(textBlock);
+            innerGrid.Children.Add(button);
+            Grid.SetColumn(textBlock, 0);
+            Grid.SetColumn(button, 1);
+            Grid.SetColumnSpan(progressBar, 2);
+            innerGrid.Children.Add(progressBar);
+
+            border.Child = innerGrid;
+
+            return border;
+        }
+
+        private static void UpdateVersionControls(string currentVersion)
+        {
+            for (int i = 0; i < versionControls.Count; i++)
+            {
+                string version = versionList[i];
+                string versionFolderPath = Path.Combine(ConfigManager.GetMinecraftInstallationPath(), $"Minecraft {version}");
+                bool isDownloaded = Directory.Exists(versionFolderPath);
+                var (textBlock, button) = versionControls[i];
+
+                // Update text block
+                string displayVersion = version;
+                if (version == currentVersion)
+                {
+                    displayVersion += " - In use";
+                }
+                else
+                {
+                    if (isDownloaded)
+                    {
+                        displayVersion += " - Downloaded";
+                    }
+                }
+                textBlock.Text = displayVersion;
+
+                // Update button content based on the current version and isDownloaded status
+
+                if (version == currentVersion)
+                {
+                    button.Content = "Uninstall";
+                }
+                else if (isDownloaded)
+                {
+                    button.Content = "Switch";
+                }
+                else
+                {
+                    button.Content = "Install";
+                }
+            }
+        }
+
+        public static async Task RefreshVersions()
+        {
+            // Get the current version again
+            string currentVersion = await PackageHelper.GetVersion();
+            UpdateVersionControls(currentVersion);
         }
 
         private static async Task DownloadVersionAsync(string version, ProgressBar progressBar)
@@ -177,7 +239,7 @@ namespace StarZLauncher.Classes
                     if (result == true)
                     {
                         await UnregisterAndDeleteVersionAsync(versionFolderPath);
-                        await LoadVersionsAsync();
+                        await RefreshVersions();
                         VersionHelper.LoadInstalledMinecraftVersion();
                     }
                     isRunning = false;
@@ -195,7 +257,7 @@ namespace StarZLauncher.Classes
                     else if (result == false)
                     {
                         await DeleteVersionAsync(versionFolderPath);
-                        await LoadVersionsAsync();
+                        await RefreshVersions();
                         VersionHelper.LoadInstalledMinecraftVersion();
                         isRunning = false;
                     }
