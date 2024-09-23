@@ -41,7 +41,7 @@ Thank you for being a part of this journey.
 - **Version Control**: Effortlessly manage your Minecraft versions.
 - **Music Player & Downloader**: Play musics from your computer or download them from YouTube. Build your own playlist and enjoy the auto shuffle algorithm while you play!
 - **Hardware Monitoring**: View useful informations about your computer, like GPU & CPU names, temperatures, loads and fans speed, Motherboard name, Local IP Address and more!
-- **Clean & Intuitive UI**: Enjoy a user-friendly and aesthetically pleasing interface.
+- **Clean & Intuitive UI**: Enjoy a user-friendly, fully customizable and aesthetically pleasing interface.
 - **Compatibility**: Many debbuging techniques to handle many cases and scenarios.
 - **And many more !**
 
