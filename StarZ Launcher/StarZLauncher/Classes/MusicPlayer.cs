@@ -203,8 +203,7 @@ namespace StarZLauncher.Classes
             // Stop and close the MediaPlayer
             MediaPlayer.Stop();
             MediaPlayer.Close();
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
-            GC.WaitForPendingFinalizers();
+            GC.Collect(0, GCCollectionMode.Forced);
 
             // Reset music-related state
             IsStopped = true;

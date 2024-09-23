@@ -9,15 +9,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using WK.Libraries.BetterFolderBrowserNS;
-using System.Collections.Generic;
-using System.Windows.Media;
 
 namespace StarZLauncher.Windows
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-
-        public static MainWindow? mainWindow;
         private static bool isVersionsListLoaded;
 
         // Making them public to be used somewhere else
@@ -27,8 +23,6 @@ namespace StarZLauncher.Windows
         public static Rectangle? MusicPlayerTabImage;
         public static Rectangle? SettingsTabImage;
         public static Rectangle? ComputerTabImage;
-        public static Rectangle? CloseImage;
-        public static Rectangle? MinimizeImage;
         public static Image? CurrentlyPlayingSongImage;
 
         public static TabControl? MainTabControl;
@@ -118,19 +112,23 @@ namespace StarZLauncher.Windows
             CustomThemeCheckBox = CheckBoxCustomTheme;
 
             // Individual TextBlocks
+            bool debugHW = ConfigManager.GetDebugHardwareMonitoring();
+            if (debugHW == false)
+            {
+                cpuTempTextBlock = CPUTempTextBlock;
+                gpuTempTextBlock = GPUTempTextBlock;
+                gpuNameTextBlock = GPUNameTextBlock;
+                cpuNameTextBlock = CPUNameTextBlock;
+                gpuLoadTextBlock = GPULoadTextBlock;
+                cpuLoadTextBlock = CPULoadTextBlock;
+                cpufanTextBlock = CPUFanTextBlock;
+                gpufanTextBlock = GPUFanTextBlock;
+                memoryTextBlock = MemoryTextBlock;
+                motherboardTextBlock = MotherboardTextBlock;
+                ipaddressTextBlock = IPAddressTextBlock;
+            }
             MusicPlayerInformationTextBlock = MusicPlayerInfoTextBlock;
             minecraftInstallationPathTextBlock = MinecraftInstallationPathTextBlock;
-            cpuTempTextBlock = CPUTempTextBlock;
-            gpuTempTextBlock = GPUTempTextBlock;
-            gpuNameTextBlock = GPUNameTextBlock;
-            cpuNameTextBlock = CPUNameTextBlock;
-            gpuLoadTextBlock = GPULoadTextBlock;
-            cpuLoadTextBlock = CPULoadTextBlock;
-            cpufanTextBlock = CPUFanTextBlock;
-            gpufanTextBlock = GPUFanTextBlock;
-            memoryTextBlock = MemoryTextBlock;
-            motherboardTextBlock = MotherboardTextBlock;
-            ipaddressTextBlock = IPAddressTextBlock;
             CurrentlyPlayingSongTitle = CurrentlyPlayingTitle;
             CurrentlyPlayingSongArtist = CurrentlyPlayingArtist;
             CurrentlyPlayingSongTime = CurrentlyPlayingTime;
@@ -142,10 +140,6 @@ namespace StarZLauncher.Windows
 
             // Slider
             CurrentlyPlayingSongVolumeSlider = VolumeSlider;
-
-            // Buttons
-            CloseImage = CloseButton;
-            MinimizeImage = MinimizeButton;
 
             // TextBoxes
             URLTextBox = urlTextBox;
@@ -198,7 +192,7 @@ namespace StarZLauncher.Windows
                 {
                     EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
                 };
-                this.BeginAnimation(Window.OpacityProperty, animation);
+                this.BeginAnimation(OpacityProperty, animation);
 
                 // Wait for 3 seconds before setting the visibility of the grid to Hidden
                 await Task.Delay(1000);
@@ -209,7 +203,7 @@ namespace StarZLauncher.Windows
                     To = 0,
                     Duration = new Duration(TimeSpan.FromSeconds(0.5)),
                 };
-                OpeningAnim.BeginAnimation(Image.OpacityProperty, opacityAnimation);
+                OpeningAnim.BeginAnimation(OpacityProperty, opacityAnimation);
 
                 await Task.Delay(500);
                 // Handle the Completed event to hide the grid when the opacity animation is finished

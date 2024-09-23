@@ -238,28 +238,32 @@ namespace StarZLauncher.Classes
         {
             try
             {
-                // Get the local machine's IP addresses
-                string hostName = Dns.GetHostName();
-                IPAddress[] localIPs = Dns.GetHostAddresses(hostName);
-
-                // Find the IPv4 address (assuming one exists)
-                foreach (IPAddress ip in localIPs)
+                bool debug = ConfigManager.GetDebugHardwareMonitoring();
+                if (debug == false)
                 {
-                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    // Get the local machine's IP addresses
+                    string hostName = Dns.GetHostName();
+                    IPAddress[] localIPs = Dns.GetHostAddresses(hostName);
+
+                    // Find the IPv4 address (assuming one exists)
+                    foreach (IPAddress ip in localIPs)
                     {
-                        ipaddressTextBlock!.Dispatcher.Invoke(() =>
+                        if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
-                            ipaddressTextBlock!.Text = $"Local IP Address: {ip}";
-                        });
-                        return;
+                            ipaddressTextBlock!.Dispatcher.Invoke(() =>
+                            {
+                                ipaddressTextBlock!.Text = $"Local IP Address: {ip}";
+                            });
+                            return;
+                        }
                     }
-                }
 
-                // If no IPv4 address found
-                ipaddressTextBlock!.Dispatcher.Invoke(() =>
-                {
-                    ipaddressTextBlock!.Text = "Local IP Address: Not Found";
-                });
+                    // If no IPv4 address found
+                    ipaddressTextBlock!.Dispatcher.Invoke(() =>
+                    {
+                        ipaddressTextBlock!.Text = "Local IP Address: Not Found";
+                    });
+                }
             }
             catch (Exception ex)
             {

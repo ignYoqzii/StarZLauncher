@@ -23,9 +23,7 @@ namespace StarZLauncher.Classes
         {
             if (!IsMinecraftOpened)
             {
-                var MinecraftApplication = await PackageHelper.GetPackage();
-                if (MinecraftApplication == null) return;
-
+                var MinecraftApplication = await PackageHelper.GetPackage() ?? throw new Exception("Minecraft could not be launched. This is likely due to it not being installed or being corrupted.");
                 await MinecraftApplication.LaunchAsync();
                 Minecraft = Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault();
 
@@ -81,14 +79,30 @@ namespace StarZLauncher.Classes
 
             if (openFileDialog.ShowDialog() != true) return;
 
-            await OpenGame();
+            try
+            {
+                await OpenGame();
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog($"{ex.Message}", "Error!", false);
+                return;
+            }
             await InjectAndHandlePresence(openFileDialog.FileName);
         }
 
         // Launch game and inject default DLL on left-click
         public async static void LaunchGameOnLeftClick()
         {
-            await OpenGame();
+            try
+            {
+                await OpenGame();
+            }
+            catch (Exception ex) 
+            {
+                StarZMessageBox.ShowDialog($"{ex.Message}", "Error!", false);
+                return;
+            }
 
             string DefaultDLLName = DLLsManager.DefaultDLL!;
 
