@@ -1783,7 +1783,7 @@
 
 
 
-        <Border x:Name="DarkBackgroundWindows" Visibility="Collapsed" HorizontalAlignment="Center" Height="564" Width="904" Opacity="0.7" BorderThickness="0.5" VerticalAlignment="Center" CornerRadius="20" Background="Black"/>
+        <Border x:Name="DarkerBackgroundOverlay" Visibility="Collapsed" HorizontalAlignment="Center" Height="564" Width="904" Opacity="0.7" BorderThickness="0.5" VerticalAlignment="Center" CornerRadius="20" Background="Black"/>
 
 
 

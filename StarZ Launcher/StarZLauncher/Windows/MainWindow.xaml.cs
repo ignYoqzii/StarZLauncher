@@ -149,7 +149,7 @@ namespace StarZLauncher.Windows
             // DLLs List Box
             DLLsListManager = DllList;
 
-            BackgroundForWindowsOnTop = DarkBackgroundWindows;
+            BackgroundForWindowsOnTop = DarkerBackgroundOverlay;
 
             DefaultDLLText = DefaultDLLLabel;
 

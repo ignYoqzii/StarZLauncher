@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Windows
 {
@@ -13,6 +14,14 @@ namespace StarZLauncher.Windows
             InitializeComponent();
             CurrentName = currentName;
             DataContext = this;
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            // Hide the BackgroundForWindowsOnTop element when closing
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
+
+            base.OnClosing(e); // Call the base method
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

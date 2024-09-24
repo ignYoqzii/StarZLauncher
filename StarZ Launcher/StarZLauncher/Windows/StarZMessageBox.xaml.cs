@@ -15,12 +15,17 @@ namespace StarZLauncher.Windows
             InitializeComponent();
         }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            // Hide the BackgroundForWindowsOnTop element when closing
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
+
+            base.OnClosing(e); // Call the base method
+        }
+
         public static bool? ShowDialog(string message, string title, bool showCancelButton = true)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
-            }));
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
             StarZMessageBox messageBox = new();
             messageBox.Message.Text = message;
             messageBox.Title.Text = title;
@@ -32,28 +37,19 @@ namespace StarZLauncher.Windows
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
-            }));
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
-            }));
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
         }
 
         private void CloseButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DialogResult = false;
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
-            }));
+            BackgroundForWindowsOnTop!.Visibility = Visibility.Hidden;
         }
     }
 }
