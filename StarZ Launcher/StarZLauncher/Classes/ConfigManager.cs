@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace StarZLauncher.Classes
         {
             { "DefaultDLL", "None" },
             { "DiscordRPC", true },
+            { "DiscordRPCIdleStatus", "In the launcher" },
             { "DiscordRPCShowGameVersion", true },
             { "DiscordRPCShowDLLName", true },
             { "Theme", "LightTheme" },
@@ -94,6 +96,7 @@ namespace StarZLauncher.Classes
 
         public static string GetDefaultDLL() => (string)settings["DefaultDLL"];
         public static bool GetDiscordRPC() => (bool)settings["DiscordRPC"];
+        public static string GetDiscordRPCIdleStatus() => (string)settings["DiscordRPCIdleStatus"];
         public static bool GetDiscordRPCShowGameVersion() => (bool)settings["DiscordRPCShowGameVersion"];
         public static bool GetDiscordRPCShowDLLName() => (bool)settings["DiscordRPCShowDLLName"];
         public static string GetTheme() => (string)settings["Theme"];
@@ -108,6 +111,7 @@ namespace StarZLauncher.Classes
         public static void SetDefaultDLL(string newDefaultDLL) => UpdateSetting("DefaultDLL", newDefaultDLL);
         public static void SetTheme(string newTheme) => UpdateSetting("Theme", newTheme);
         public static void SetDiscordRPC(bool value) => UpdateSetting("DiscordRPC", value);
+        public static void SetDiscordRPCIdleStatus(string newIdleStatus) => UpdateSetting("DiscordRPCIdleStatus", newIdleStatus);
         public static void SetDiscordRPCShowGameVersion(bool value) => UpdateSetting("DiscordRPCShowGameVersion", value);
         public static void SetDiscordRPCShowDLLName(bool value) => UpdateSetting("DiscordRPCShowDLLName", value);
         public static void SetInjectionDelay(string newInjectionDelay) => UpdateSetting("InjectionDelay", newInjectionDelay);

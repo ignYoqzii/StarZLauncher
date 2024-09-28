@@ -427,7 +427,7 @@
                                 </Rectangle.OpacityMask>
                             </Rectangle>
 
-                            
+
                             <ScrollViewer x:Name="versionsScrollView" VerticalScrollBarVisibility="Hidden" Margin="10,66,10,10" Opacity="0.8">
 
 
@@ -1030,7 +1030,7 @@
                         <TextBlock x:Name="CurrentlyPlayingArtist" Text="From Artist" TextAlignment="Left" FontFamily="Outfit" FontWeight="Medium" FontSize="10" Foreground="{DynamicResource TextColor}" Margin="146,493,145,102"/>
                         <TextBlock x:Name="CurrentlyPlayingTime" Text="00:00" TextAlignment="Right" FontFamily="Outfit" FontWeight="Medium" FontSize="8" Foreground="{DynamicResource TextColor}" Margin="266,508,533,89"/>
 
-                        <Border Background="{DynamicResource ProgressBarColor}" CornerRadius="2" BorderThickness="1" Margin="308,509,279,90">
+                        <Border Background="{DynamicResource IconColor}" CornerRadius="2" BorderThickness="1" Margin="308,509,279,90">
 
                             <ProgressBar x:Name="CurrentlyPlayingProgress" Minimum="0" Maximum="100" Value="0" Background="Transparent" BorderThickness="0" Margin="0,0,0,0" Foreground="{DynamicResource AccentColorGradientBrush}"/>
 
@@ -1412,7 +1412,7 @@
 
                         <Label x:Name="OfflineMode" Content="Offline Mode" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" FontFamily="Outfit" HorizontalContentAlignment="Left" Opacity="1" HorizontalAlignment="Left" Margin="467,218,0,0" VerticalAlignment="Top" Width="105"/>
 
-                        <ToggleButton x:Name="OfflineModeToggle" Style="{StaticResource DefaultToggleButtonStyle}" IsChecked="True" Margin="732,222,65,365" Click="OfflineMode_Click"/>
+                        <CheckBox x:Name="OfflineModeToggle" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource CustomCheckbox}" Margin="728,222,0,0" Click="OfflineMode_Click" />
 
                         <Rectangle x:Name="MinecraftInstallationPathReset" ToolTip="Reset" Style="{DynamicResource IconsStyle}" Width="15" Height="15" Margin="657,267,167,325" MouseLeftButtonDown="MinecraftInstallationPathReset_MouseLeftButtonDown" Panel.ZIndex="4">
                             <Rectangle.OpacityMask>
@@ -1487,10 +1487,10 @@
                         <TextBlock x:Name="GeneralTextBlock" Text="General" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="467,174,253,394"/>
 
 
-                        <TextBlock x:Name="LaunchOptionsTextBlock" Text="Launch" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="98,390,512,179"/>
+                        <TextBlock x:Name="LaunchOptionsTextBlock" Text="Launch" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="98,384,512,185"/>
 
 
-                        <TextBlock x:Name="DiscordOptionsTextBlock" Text="Discord" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="467,389,151,179"/>
+                        <TextBlock x:Name="DiscordOptionsTextBlock" Text="Discord" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="467,384,151,185"/>
 
 
                         <Rectangle x:Name="ResetAllThemes" ToolTip="Reset all themes to default." Style="{DynamicResource IconsStyle}" Width="15" Height="15" Margin="220,314,604,279" MouseLeftButtonDown="ResetAllThemes_MouseLeftButtonDown" Panel.ZIndex="4">
@@ -1736,31 +1736,40 @@
 
 
 
-                        <Label x:Name="DiscordRPC" Content="Discord Rich Presence" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" FontFamily="Outfit" Opacity="1" HorizontalAlignment="Left" Margin="463,430,0,0" VerticalAlignment="Top" Width="166"/>
+                        <Label x:Name="DiscordRPC" Content="Rich Presence" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" FontFamily="Outfit" Opacity="1" HorizontalAlignment="Left" Margin="463,422,0,0" VerticalAlignment="Top" Width="166"/>
 
 
 
-                        <ToggleButton x:Name="DRP" Style="{StaticResource DefaultToggleButtonStyle}" IsChecked="True" Margin="732,434,65,153" Click="DRP_Click"/>
+                        <CheckBox x:Name="DRP" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource CustomCheckbox}" Margin="728,428,0,0" Click="DRP_Click" />
 
 
 
-                        <Grid x:Name="DiscordOptions" Margin="443,449,44,100">
+                        <Grid x:Name="DiscordOptions" Margin="443,437,44,95">
+
+                            <TextBlock x:Name="StatusTextBlock" Text="Status" TextAlignment="Left" FontSize="15px" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="25,45,211,6"/>
+                            <Border x:Name="StatusBackground" Background="{DynamicResource SecondaryBackgroundColor}" Height="20" CornerRadius="7" Margin="209,45,21,10">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
+                                </Border.Effect>
+                                <TextBox x:Name="StatusTextBox" Text="" FontWeight="Medium" TextChanged="StatusTextBox_TextChanged" Foreground="{DynamicResource TextColor}" FontFamily="Outfit" FontSize="11px" Background="Transparent" BorderThickness="0" VerticalAlignment="Center" TextAlignment="Justify" Margin="10,0,10,0"/>
+                            </Border>
+
+                            <Line X1="0" Y1="0" X2="0" Y2="20" Stroke="{DynamicResource IconColor}" StrokeThickness="2" Margin="190,18,161,37" />
+
+
+                            <Label x:Name="ShowGameVersion" Content="Game Version" FontFamily="Outfit" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" Opacity="1" HorizontalAlignment="Left" Margin="20,12,0,0" VerticalContentAlignment="Center" VerticalAlignment="Top" Width="105" Height="26"/>
 
 
 
-                            <Label x:Name="ShowGameVersion" Content="Show Game Version" FontFamily="Outfit" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" Opacity="1" HorizontalAlignment="Left" Margin="20,3,0,0" VerticalAlignment="Top" Width="152"/>
+                            <Label x:Name="ShowDLLName" Content="DLL Name" FontFamily="Outfit" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" Opacity="1" HorizontalAlignment="Left" Margin="203,12,0,0" VerticalAlignment="Top" Height="26"/>
 
 
 
-                            <Label x:Name="ShowDLLName" Content="Show DLL Name" FontFamily="Outfit" FontSize="15px" Foreground="{DynamicResource TextColor}" FontWeight="Medium" Opacity="1" HorizontalAlignment="Left" Margin="20,25,0,0" VerticalAlignment="Top"/>
+                            <CheckBox x:Name="SGV" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource CustomCheckbox}" Margin="125,18,0,0" Click="SGV_Click" />
 
 
 
-                            <ToggleButton x:Name="SGV" Style="{StaticResource DefaultToggleButtonStyle}" IsChecked="True" Margin="289,6,21,29" Click="SGV_Click"/>
-
-
-
-                            <ToggleButton x:Name="SDN" Style="{StaticResource DefaultToggleButtonStyle}" IsChecked="True" Margin="289,29,21,8" Click="SDN_Click"/>
+                            <CheckBox x:Name="SDN" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource CustomCheckbox}" Margin="285,18,0,0" Click="SDN_Click" />
 
 
 

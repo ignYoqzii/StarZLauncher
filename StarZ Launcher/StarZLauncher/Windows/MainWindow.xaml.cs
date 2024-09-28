@@ -84,6 +84,7 @@ namespace StarZLauncher.Windows
         public MainWindow()
         {
             InitializeComponent();
+            LoadSettingsFromFile();
 
             // Images
             HomeTabImage = HomeTab;
@@ -161,7 +162,6 @@ namespace StarZLauncher.Windows
             InstallStatusText = InstallationStatus;
 
             // Loading part
-            LoadSettingsFromFile();
             Loader.Load();
             // Start the HardwareMonitoring
             bool debug = ConfigManager.GetDebugHardwareMonitoring();
@@ -440,6 +440,7 @@ namespace StarZLauncher.Windows
         // Event for Discord RPC option
         private void DRP_Click(object sender, RoutedEventArgs e)
         {
+            CheckBoxAnimation(sender);
             if (DRP.IsChecked == true)
             {
                 DiscordOptions.Visibility = Visibility.Visible;
@@ -454,13 +455,18 @@ namespace StarZLauncher.Windows
             {
                 DiscordOptions.Visibility = Visibility.Collapsed;
                 ConfigManager.SetDiscordRPC(false); // set DiscordRPC to false
-                DiscordRichPresenceManager.DiscordClient.ClearPresence();
+                bool offlineMode = ConfigManager.GetOfflineMode();
+                if (!offlineMode)
+                {
+                    DiscordRichPresenceManager.DiscordClient.ClearPresence();
+                }
             }
         }
 
         // Event for show game version option
         private void SGV_Click(object sender, RoutedEventArgs e)
         {
+            CheckBoxAnimation(sender);
             if (SGV.IsChecked == true)
             {
                 ConfigManager.SetDiscordRPCShowGameVersion(true);
@@ -474,6 +480,7 @@ namespace StarZLauncher.Windows
         // Event for show dll name option
         private void SDN_Click(object sender, RoutedEventArgs e)
         {
+            CheckBoxAnimation(sender);
             if (SDN.IsChecked == true)
             {
                 ConfigManager.SetDiscordRPCShowDLLName(true);
@@ -533,7 +540,7 @@ namespace StarZLauncher.Windows
         private void ALTTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Get the text value from the TextBox
-            string textValue = altTextBox!.Text;
+            string textValue = ALTTextBox.Text;
 
             // Validate the entered value
             if (!string.IsNullOrEmpty(textValue))
@@ -542,7 +549,7 @@ namespace StarZLauncher.Windows
                 if (!int.TryParse(textValue, out int value))
                 {
                     // If it's not numeric, remove the last character
-                    altTextBox!.Text = textValue.Substring(0, textValue.Length - 1);
+                    ALTTextBox.Text = textValue.Substring(0, textValue.Length - 1);
                 }
                 else
                 {
@@ -550,14 +557,14 @@ namespace StarZLauncher.Windows
                     if (value < 0 || value > 10000)
                     {
                         // If it's out of range, set it to the nearest valid value
-                        altTextBox!.Text = (value < 0 ? 0 : 10000).ToString();
+                        ALTTextBox.Text = (value < 0 ? 0 : 10000).ToString();
                     }
                     else
                     {
                         // Limit the value to 5000 and prevent further insertion
                         if (value == 10000 && textValue.Length > 5)
                         {
-                            altTextBox!.Text = "10000";
+                            ALTTextBox.Text = "10000";
                         }
                         else
                         {
@@ -571,6 +578,32 @@ namespace StarZLauncher.Windows
             {
                 // Set the value to 0 if the TextBox is empty
                 ConfigManager.SetAccelerateLoadingTime("0");
+            }
+        }
+
+        private void CheckBoxAnimation(object sender)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                // Access the ControlTemplate elements
+
+                if (checkBox.Template.FindName("button", checkBox) is Border button)
+                {
+                    Storyboard Storyboard1 = (Storyboard)checkBox.FindResource("right");
+                    Storyboard Storyboard2 = (Storyboard)checkBox.FindResource("left");
+                    if (checkBox.IsChecked == true)
+                    {
+                        // Start the "right" animation when checked
+                        Storyboard2.Stop(button);
+                        Storyboard1.Begin(button); // Pass the target element
+                    }
+                    else
+                    {
+                        // Start the "left" animation when unchecked
+                        Storyboard1.Stop(button);
+                        Storyboard2.Begin(button); // Pass the target element
+                    }
+                }
             }
         }
 
@@ -591,6 +624,8 @@ namespace StarZLauncher.Windows
             {
                 DRP.IsChecked = true;
                 DiscordOptions.Visibility = Visibility.Visible;
+                string DiscordStatusText = ConfigManager.GetDiscordRPCIdleStatus();
+                StatusTextBox.Text = DiscordStatusText;
             }
             else
             {
@@ -620,10 +655,10 @@ namespace StarZLauncher.Windows
             InjectionDelayTextBox.Text = InjectionDelayValue;
 
             string AccelerateLoadingTimeValue = ConfigManager.GetAccelerateLoadingTime();
-            altTextBox!.Text = AccelerateLoadingTimeValue;
+            ALTTextBox.Text = AccelerateLoadingTimeValue;
 
             string MinecraftInstallationPath = ConfigManager.GetMinecraftInstallationPath();
-            MinecraftInstallationPathTextBlock!.Text = MinecraftInstallationPath;
+            MinecraftInstallationPathTextBlock.Text = MinecraftInstallationPath;
         }
 
         private void VSyncEnable_Click(object sender, RoutedEventArgs e)
@@ -715,6 +750,7 @@ namespace StarZLauncher.Windows
 
         private void OfflineMode_Click(object sender, RoutedEventArgs e)
         {
+            CheckBoxAnimation(sender);
             if (OfflineModeToggle.IsChecked == true)
             {
                 ConfigManager.SetOfflineMode(true);
@@ -739,6 +775,32 @@ namespace StarZLauncher.Windows
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             MusicPlayer.UpdateVolume(e.NewValue);
+        }
+
+        private void StatusTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                // Get the text value from the TextBox
+                string text = StatusTextBox.Text;
+                ConfigManager.SetDiscordRPCIdleStatus(text);
+
+                bool OfflineMode = ConfigManager.GetOfflineMode();
+                bool isDiscordRPCEnabled = ConfigManager.GetDiscordRPC();
+                if (!OfflineMode && isDiscordRPCEnabled)
+                {
+                    var presence = DiscordRichPresenceManager.DiscordClient.CurrentPresence;
+                    // All those checks are to only update the IdlePresence when user is actually on idle mode.
+                    if (presence != null && string.IsNullOrWhiteSpace(presence.Details) && !Launch.IsMinecraftOpened)
+                    {
+                        DiscordRichPresenceManager.IdlePresence(text);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog($"Error updating Discord status: {ex.Message}", "Error", false);
+            }
         }
     }
 }

@@ -117,11 +117,11 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Fody" Version="6.8.1">
+		<PackageReference Include="Fody" Version="6.8.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Discord.Net" Version="3.15.3" />
+		<PackageReference Include="Discord.Net" Version="3.16.0" />
 		<PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
 		<PackageReference Include="LibreHardwareMonitorLib" Version="0.9.3" />
 		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
@@ -139,7 +139,8 @@
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 		<PackageReference Include="System.ValueTuple" Version="4.5.0" />
 		<PackageReference Include="TagLibSharp" Version="2.3.0" />
-		<PackageReference Include="YoutubeExplode" Version="6.4.0" />
+		<PackageReference Include="YoutubeExplode" Version="6.4.2" />
+		<PackageReference Include="YoutubeExplode.Converter" Version="6.4.2" />
 		<Reference Include="Accessibility" />
 		<Reference Include="System.DirectoryServices.AccountManagement" />
 		<Reference Include="System.IO.Compression" />

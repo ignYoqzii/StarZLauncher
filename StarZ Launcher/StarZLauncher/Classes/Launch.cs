@@ -63,7 +63,8 @@ namespace StarZLauncher.Classes
         {
             if (ConfigManager.GetDiscordRPC() && !ConfigManager.GetOfflineMode())
             {
-                DiscordRichPresenceManager.IdlePresence();
+                string state = ConfigManager.GetDiscordRPCIdleStatus();
+                DiscordRichPresenceManager.IdlePresence(state);
             }
         }
 
@@ -118,6 +119,7 @@ namespace StarZLauncher.Classes
                 if (!DiscordRPCisEnabled || OfflineModeisEnabled) return;
 
                 DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {versionNumber}" : "Playing Minecraft");
+                DiscordRichPresenceManager.DiscordClient.UpdateState("");
 
                 return;
             }

@@ -129,157 +129,41 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="ComboboxButtonStyle" TargetType="{x:Type ToggleButton}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ToggleButton}">
-                            <Border
-                            x:Name="border"
-                            BorderBrush="#FF00C7ED"
-                            BorderThickness="0,1,1,1"
-                            CornerRadius="0,10,10,0" Background="{DynamicResource AccentColorGradientBrush}">
-                                <ContentPresenter />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
 
-            <Style x:Key="ComboboxTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Style x:Key="CustomCheckbox" TargetType="CheckBox">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Grid>
-                                <Border
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="#FF00C7ED"
-                                BorderThickness="1,1,0,1"
-                                CornerRadius="10,0,0,10">
-                                    <ScrollViewer x:Name="PART_ContentHost" />
-                                </Border>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="DefaultComboboxStyle" TargetType="{x:Type ComboBox}">
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ComboBox}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition />
-                                    <ColumnDefinition MaxWidth="18" />
-                                </Grid.ColumnDefinitions>
-                                <TextBox
-                                Name="PART_EditableTextBox"
-                                Height="{TemplateBinding Height}"
-                                Padding="5,5,0,0"
-                                Focusable="False"
-                                FontFamily="Inter"
-                                FontSize="10px"
-                                Foreground="AliceBlue"
-                                IsEnabled="False"
-                                SelectionBrush="#FF00C7ED"
-                                Style="{StaticResource ComboboxTextBoxStyle}" Background="{DynamicResource AccentColorGradientBrush}" >
-                                </TextBox>
-                                <ToggleButton
-                                Grid.Column="1"
-                                Height="{TemplateBinding Height}"
-                                Margin="0"
-                                ClickMode="Press"
-                                Cursor="Hand"
-                                Focusable="False"
-                                IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                Style="{StaticResource ComboboxButtonStyle}">
-                                    <Path
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Data="M 0 0 L 4 5 L 8 0"
-                                    Fill="White" Stretch="Fill" Width="5" Height="4" Margin="0,10,0,0" />
-                                </ToggleButton>
-                                <ContentPresenter
-                                Name="ContentSite"
-                                Grid.Column="0"
-                                Margin="5,0,0,0"
-                                Opacity="1"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Content="{TemplateBinding SelectionBoxItem}"
-                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
-                                <Popup
-                                Name="Popup"
-                                AllowsTransparency="True"
-                                Focusable="False"
-                                IsOpen="{TemplateBinding IsDropDownOpen}"
-                                Placement="Bottom"
-                                PopupAnimation="Fade">
-                                    <Border
-                                    BorderBrush="#6D6D6D"
-                                    BorderThickness="1"
-                                    CornerRadius="10">
-                                        <Grid
-                                        Name="DropDown"
-                                        MinWidth="{TemplateBinding ActualWidth}"
-                                        MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                                        SnapsToDevicePixels="True" Background="{DynamicResource AccentColorGradientBrush}">
-                                            <Border
-                                            x:Name="DropDownBorder"
-                                            BorderBrush="#6D6D6D"
-                                            BorderThickness="1"
-                                            CornerRadius="10" />
-                                            <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                            </ScrollViewer>
-                                        </Grid>
-                                    </Border>
-                                </Popup>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="DefaultToggleButtonStyle" TargetType="ToggleButton">
-                <Setter Property="Foreground" Value="#FFF" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Grid Width="40" Height="20">
-                                <Border x:Name="border" BorderBrush="#6D6D6D" BorderThickness="2" CornerRadius="10" Background="#9E9E9E" Cursor="Hand">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="0.5*" />
-                                            <ColumnDefinition Width="0.5*" />
-                                        </Grid.ColumnDefinitions>
-                                    </Grid>
-                                </Border>
-                                <Ellipse x:Name="SwitchCircle" Fill="#FFF" StrokeThickness="2" Margin="1" Cursor="Hand">
-                                    <Ellipse.Width>
-                                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
-                                    </Ellipse.Width>
-                                </Ellipse>
-                            </Grid>
+                        <ControlTemplate TargetType="CheckBox">
+                            <StackPanel Orientation="Horizontal">
+                                <Grid >
+                                    <Border x:Name="border" Width="40" Height="20" Cursor="Hand" CornerRadius="10" Margin="5,0"/>
+                                    <Border x:Name="button" Background="#FFF" Margin="9,0,0,0" Height="16" Width="16" CornerRadius="13.5" Cursor="Hand" HorizontalAlignment="Left"  />
+                                </Grid>
+                            </StackPanel>
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="right">
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="button" Duration="0:0:0.3" From="9,0,0,0" To="25,0,0,0" >
+                                        <ThicknessAnimation.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </ThicknessAnimation.EasingFunction>
+                                    </ThicknessAnimation>
+                                </Storyboard>
+                                <Storyboard x:Key="left">
+                                    <ThicknessAnimation Storyboard.TargetProperty="Margin" Storyboard.TargetName="button" Duration="0:0:0.3" From="25,0,0,0" To="9,0,0,0" >
+                                        <ThicknessAnimation.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </ThicknessAnimation.EasingFunction>
+                                    </ThicknessAnimation>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
                             <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="SwitchCircle" Property="Margin" Value="20,1,1,1" />
-                                    <Setter TargetName="border" Property="Background" >
-                                        <Setter.Value>
-                                            <DynamicResource ResourceKey="AccentColorGradientBrush"/>
-                                        </Setter.Value>
-                                    </Setter>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter TargetName="border" Property="Background" Value="#72767C"/>
+                                    <Setter TargetName="button" Property="Margin" Value="9,0,0,0"/>
                                 </Trigger>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter TargetName="SwitchCircle" Property="Margin" Value="1,1,20,1" />
-                                    <Setter TargetName="border" Property="Background" Value="#9E9E9E" />
+                                <Trigger Property="IsChecked" Value="true">
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentColorGradientBrush}"/>
+                                    <Setter TargetName="button" Property="Margin" Value="25,0,0,0"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -295,7 +179,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="RepeatButton">
-                            <Border  BorderThickness="0" CornerRadius="2" Background="{DynamicResource ProgressBarColor}" Height="3"/>
+                            <Border  BorderThickness="0" CornerRadius="2" Background="{DynamicResource IconColor}" Height="3"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

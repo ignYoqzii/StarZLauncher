@@ -194,7 +194,8 @@ namespace StarZLauncher.Classes
             bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
             if (DiscordRPCisEnabled == true & OfflineModeisEnabled == false)
             {
-                DiscordRichPresenceManager.IdlePresence();
+                string state = ConfigManager.GetDiscordRPCIdleStatus();
+                DiscordRichPresenceManager.IdlePresence(state);
             }
         }
 
@@ -223,7 +224,8 @@ namespace StarZLauncher.Classes
 
             if (discordRPCisEnabled && !offlineModeIsEnabled)
             {
-                DiscordRichPresenceManager.IdlePresence();
+                string state = ConfigManager.GetDiscordRPCIdleStatus();
+                DiscordRichPresenceManager.IdlePresence(state);
             }
         }
 
@@ -273,7 +275,7 @@ namespace StarZLauncher.Classes
                 var youtube = new YoutubeClient();
                 var video = await youtube.Videos.GetAsync(videoUrl);
                 var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
-                var audioStreamInfo = streamManifest.GetAudioStreams().OrderByDescending(s => s.Bitrate).FirstOrDefault();
+                var audioStreamInfo = streamManifest.GetAudioOnlyStreams().OrderByDescending(s => s.Bitrate).FirstOrDefault();
 
                 if (audioStreamInfo != null)
                 {
@@ -281,14 +283,8 @@ namespace StarZLauncher.Classes
                     var tempFilePath = Path.Combine(MusicDirectoryPath, $"{sanitizedTitle}.temp");
                     var outputFilePath = Path.Combine(MusicDirectoryPath, $"{sanitizedTitle}.mp3");
 
-                    // Download the audio stream to a temporary file
-                    using (var httpClient = new HttpClient())
-                    using (var response = await httpClient.GetAsync(audioStreamInfo.Url, HttpCompletionOption.ResponseHeadersRead))
-                    using (var inputStream = await response.Content.ReadAsStreamAsync())
-                    using (var outputStream = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 8192, useAsync: true))
-                    {
-                        await inputStream.CopyToAsync(outputStream);
-                    }
+                    // Download the audio stream to a temporary file using YoutubeClient's DownloadAsync
+                    await youtube.Videos.Streams.DownloadAsync(audioStreamInfo, tempFilePath);
 
                     // Convert the temporary file to MP3 format
                     ConvertToMp3(tempFilePath, outputFilePath);

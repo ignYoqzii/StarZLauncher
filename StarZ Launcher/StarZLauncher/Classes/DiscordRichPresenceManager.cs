@@ -18,10 +18,11 @@ namespace StarZLauncher.Classes
             }
         }
 
-        public static void SetPresence(string state = "In the launcher", string details = "")
+        public static void SetPresence(string details = "")
         {
             try
             {
+                string state = ConfigManager.GetDiscordRPCIdleStatus();
                 DiscordClient.SetPresence(new RichPresence
                 {
                     State = state,
@@ -42,11 +43,11 @@ namespace StarZLauncher.Classes
             }
         }
 
-        public static void IdlePresence()
+        public static void IdlePresence(string state)
         {
             try
             {
-                DiscordClient.UpdateState("In the launcher");
+                DiscordClient.UpdateState(state);
                 DiscordClient.UpdateDetails("");
             }
             catch (Exception ex)

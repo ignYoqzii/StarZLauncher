@@ -140,37 +140,35 @@ namespace StarZLauncher.Classes
             var packageUri = new Uri(packagePath);
             var deploymentOperation = PackageManager.RegisterPackageAsync(packageUri, null, DeploymentOptions.DevelopmentMode);
 
-            deploymentOperation.Completed += (asyncInfo, asyncStatus) =>
+            deploymentOperation.Completed += async (asyncInfo, asyncStatus) =>
             {
-                Task.Run(() =>
+                await Application.Current.Dispatcher.InvokeAsync(async () =>
                 {
-                    Application.Current.Dispatcher.Invoke(async () =>
+                    if (asyncStatus == AsyncStatus.Completed)
                     {
-                        if (asyncStatus == AsyncStatus.Completed)
+                        StarZMessageBox.ShowDialog("App package registered successfully! Don't forget to apply your profile!", "Success!", false);
+
+                        InstallStatusText!.Foreground = Brushes.AliceBlue;
+                        InstallStatusText.Text = "";
+                        VersionHelper.LoadInstalledMinecraftVersion();
+                    }
+                    else
+                    {
+                        string detailedError = "";
+                        if (asyncInfo.ErrorCode != null)
                         {
-                            StarZMessageBox.ShowDialog("App package registered successfully! Don't forget to apply your profile!", "Success!", false);
-                            InstallStatusText!.Foreground = Brushes.AliceBlue;
-                            InstallStatusText.Text = "";
-                            VersionHelper.LoadInstalledMinecraftVersion();
+                            detailedError = $"Error code: {asyncInfo.ErrorCode.HResult}, Message: {asyncInfo.ErrorCode.Message}";
                         }
-                        else
-                        {
-                            string detailedError = "";
-                            if (asyncInfo.ErrorCode != null)
-                            {
-                                detailedError = $"Error code: {asyncInfo.ErrorCode.HResult}, Message: {asyncInfo.ErrorCode.Message}";
-                            }
 
-                            StarZMessageBox.ShowDialog($"Failed to register app package. {detailedError} Please enable Developer Mode. For help, join our Discord server.", "Failed!", false);
+                        StarZMessageBox.ShowDialog($"Failed to register app package. {detailedError} Please enable Developer Mode. For help, join our Discord server.", "Failed!", false);
 
-                            // You can log this error for further debugging.
-                            LogManager.Log($"Failed to register package: {detailedError}", "PackageRegistration.txt");
+                        // You can log this error for further debugging.
+                        LogManager.Log($"Failed to register package: {detailedError}", "PackageRegistration.txt");
 
-                            InstallStatusText!.Foreground = Brushes.AliceBlue;
-                            InstallStatusText.Text = "";
-                        }
-                        await MinecraftVersionsListManager.RefreshVersions();
-                    });
+                        InstallStatusText!.Foreground = Brushes.AliceBlue;
+                        InstallStatusText.Text = "";
+                    }
+                    await MinecraftVersionsListManager.RefreshVersions();
                 });
             };
         }
