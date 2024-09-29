@@ -57,7 +57,7 @@ Thank you for being a part of this journey.
   <p>This is the Light Mode interface.</p>
 
   <img src="https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/refs/heads/main/StarZ%20Launcher/StarZLauncher/Resources/ScreenShotCustomTheme.png" alt="Custom Theme (Customizable in the launcher)" width="800">
-  <p>This is the Customizable Theme interface.</p>
+  <p>This is a Custom Theme (Editable in the launcher).</p>
 </div>
 
 
