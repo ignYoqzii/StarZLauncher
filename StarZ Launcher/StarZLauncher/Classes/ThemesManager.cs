@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Media;
 using static StarZLauncher.Windows.MainWindow;
 
@@ -12,7 +13,7 @@ namespace StarZLauncher.Classes
 {
     public static class ThemesManager
     {
-        private static readonly string themeFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Theme", "StarZTheme.json");
+        private static readonly string themeFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Theme", "StarZTheme.szt");
         private static readonly string ActiveColor = "#F6F8FA";
         private static readonly string logFileName = "ThemesManager.txt";
 
@@ -158,7 +159,7 @@ namespace StarZLauncher.Classes
         {
             foreach (var key in colors.Keys)
             {
-                Application.Current.Resources[key] = GetSolidColorBrush(colors[key]);
+                System.Windows.Application.Current.Resources[key] = GetSolidColorBrush(colors[key]);
             }
         }
 
@@ -183,7 +184,7 @@ namespace StarZLauncher.Classes
                 (byte)((accentColor1.B + accentColor2.B) / 2)), 0.5)); // Intermediate Color
             accentGradientBrush.GradientStops.Add(new GradientStop(accentColor2, 1.0));
 
-            Application.Current.Resources["AccentColorGradientBrush"] = accentGradientBrush;
+            System.Windows.Application.Current.Resources["AccentColorGradientBrush"] = accentGradientBrush;
         }
 
         public static Dictionary<string, string>? LoadThemeColors(string themeName)
@@ -271,6 +272,92 @@ namespace StarZLauncher.Classes
             catch (Exception ex)
             {
                 LogManager.Log($"Error resetting themes: {ex.Message}", logFileName);
+            }
+        }
+
+        public static void ExportTheme(bool showSuccessMessage)
+        {
+            try
+            {
+                // Check if the current theme file exists
+                if (!File.Exists(themeFilePath))
+                {
+                    LogManager.Log("No theme file found to backup.", logFileName);
+                    return;
+                }
+
+                // Show the RenameWindow to ask the user for a new file name
+                BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
+                var renameWindow = new RenameWindow("StarZTheme.szt");
+                bool? result = renameWindow.ShowDialog();
+
+                if (result == true && !string.IsNullOrEmpty(renameWindow.NewName!))
+                {
+                    // Define the backup file path with the new file name and .json extension
+                    string backupFilePath = Path.Combine(Path.GetDirectoryName(themeFilePath) ?? string.Empty, renameWindow.NewName! + ".szt");
+
+                    // Copy the existing theme file to the backup location
+                    File.Copy(themeFilePath, backupFilePath, true); // Use true to overwrite if the file exists
+
+                    if (showSuccessMessage)
+                    {
+                        StarZMessageBox.ShowDialog($"Current theme exported successfully as backup to {backupFilePath}.", "Success!", false);
+                    }
+                    LogManager.Log($"Current theme exported successfully as backup to {backupFilePath}.", logFileName);
+                }
+                else
+                {
+                    LogManager.Log("Backup operation cancelled by user.", logFileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog($"Error exporting current theme as backup: {ex.Message}", "Error!", false);
+                LogManager.Log($"Error exporting current theme as backup: {ex.Message}", logFileName);
+            }
+        }
+
+        public static void ImportTheme()
+        {
+            try
+            {
+                // Show an OpenFileDialog to let the user select the theme file to import
+                using OpenFileDialog openFileDialog = new();
+                openFileDialog.Filter = "StarZ Theme files (*.szt)|*.szt";
+                openFileDialog.Title = "Select a valid StarZ Theme .szt file to import";
+
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    LogManager.Log("Import operation cancelled by user.", logFileName);
+                    return; // User canceled the dialog
+                }
+
+                // Export the current theme as a backup before importing the new one
+                ExportTheme(false);
+
+                // Read the contents of the new theme file
+                var importedThemeJson = File.ReadAllText(openFileDialog.FileName);
+                var importedThemes = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(importedThemeJson);
+
+                // Validate the imported theme's structure and color values
+                if (importedThemes == null)
+                {
+                    LogManager.Log("Imported theme file is invalid or corrupt.", logFileName);
+                    return;
+                }
+
+                // Overwrite the existing StarZTheme.json with the new theme
+                File.WriteAllText(themeFilePath, importedThemeJson);
+
+                LogManager.Log($"Theme imported successfully from {openFileDialog.FileName} and applied.", logFileName);
+
+                // Apply the imported theme right after import
+                ApplyTheme("CustomTheme");
+            }
+            catch (Exception ex)
+            {
+                StarZMessageBox.ShowDialog($"Error importing theme: {ex.Message}", "Error!", false);
+                LogManager.Log($"Error importing theme: {ex.Message}", logFileName);
             }
         }
     }

@@ -1478,9 +1478,9 @@
                         </Border>
 
 
-                        <TextBlock x:Name="ThemesTextBlock" Text="Themes" FontSize="15px" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="0,222,671,365" HorizontalAlignment="Right" Width="70"/>
+                        <TextBlock x:Name="ThemesTextBlock" Text="Themes" FontSize="15px" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="0,222,681,365" HorizontalAlignment="Right" Width="60"/>
 
-                        <TextBlock x:Name="CreateACustomThemeTextBlock" Text="Themes Manager" FontSize="15px" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="0,311,621,276" HorizontalAlignment="Right" Width="120"/>
+                        <TextBlock x:Name="CreateACustomThemeTextBlock" Text="Colors Manager" FontSize="15px" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="0,311,627,276" HorizontalAlignment="Right" Width="114"/>
 
                         <TextBlock x:Name="PersonalizeTextBlock" Text="Personalize" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="0,174,586,394" HorizontalAlignment="Right" Width="155"/>
 
@@ -1493,16 +1493,32 @@
                         <TextBlock x:Name="DiscordOptionsTextBlock" Text="Discord" FontSize="30" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="467,384,151,185"/>
 
 
-                        <Rectangle x:Name="ResetAllThemes" ToolTip="Reset all themes to default." Style="{DynamicResource IconsStyle}" Width="15" Height="15" Margin="220,314,604,279" MouseLeftButtonDown="ResetAllThemes_MouseLeftButtonDown" Panel.ZIndex="4">
+                        <Rectangle x:Name="ResetAllThemes" ToolTip="Restore the currently applied themes to default." Style="{DynamicResource IconsStyle}" Width="15" Height="15" Margin="212,314,611,278" MouseLeftButtonDown="ResetAllThemes_MouseLeftButtonDown" Panel.ZIndex="4">
                             <Rectangle.OpacityMask>
                                 <ImageBrush ImageSource="/Resources/Reset.png" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+
+                        <Line X1="0" Y1="0" X2="0" Y2="50" Stroke="{DynamicResource IconColor}" StrokeThickness="2" Margin="278,246,559,309" />
+
+
+                        <Rectangle x:Name="ImportThemes" ToolTip="Import a valid StarZ Theme .stz file and apply it." Style="{DynamicResource IconsStyle}" Margin="292,247,497,310" MouseLeftButtonDown="ImportThemes_MouseLeftButtonDown" Panel.ZIndex="4">
+                            <Rectangle.OpacityMask>
+                                <ImageBrush ImageSource="/Resources/Import.png" RenderOptions.BitmapScalingMode="HighQuality" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+
+
+                        <Rectangle x:Name="ExportThemes" ToolTip="Export the current themes as a backup." Style="{DynamicResource IconsStyle}" Margin="347,247,442,310" MouseLeftButtonDown="ExportThemes_MouseLeftButtonDown" Panel.ZIndex="4">
+                            <Rectangle.OpacityMask>
+                                <ImageBrush ImageSource="/Resources/Export.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
 
                         <Button Height="19" x:Name="OpenThemesManager" Panel.ZIndex="3" Content="Open" FontWeight="Bold" FontSize="10px" HorizontalAlignment="Left" Cursor="Hand" Foreground="AliceBlue" FontFamily="Outfit" Template="{StaticResource DefaultButtons}" VerticalAlignment="Top" Margin="345,312,0,0" Click="OpenThemesManager_Click" Width="53"/>
 
 
-                        <CheckBox x:Name="CheckBoxLightMode" Cursor="Hand" Margin="150,247,639,0" VerticalAlignment="Top" Width="50" Height="50" IsEnabled="True" Checked="CheckBoxTheme_Checked" Tag="LightTheme">
+                        <CheckBox x:Name="CheckBoxLightMode" Cursor="Hand" Margin="98,247,691,0" VerticalAlignment="Top" Width="50" Height="50" IsEnabled="True" Checked="CheckBoxTheme_Checked" Tag="LightTheme">
 
 
                             <CheckBox.Resources>
@@ -1558,7 +1574,7 @@
 
 
 
-                        <CheckBox x:Name="CheckBoxDarkMode" Cursor="Hand" Margin="225,247,564,0" VerticalAlignment="Top" IsEnabled="True" Width="50" Height="50" Checked="CheckBoxTheme_Checked" Tag="DarkTheme">
+                        <CheckBox x:Name="CheckBoxDarkMode" Cursor="Hand" Margin="153,247,636,0" VerticalAlignment="Top" IsEnabled="True" Width="50" Height="50" Checked="CheckBoxTheme_Checked" Tag="DarkTheme">
 
 
                             <CheckBox.Resources>
@@ -1612,7 +1628,7 @@
 
                         </CheckBox>
 
-                        <CheckBox x:Name="CheckBoxCustomTheme" Cursor="Hand" Margin="300,247,489,0" VerticalAlignment="Top" IsEnabled="True" Width="50" Height="50" Checked="CheckBoxTheme_Checked" Tag="CustomTheme">
+                        <CheckBox x:Name="CheckBoxCustomTheme" Cursor="Hand" Margin="208,247,581,0" VerticalAlignment="Top" IsEnabled="True" Width="50" Height="50" Checked="CheckBoxTheme_Checked" Tag="CustomTheme">
 
 
                             <CheckBox.Resources>
@@ -1667,7 +1683,7 @@
                         </CheckBox>
 
 
-                        <Rectangle x:Name="CustomIconRectangle" Fill="#F6F8FA" IsHitTestVisible="False" Panel.ZIndex="1" HorizontalAlignment="Left" Opacity="1" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Height="30" Margin="310,257,0,320">
+                        <Rectangle x:Name="CustomIconRectangle" Fill="#F6F8FA" IsHitTestVisible="False" Panel.ZIndex="1" HorizontalAlignment="Left" Opacity="1" RenderOptions.BitmapScalingMode="HighQuality" Width="30" Height="30" Margin="218,257,0,320">
                             <Rectangle.OpacityMask>
                                 <ImageBrush ImageSource="/Resources/Custom.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>

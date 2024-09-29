@@ -284,7 +284,7 @@ namespace StarZLauncher.Classes
             if (result == true)
             {
                 string currentFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Packages", "Microsoft.MinecraftUWP_8wekyb3d8bbwe", "LocalState", "games", "com.mojang");
-                string newFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Profiles", renameWindow.NewNameProfile);
+                string newFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Profiles", renameWindow.NewName);
 
                 // Check if the current folder path exists
                 if (Directory.Exists(currentFolderPath))
@@ -292,7 +292,7 @@ namespace StarZLauncher.Classes
                     // Check if the new folder name already exists in the "Profiles" directory
                     if (Directory.Exists(newFolderPath))
                     {
-                        string modifiedNewName = GetUniqueFolderName(renameWindow.NewNameProfile!);
+                        string modifiedNewName = GetUniqueFolderName(renameWindow.NewName!);
                         newFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Profiles", modifiedNewName);
                     }
 

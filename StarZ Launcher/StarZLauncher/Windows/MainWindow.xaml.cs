@@ -238,7 +238,7 @@ namespace StarZLauncher.Windows
                 // Validate color values using ThemesManager
                 if (colors == null || !ThemesManager.AreColorValuesValid(colors))
                 {
-                    string message = theme == "CustomTheme" ? "Please create a custom theme using the Themes Manager before applying it." : "Invalid color values for the selected theme.";
+                    string message = theme == "CustomTheme" ? "Please create a custom theme using the Colors Manager before applying it." : "Invalid color values for the selected theme.";
 
                     StarZMessageBox.ShowDialog(message, "Error!", false);
                     checkBox.IsChecked = false;
@@ -708,7 +708,6 @@ namespace StarZLauncher.Windows
                 // Apply the theme
                 string theme = "CustomTheme";
                 ThemesManager.ApplyTheme(theme);
-                ThemesManager.UpdateCheckBoxes(theme);
             }
             BackgroundForWindowsOnTop.Visibility = Visibility.Collapsed;
         }
@@ -801,6 +800,16 @@ namespace StarZLauncher.Windows
             {
                 StarZMessageBox.ShowDialog($"Error updating Discord status: {ex.Message}", "Error", false);
             }
+        }
+
+        private void ExportThemes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ThemesManager.ExportTheme(true);
+        }
+
+        private void ImportThemes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ThemesManager.ImportTheme();
         }
     }
 }

@@ -19,22 +19,16 @@
     <Grid>
 
         <StackPanel Orientation="Vertical" Margin="10,10,10,1">
-            <TextBlock Text="Current name :" FontSize="15" FontWeight="Medium" FontFamily="Outfit" Foreground="AliceBlue" Margin="0,0,0,10">
-                <TextBlock.Effect>
-                    <DropShadowEffect/>
-                </TextBlock.Effect>
+            <TextBlock Text="Current name :" FontSize="15" FontWeight="Medium" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" Margin="0,0,0,10">
             </TextBlock>
-            <Label Content="{Binding CurrentName}" Foreground="AliceBlue" FontFamily="Outfit" FontWeight="Medium" Background="#242c35" FontSize="15" VerticalContentAlignment="Center" Margin="0,0,0,10" Height="30">
+            <Label Content="{Binding CurrentName}" Opacity="0.7" Foreground="{DynamicResource TextColor}" FontFamily="Outfit" FontWeight="Medium" Background="{DynamicResource SecondaryBackgroundColor}" FontSize="15" VerticalContentAlignment="Center" Margin="0,0,0,10" Height="30">
                 <Label.Effect>
-                    <DropShadowEffect/>
+                    <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
                 </Label.Effect>
             </Label>
-            <TextBlock Text="New name :" FontWeight="Medium" FontFamily="Outfit" Foreground="AliceBlue" FontSize="15" Margin="0,0,0,10">
-                <TextBlock.Effect>
-                    <DropShadowEffect/>
-                </TextBlock.Effect>
+            <TextBlock Text="New name :" FontWeight="Medium" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" FontSize="15" Margin="0,0,0,10">
             </TextBlock>
-            <TextBox x:Name="NewNameTextBox" Background="#242c35" BorderThickness="0" FontWeight="Medium" FontFamily="Outfit" BorderBrush="#202020" VerticalContentAlignment="Center" Cursor="IBeam" FontSize="15" Foreground="AliceBlue" Margin="0,0,0,10" Height="30">
+            <TextBox x:Name="NewNameTextBox" Opacity="0.7" Background="{DynamicResource SecondaryBackgroundColor}" BorderThickness="0" FontWeight="Medium" FontFamily="Outfit" BorderBrush="#202020" VerticalContentAlignment="Center" Cursor="IBeam" FontSize="15" Foreground="AliceBlue" Margin="0,0,0,10" Height="30">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="Foreground" Value="AliceBlue"/>
@@ -58,21 +52,15 @@
                     </Style>
                 </TextBox.Style>
                 <TextBox.Effect>
-                    <DropShadowEffect/>
+                    <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
                 </TextBox.Effect>
             </TextBox>
         </StackPanel>
-        <Rectangle Panel.ZIndex="-1" RadiusX="20" RadiusY="20" Fill="#171d22" Opacity="1" Stroke="AliceBlue" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" StrokeThickness="0">
+        <Rectangle Panel.ZIndex="-1" RadiusX="20" RadiusY="20" Fill="{DynamicResource PrimaryBackgroundColor}" Opacity="1" Stroke="AliceBlue" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5" StrokeThickness="0">
         </Rectangle>
         <Button x:Name="CancelRenameButton" Content="Cancel" FontFamily="Outfit" FontWeight="Bold" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" Click="CancelButton_Click" Width="50" Margin="65,163,85,10">
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
         </Button>
         <Button x:Name="SaveRenameButton" Content="Save" FontFamily="Outfit" FontWeight="Bold" Cursor="Hand"  Panel.ZIndex="4" Foreground="AliceBlue" Template="{StaticResource DefaultButtons}" IsDefault="True" Click="SaveButton_Click" Margin="10,163,140,10">
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
         </Button>
     </Grid>
 </Window>

@@ -20,37 +20,21 @@
 
         <StackPanel Orientation="Vertical">
 
-            <TextBlock x:Name="Title" Text="Title" FontFamily="Outfit" FontSize="25" FontWeight="Medium" Foreground="AliceBlue" Margin="55,10,55,0">
-                <TextBlock.Effect>
-                    <DropShadowEffect/>
-                </TextBlock.Effect>
+            <TextBlock x:Name="Title" Text="Title" FontFamily="Outfit" FontSize="25" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="55,10,55,0">
+
             </TextBlock>
 
-            <TextBlock x:Name="Message" Text="Message" FontSize="15" FontFamily="Outfit" FontWeight="Medium" Foreground="AliceBlue" Margin="10,10,10,5" Height="122" TextWrapping="Wrap" Padding="5, 0, 5, 0">
-                <TextBlock.Effect>
-                    <DropShadowEffect/>
-                </TextBlock.Effect>
+            <TextBlock x:Name="Message" Text="Message" FontSize="15" FontFamily="Outfit" FontWeight="Medium" Foreground="{DynamicResource TextColor}" Margin="10,10,10,5" Height="122" TextWrapping="Wrap" Padding="5, 0, 5, 0">
+
             </TextBlock>
 
         </StackPanel>
 
         <Button x:Name="OKButton" Content="OK" Cursor="Hand" Foreground="AliceBlue" FontFamily="Outfit" FontWeight="Bold" Template="{StaticResource DefaultButtons}" Height="30" Click="OKButton_Click" Width="50" Margin="10,185,440,10">
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
         </Button>
 
         <Button x:Name="CancelButton" Content="Cancel" Cursor="Hand" Foreground="AliceBlue" FontFamily="Outfit" FontWeight="Bold" Template="{StaticResource DefaultButtons}" Height="30" Click="CancelButton_Click" Width="50" Margin="65,185,385,10">
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
         </Button>
-
-        <Image 
-            Source="/Resources/Info.png" 
-            RenderOptions.BitmapScalingMode="HighQuality" 
-            Height="35" 
-            Width="35" Margin="10,10,455,180" />
 
         <Rectangle x:Name="CloseButton" Style="{DynamicResource IconsStyle}" Height="25" Width="25" Margin="465,10,10,190" MouseLeftButtonDown="CloseButton_MouseLeftButtonDown" Panel.ZIndex="3">
             <Rectangle.OpacityMask>
@@ -58,11 +42,17 @@
             </Rectangle.OpacityMask>
         </Rectangle>
 
+        <Rectangle Style="{DynamicResource IconsStyle}" Margin="10,10,457,181" MouseLeftButtonDown="CloseButton_MouseLeftButtonDown" Panel.ZIndex="3">
+            <Rectangle.OpacityMask>
+                <ImageBrush ImageSource="/Resources/Info.png" RenderOptions.BitmapScalingMode="HighQuality" />
+            </Rectangle.OpacityMask>
+        </Rectangle>
+
         <Rectangle 
             Panel.ZIndex="-1" 
             RadiusX="20" 
             RadiusY="20" 
-            Fill="#171d22" 
+            Fill="{DynamicResource PrimaryBackgroundColor}" 
             Opacity="1" 
             Stroke="AliceBlue" 
             Margin="0,0,0,0" 

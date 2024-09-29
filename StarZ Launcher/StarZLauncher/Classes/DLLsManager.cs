@@ -50,19 +50,21 @@ namespace StarZLauncher.Classes
         {
             if (DLLsListManager!.SelectedItem is not string selectedDll) return;
 
-            var renameWindow = new RenameWindow(selectedDll);
+            string dllName = Path.GetFileNameWithoutExtension(selectedDll);
+
+            var renameWindow = new RenameWindow(dllName);
             BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
 
             if (renameWindow.ShowDialog() == true)
             {
                 var currentName = Path.Combine(DLL_FOLDER, selectedDll);
-                var newName = Path.Combine(DLL_FOLDER, renameWindow.NewNameDLLs!);
+                var newName = Path.Combine(DLL_FOLDER, renameWindow.NewName! + ".dll");
                 File.Move(currentName, newName);
 
-                _dlls[DLLsListManager.SelectedIndex] = renameWindow.NewNameDLLs!;
+                _dlls[DLLsListManager.SelectedIndex] = renameWindow.NewName! + ".dll";
                 if (selectedDll == DefaultDLL)
                 {
-                    ConfigManager.SetDefaultDLL(renameWindow.NewNameDLLs!);
+                    ConfigManager.SetDefaultDLL(renameWindow.NewName! + ".dll");
                     LoadDefaultDLL();
                 }
             }

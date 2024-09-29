@@ -5,6 +5,8 @@ using StarZLauncher.Classes;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using static StarZLauncher.Windows.MainWindow;
+using System.IO;
+using System;
 
 namespace StarZLauncher.Windows
 {
