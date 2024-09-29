@@ -1502,7 +1502,7 @@
                         <Line X1="0" Y1="0" X2="0" Y2="50" Stroke="{DynamicResource IconColor}" StrokeThickness="2" Margin="278,246,559,309" />
 
 
-                        <Rectangle x:Name="ImportThemes" ToolTip="Import a valid StarZ Theme .stz file and apply it." Style="{DynamicResource IconsStyle}" Margin="292,247,497,310" MouseLeftButtonDown="ImportThemes_MouseLeftButtonDown" Panel.ZIndex="4">
+                        <Rectangle x:Name="ImportThemes" ToolTip="Import a valid StarZ Theme .szt file and apply it." Style="{DynamicResource IconsStyle}" Margin="292,247,497,310" MouseLeftButtonDown="ImportThemes_MouseLeftButtonDown" Panel.ZIndex="4">
                             <Rectangle.OpacityMask>
                                 <ImageBrush ImageSource="/Resources/Import.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>
