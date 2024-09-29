@@ -51,9 +51,15 @@ Thank you for being a part of this journey.
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/refs/heads/main/StarZ%20Launcher/StarZLauncher/Resources/ScreenShotDarkMode.png" alt="Dark Mode" width="800">
+  <p>This is the Dark Mode interface.</p>
+  
   <img src="https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/refs/heads/main/StarZ%20Launcher/StarZLauncher/Resources/ScreenShotLightMode.png" alt="Light Mode" width="800">
+  <p>This is the Light Mode interface.</p>
+
   <img src="https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/refs/heads/main/StarZ%20Launcher/StarZLauncher/Resources/ScreenShotCustomTheme.png" alt="Custom Theme (Customizable in the launcher)" width="800">
+  <p>This is the Customizable Theme interface.</p>
 </div>
+
 
 ---
 
