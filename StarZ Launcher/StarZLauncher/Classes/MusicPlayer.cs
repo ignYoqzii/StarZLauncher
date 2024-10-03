@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -348,29 +349,25 @@ namespace StarZLauncher.Classes
         {
             try
             {
-                // Get the highest resolution thumbnail
-                var thumbnailUrl = video.Thumbnails.OrderByDescending(t => t.Resolution.Width * t.Resolution.Height)
-                    .Select(t => t.Url)
-                    .FirstOrDefault() ?? $"https://i.ytimg.com/vi/{video.Id}/hqdefault.jpg";
+                // Get the thumbnail
+                var thumbnailUrl = video.Thumbnails.Where(t => string.Equals(t.TryGetImageFormat(), "jpg", StringComparison.OrdinalIgnoreCase)).OrderByDescending(t => t.Resolution.Area).Select(t => t.Url).FirstOrDefault() ?? $"https://i.ytimg.com/vi/{video.Id}/hqdefault.jpg";
 
                 using var httpClient = new HttpClient();
                 byte[] imageData = await httpClient.GetByteArrayAsync(thumbnailUrl);
 
                 // Use a new instance of the TagLib.File class
-                using (var file = TagLib.File.Create(filePath))
-                {
-                    // Create a new picture object with the image data
-                    var picture = new TagLib.Picture(new TagLib.ByteVector(imageData));
+                using var file = TagLib.File.Create(filePath);
+                // Create a new picture object with the image data
+                var picture = new TagLib.Picture(new TagLib.ByteVector(imageData));
 
-                    // Assign the picture and author to the file's tag
-                    file.Tag.Pictures = new TagLib.IPicture[] { picture };
-                    file.Tag.Performers = video.Author.ChannelTitle.Split(',');
+                // Assign the picture and author to the file's tag
+                file.Tag.Pictures = new TagLib.IPicture[] { picture };
+                file.Tag.Performers = video.Author.ChannelTitle.Split(',');
 
-                    // Explicitly save changes
-                    file.Tag.DateTagged = DateTime.Now;
-                    file.Save();
-                    file.Dispose();
-                }
+                // Explicitly save changes
+                file.Tag.DateTagged = DateTime.Now;
+                file.Save();
+                file.Dispose();
             }
             catch (Exception ex)
             {
@@ -404,5 +401,26 @@ namespace StarZLauncher.Classes
             Artist = MusicPlayer.GetArtistFromSongFile(filePath);
             Image = MusicPlayer.GetImageFromSongFile(filePath);
         }
+    }
+
+    // For thumbnail embedding
+    public static class StringExtensions
+    {
+        public static string? NullIfEmptyOrWhiteSpace(this string str) => !string.IsNullOrEmpty(str.Trim()) ? str : null;
+    }
+
+    public static class Url
+    {
+        public static string? TryExtractFileName(string url) => Regex.Match(url, @".+/([^?]*)").Groups[1].Value.NullIfEmptyOrWhiteSpace();
+    }
+
+    public static class GenericExtensions
+    {
+        public static TOut Pipe<TIn, TOut>(this TIn input, Func<TIn, TOut> transform) => transform(input);
+    }
+
+    public static class ThumbnailExtensions
+    {
+        public static string? TryGetImageFormat(this Thumbnail thumbnail) => Url.TryExtractFileName(thumbnail.Url)?.Pipe(Path.GetExtension)?.Trim('.');
     }
 }
