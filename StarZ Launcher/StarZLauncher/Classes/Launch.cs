@@ -13,7 +13,6 @@ namespace StarZLauncher.Classes
         public static Process? Minecraft;
         private static readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
         public static string? DllNameLaunchOnRightClick { get; private set; }
-        private static readonly string? versionNumber = VersionHelper.VersionNumber;
 
         // Check if Minecraft is opened
         public static bool IsMinecraftOpened => (Minecraft = Process.GetProcessesByName("Minecraft.Windows").FirstOrDefault()) != null;
@@ -118,7 +117,7 @@ namespace StarZLauncher.Classes
 
                 if (!DiscordRPCisEnabled || OfflineModeisEnabled) return;
 
-                DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {versionNumber}" : "Playing Minecraft");
+                DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {VersionHelper.VersionNumber}" : "Playing Minecraft");
                 DiscordRichPresenceManager.DiscordClient.UpdateState("");
 
                 return;
@@ -168,7 +167,7 @@ namespace StarZLauncher.Classes
 
             if (!DiscordRPCisEnabled || OfflineModeisEnabled) return;
 
-            DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {versionNumber}" : "Playing Minecraft");
+            DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {VersionHelper.VersionNumber}" : "Playing Minecraft");
             DiscordRichPresenceManager.DiscordClient.UpdateState(DiscordShowDLLNameisEnabled ? $"With {dllName}" : "");
         }
     }
