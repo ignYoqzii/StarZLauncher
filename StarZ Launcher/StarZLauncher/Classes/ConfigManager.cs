@@ -12,7 +12,7 @@ namespace StarZLauncher.Classes
         // Default values for settings
         private static readonly Dictionary<string, object> DefaultSettings = new()
         {
-            { "DefaultDLL", "None" },
+            { "DefaultMod", "None" },
             { "DiscordRPC", true },
             { "DiscordRPCIdleStatus", "In the launcher" },
             { "DiscordRPCShowGameVersion", true },
@@ -94,7 +94,7 @@ namespace StarZLauncher.Classes
             }
         }
 
-        public static string GetDefaultDLL() => (string)settings["DefaultDLL"];
+        public static string GetDefaultMod() => (string)settings["DefaultMod"];
         public static bool GetDiscordRPC() => (bool)settings["DiscordRPC"];
         public static string GetDiscordRPCIdleStatus() => (string)settings["DiscordRPCIdleStatus"];
         public static bool GetDiscordRPCShowGameVersion() => (bool)settings["DiscordRPCShowGameVersion"];
@@ -108,7 +108,7 @@ namespace StarZLauncher.Classes
         public static bool GetDebugHardwareMonitoring() => (bool)settings["DebugHardwareMonitoring"];
         public static bool GetDebugFontInstaller() => (bool)settings["DebugFontInstaller"];
         
-        public static void SetDefaultDLL(string newDefaultDLL) => UpdateSetting("DefaultDLL", newDefaultDLL);
+        public static void SetDefaultMod(string newDefaultMod) => UpdateSetting("DefaultMod", newDefaultMod);
         public static void SetTheme(string newTheme) => UpdateSetting("Theme", newTheme);
         public static void SetDiscordRPC(bool value) => UpdateSetting("DiscordRPC", value);
         public static void SetDiscordRPCIdleStatus(string newIdleStatus) => UpdateSetting("DiscordRPCIdleStatus", newIdleStatus);

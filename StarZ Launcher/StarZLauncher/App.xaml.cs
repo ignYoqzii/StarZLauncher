@@ -34,7 +34,7 @@ public partial class App : Application
             string VersionsPath = Path.Combine(starZLauncherPath, "Versions");
             string profilesPath = Path.Combine(starZLauncherPath, "Profiles");
             string musicsPath = Path.Combine(starZLauncherPath, "Musics");
-            string dllsPath = Path.Combine(starZLauncherPath, "DLLs");
+            string dllsPath = Path.Combine(starZLauncherPath, "Mods");
             string logsPath = Path.Combine(starZLauncherPath, "Logs");
             string versionFilePath = Path.Combine(starZLauncherPath, "LauncherVersion.txt");
             string oldConfigFilePath = Path.Combine(starZLauncherPath, "Config.txt");

@@ -288,13 +288,13 @@ namespace StarZLauncher.Classes
 
                 // Show the RenameWindow to ask the user for a new file name
                 BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
-                var renameWindow = new RenameWindow("StarZTheme.szt");
-                bool? result = renameWindow.ShowDialog();
+                var editWindow = new EditWindow("StarZTheme.szt");
+                bool? result = editWindow.ShowDialog();
 
-                if (result == true && !string.IsNullOrEmpty(renameWindow.NewName!))
+                if (result == true && !string.IsNullOrEmpty(editWindow.NewName!))
                 {
                     // Define the backup file path with the new file name and .json extension
-                    string backupFilePath = Path.Combine(Path.GetDirectoryName(themeFilePath) ?? string.Empty, renameWindow.NewName! + ".szt");
+                    string backupFilePath = Path.Combine(Path.GetDirectoryName(themeFilePath) ?? string.Empty, editWindow.NewName! + ".szt");
 
                     // Copy the existing theme file to the backup location
                     File.Copy(themeFilePath, backupFilePath, true); // Use true to overwrite if the file exists

@@ -1,8 +1,6 @@
 <?xml version="1.0" ?>
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:StarZLauncher.Classes" xmlns:classes="clr-namespace:StarZLauncher.Classes" x:Class="StarZLauncher.Windows.MainWindow" mc:Ignorable="d" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="Transparent" AllowsTransparency="True" Title="StarZ Launcher v5" Height="564" Width="904" Loaded="Window_Loaded">
 
-
-
     <Grid>
 
 
@@ -600,13 +598,13 @@
 
                         </Border>
 
-                        <ListBox x:Name="DllList" Background="Transparent" BorderThickness="0" ItemsSource="{x:Static classes:MusicPlayer.MusicItems}" Margin="56,190,26,154" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ListBox x:Name="ModList" Background="Transparent" BorderThickness="0" ItemsSource="{x:Static classes:ModsManager.ModItems}" Margin="56,190,26,154" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" d:ItemsSource="{d:SampleData ItemCount=5}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ListBoxItem">
-                                                <Border x:Name="DLLsItemsBackground" HorizontalAlignment="Center" BorderThickness="0" Background="{DynamicResource SecondaryBackgroundColor}" CornerRadius="10" Padding="5,5,5,5" Width="710" Margin="0,10,0,10">
+                                                <Border x:Name="ModsItemsBackground" HorizontalAlignment="Center" BorderThickness="0" Background="{DynamicResource SecondaryBackgroundColor}" CornerRadius="10" Padding="5,5,5,5" Width="710" Margin="0,10,0,10">
                                                     <Border.Effect>
                                                         <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
                                                     </Border.Effect>
@@ -615,35 +613,41 @@
                                                             <ColumnDefinition Width="Auto"/>
                                                             <ColumnDefinition Width="*"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <Rectangle x:Name="DllImage" Fill="{DynamicResource IconColor}" RenderOptions.BitmapScalingMode="HighQuality" Width="100" Height="100">
+                                                        <!-- Image Binding -->
+                                                        <Rectangle x:Name="ModImage" Fill="{DynamicResource IconColor}" RenderOptions.BitmapScalingMode="HighQuality" Width="100" Height="100">
                                                             <Rectangle.OpacityMask>
-                                                                <ImageBrush ImageSource="/Resources/DLL.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="Uniform" />
+                                                                <ImageBrush ImageSource="{Binding ImageName}" RenderOptions.BitmapScalingMode="HighQuality" Stretch="Uniform" />
                                                             </Rectangle.OpacityMask>
                                                         </Rectangle>
                                                         <StackPanel Grid.Column="1" Margin="10">
-                                                            <TextBlock Text="DLLs Client / Mods" Foreground="{DynamicResource TextColor}" FontFamily="Outfit" FontSize="15"/>
-                                                            <TextBlock Text="{Binding}" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" FontSize="16" FontWeight="Medium" Margin="0,5,0,0"/>
-                                                            <TextBlock Text="Select me to edit !" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" FontSize="10" Margin="0,25,0,0"/>
+                                                            <!-- DLL Type Text -->
+                                                            <TextBlock Text="{Binding DisplayTypeText}" Foreground="{DynamicResource TextColor}" FontFamily="Outfit" FontSize="15"/>
+                                                            <!-- DLL Name -->
+                                                            <TextBlock Text="{Binding Name}" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" FontSize="16" FontWeight="Medium" Margin="0,5,0,0"/>
+                                                            <!-- URL if Web-based DLL -->
+                                                            <TextBlock Text="{Binding Url}" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" FontSize="10" Margin="0,0,0,0"/>
+                                                            <!-- Edit Prompt -->
+                                                            <TextBlock Text="Select me to edit!" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" FontSize="10" Margin="0,25,0,0"/>
                                                         </StackPanel>
                                                     </Grid>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsSelected" Value="True">
-                                                        <Setter TargetName="DLLsItemsBackground" Property="Opacity" Value="0.7"/>
-                                                        <Setter TargetName="DLLsItemsBackground" Property="BorderBrush" Value="White"/>
+                                                        <Setter TargetName="ModsItemsBackground" Property="Opacity" Value="0.7"/>
+                                                        <Setter TargetName="ModsItemsBackground" Property="BorderBrush" Value="White"/>
                                                     </Trigger>
                                                     <Trigger Property="IsMouseOver" Value="True">
                                                         <Trigger.EnterActions>
                                                             <BeginStoryboard>
                                                                 <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="DLLsItemsBackground" Storyboard.TargetProperty="Background.(SolidColorBrush.Opacity)" To="0.7" Duration="0:0:0.2"/>
+                                                                    <DoubleAnimation Storyboard.TargetName="ModsItemsBackground" Storyboard.TargetProperty="Background.(SolidColorBrush.Opacity)" To="0.7" Duration="0:0:0.2"/>
                                                                 </Storyboard>
                                                             </BeginStoryboard>
                                                         </Trigger.EnterActions>
                                                         <Trigger.ExitActions>
                                                             <BeginStoryboard>
                                                                 <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetName="DLLsItemsBackground" Storyboard.TargetProperty="Background.(SolidColorBrush.Opacity)" To="1" Duration="0:0:0.2"/>
+                                                                    <DoubleAnimation Storyboard.TargetName="ModsItemsBackground" Storyboard.TargetProperty="Background.(SolidColorBrush.Opacity)" To="1" Duration="0:0:0.2"/>
                                                                 </Storyboard>
                                                             </BeginStoryboard>
                                                         </Trigger.ExitActions>
@@ -656,13 +660,26 @@
                             </ListBox.ItemContainerStyle>
                         </ListBox>
 
+                        <Border x:Name="DLLURLBackground" Background="{DynamicResource SecondaryBackgroundColor}" CornerRadius="15" Margin="324,476,142,101">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="20" Opacity="0.3" RenderingBias="Performance" ShadowDepth="5"/>
+                            </Border.Effect>
+
+                            <!-- Grid to overlay the TextBox and the placeholder TextBlock -->
+                            <Grid>
+                                <!-- Placeholder TextBlock -->
+                                <TextBlock x:Name="DLLURLTextBlock" Text="Paste in a URL and press 'Enter' on your keyboard." FontSize="15" FontWeight="Medium" FontFamily="Outfit" Foreground="{DynamicResource TextColor}" VerticalAlignment="Center" Opacity="0.3" Padding="10,5,10,5" HorizontalAlignment="Center" IsHitTestVisible="False" Visibility="Visible" Width="373"/>
+
+                                <!-- TextBox -->
+                                <TextBox x:Name="dllurlTextBox" KeyDown="DllurlTextBox_KeyDown" Background="Transparent" BorderThickness="0" Padding="10,5,10,5" Foreground="{DynamicResource TextColor}" FontWeight="Medium" FontFamily="Outfit" FontSize="15" Width="374" Height="30" TextChanged="DllurlTextBox_TextChanged" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <Label Content="Default Mod on launch: N/A" x:Name="DefaultDLLLabel" Foreground="{DynamicResource TextColor}" Opacity="1" HorizontalContentAlignment="Left" FontFamily="Outfit" FontWeight="Medium" Margin="93,155,63,426"/>
 
 
-                        <Label Content="Default DLL on launch: N/A" x:Name="DefaultDLLLabel" Foreground="{DynamicResource TextColor}" Opacity="1" HorizontalContentAlignment="Left" FontFamily="Outfit" FontWeight="Medium" Margin="93,155,63,426"/>
 
-
-
-                        <Rectangle x:Name="DeleteIcon" ToolTip="Delete the selected DLL." Style="{DynamicResource IconsStyle}" Width="30" Height="30" Margin="267,476,542,101" MouseLeftButtonDown="Delete_MouseLeftButtonDown">
+                        <Rectangle x:Name="DeleteIcon" ToolTip="Delete the selected Mod." Style="{DynamicResource IconsStyle}" Width="30" Height="30" Margin="267,476,542,101" MouseLeftButtonDown="Delete_MouseLeftButtonDown">
                             <Rectangle.OpacityMask>
                                 <ImageBrush ImageSource="/Resources/Delete.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>
@@ -671,7 +688,7 @@
 
 
 
-                        <Rectangle x:Name="EditIcon" ToolTip="Edit the selected DLL name." Style="{DynamicResource IconsStyle}" Width="30" Height="30" Margin="209,476,600,101" MouseLeftButtonDown="Edit_MouseLeftButtonDown">
+                        <Rectangle x:Name="EditIcon" ToolTip="Edit the selected Mod." Style="{DynamicResource IconsStyle}" Width="30" Height="30" Margin="209,476,600,101" MouseLeftButtonDown="Edit_MouseLeftButtonDown">
                             <Rectangle.OpacityMask>
                                 <ImageBrush ImageSource="/Resources/Edit.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>
@@ -680,16 +697,16 @@
 
 
 
-                        <Rectangle x:Name="DefaultDLLIcon" ToolTip="Set the selected DLL as default on launch." Style="{DynamicResource IconsStyle}" MouseLeftButtonDown="SetDefaultDLLButton_MouseLeftButtonDown" Height="30" Width="30" Margin="93,476,716,101">
+                        <Rectangle x:Name="DefaultModIcon" ToolTip="Set the selected Mod as default on launch." Style="{DynamicResource IconsStyle}" MouseLeftButtonDown="SetDefaultModButton_MouseLeftButtonDown" Height="30" Width="30" Margin="93,476,716,101">
                             <Rectangle.OpacityMask>
-                                <ImageBrush ImageSource="/Resources/SetDefaultDLL.png" RenderOptions.BitmapScalingMode="HighQuality" />
+                                <ImageBrush ImageSource="/Resources/SetDefaultMod.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>
                         </Rectangle>
 
 
 
 
-                        <Rectangle x:Name="ResetDefaultDLLIcon" Height="30" Width="30" ToolTip="Reset the default DLL to none." Style="{DynamicResource IconsStyle}" Margin="151,476,658,101" MouseLeftButtonDown="ResetSetDefaultDLLButton_MouseLeftButtonDown">
+                        <Rectangle x:Name="ResetDefaultDLLIcon" Height="30" Width="30" ToolTip="Reset the default Mod to NONE." Style="{DynamicResource IconsStyle}" Margin="151,476,658,101" MouseLeftButtonDown="ResetSetDefaultDLLButton_MouseLeftButtonDown">
                             <Rectangle.OpacityMask>
                                 <ImageBrush ImageSource="/Resources/Reset.png" RenderOptions.BitmapScalingMode="HighQuality" />
                             </Rectangle.OpacityMask>
@@ -698,7 +715,7 @@
 
 
 
-                        <Button x:Name="AddDLLsButton" Content="+" Panel.ZIndex="4" ToolTip="Add a DLL." HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="40px" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" Foreground="AliceBlue" FontFamily="Inter" Template="{StaticResource DefaultButtons}" Margin="730,467,63,92" Click="AddDllsButton_OnLeftClick">
+                        <Button x:Name="AddDLLsButton" Content="+" Panel.ZIndex="4" ToolTip="Add a Mod from your computer." HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="DemiBold" FontSize="40px" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand" Foreground="AliceBlue" FontFamily="Inter" Template="{StaticResource DefaultButtons}" Margin="730,467,63,92" Click="AddDllsButton_OnLeftClick">
                         </Button>
 
 

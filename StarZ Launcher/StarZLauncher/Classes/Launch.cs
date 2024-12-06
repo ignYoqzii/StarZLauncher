@@ -5,13 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls.Primitives;
 
 namespace StarZLauncher.Classes
 {
     public static class Launch
     {
         public static Process? Minecraft;
-        private static readonly string DllsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "DLLs");
+        private static readonly string ModsFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Mods");
         public static string? DllNameLaunchOnRightClick { get; private set; }
 
         // Check if Minecraft is opened
@@ -74,7 +75,7 @@ namespace StarZLauncher.Classes
             {
                 Filter = "DLL files (*.dll)|*.dll|All files (*.*)|*.*",
                 RestoreDirectory = true,
-                InitialDirectory = DllsFolderPath
+                InitialDirectory = ModsFolderPath
             };
 
             if (openFileDialog.ShowDialog() != true) return;
@@ -104,9 +105,9 @@ namespace StarZLauncher.Classes
                 return;
             }
 
-            string DefaultDLLName = DLLsManager.DefaultDLL!;
+            string DefaultModName = ModsManager.DefaultMod!;
 
-            if (string.IsNullOrEmpty(DefaultDLLName) || DefaultDLLName == "None")
+            if (string.IsNullOrEmpty(DefaultModName) || DefaultModName == "None")
             {
                 Minecraft!.EnableRaisingEvents = true;
                 Minecraft.Exited += IfMinecraftExited;
@@ -123,10 +124,34 @@ namespace StarZLauncher.Classes
                 return;
             }
 
-            string dllFilePath = Path.Combine(DllsFolderPath, DefaultDLLName);
-            if (File.Exists(dllFilePath))
+            string ModFilePath = Path.Combine(ModsFolderPath, DefaultModName);
+
+            if (File.Exists(ModFilePath))
             {
-                await InjectAndHandlePresence(dllFilePath);
+                await ModsManager.VerifyAndUpdateModHash();
+
+                var result = ModsManager.GetDefaultModType();
+                if (result == "DLL")
+                {
+                    await InjectAndHandlePresence(ModFilePath);
+                }
+                else if (result == "EXE")
+                {
+                    if (int.TryParse(ConfigManager.GetInjectionDelay(), out int delayMilliseconds))
+                    {
+                        await Task.Delay(delayMilliseconds);
+                    }
+                    Process.Start(ModFilePath);
+                    string filenameWithoutExtension = Path.GetFileNameWithoutExtension(ModFilePath);
+                    SetDiscordPresence(filenameWithoutExtension);
+                    Minecraft!.EnableRaisingEvents = true;
+                    Minecraft.Exited += IfMinecraftExited;
+                }
+                else
+                {
+                    // Should not happen
+                    return;
+                }
             }
             else
             {
@@ -158,7 +183,7 @@ namespace StarZLauncher.Classes
         }
 
         // Handle Discord Rich Presence updates
-        private static void SetDiscordPresence(string dllName)
+        private static void SetDiscordPresence(string ModName)
         {
             bool DiscordRPCisEnabled = ConfigManager.GetDiscordRPC();
             bool OfflineModeisEnabled = ConfigManager.GetOfflineMode();
@@ -168,7 +193,7 @@ namespace StarZLauncher.Classes
             if (!DiscordRPCisEnabled || OfflineModeisEnabled) return;
 
             DiscordRichPresenceManager.DiscordClient.UpdateDetails(DiscordShowGameVersionisEnabled ? $"Playing Minecraft {VersionHelper.VersionNumber}" : "Playing Minecraft");
-            DiscordRichPresenceManager.DiscordClient.UpdateState(DiscordShowDLLNameisEnabled ? $"With {dllName}" : "");
+            DiscordRichPresenceManager.DiscordClient.UpdateState(DiscordShowDLLNameisEnabled ? $"With {ModName}" : "");
         }
     }
 }

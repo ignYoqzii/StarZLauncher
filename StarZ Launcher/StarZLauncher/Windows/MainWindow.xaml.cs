@@ -71,7 +71,7 @@ namespace StarZLauncher.Windows
         public static TextBox? injectiondelayTextBox;
         public static TextBox? altTextBox;
 
-        public static ListBox? DLLsListManager;
+        public static ListBox? ModsListManager;
 
         public static Label? DefaultDLLText;
         public static Label? CurrentMinecraftVersion;
@@ -148,7 +148,7 @@ namespace StarZLauncher.Windows
             altTextBox = ALTTextBox;
 
             // DLLs List Box
-            DLLsListManager = DllList;
+            ModsListManager = ModList;
 
             BackgroundForWindowsOnTop = DarkerBackgroundOverlay;
 
@@ -350,30 +350,30 @@ namespace StarZLauncher.Windows
         // To edit the name of a dll
         private void Edit_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            DLLsManager.Edit();
+            ModsManager.Edit();
         }
 
         // set the selected dll as default
-        private void SetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+        private void SetDefaultModButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            DLLsManager.SetDefaultDLL();
+            ModsManager.SetDefaultMod();
         }
 
         // remove the default dll
         private void ResetSetDefaultDLLButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            DLLsManager.Reset();
+            ModsManager.Reset();
         }
 
         // delete the selected dll
         private void Delete_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            DLLsManager.Delete();
+            ModsManager.Delete();
         }
 
         private void AddDllsButton_OnLeftClick(object sender, RoutedEventArgs e)
         {
-            DLLsManager.Add();
+            ModsManager.Add();
         }
 
         private void ShowFullVersionsList_Click(object sender, RoutedEventArgs e)
@@ -810,6 +810,32 @@ namespace StarZLauncher.Windows
         private void ImportThemes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ThemesManager.ImportTheme();
+        }
+
+        private async void DllurlTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string DllUrl = dllurlTextBox.Text;
+                dllurlTextBox!.Clear();
+                DLLURLTextBlock!.Text = "Your DLL file is being downloaded...";
+                await ModsManager.AddFromWeb(DllUrl);
+
+                // When the download is done, reset the placeholder textblock
+                DLLURLTextBlock!.Text = "Paste in a URL and press 'Enter' on your keyboard.";
+            }
+        }
+
+        private void DllurlTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(dllurlTextBox.Text))
+            {
+                DLLURLTextBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DLLURLTextBlock.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

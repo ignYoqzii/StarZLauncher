@@ -277,14 +277,14 @@ namespace StarZLauncher.Classes
 
         public static async Task SaveProfile()
         {
-            RenameWindow renameWindow = new("com.mojang");
+            EditWindow editWindow = new("com.mojang");
             BackgroundForWindowsOnTop!.Visibility = Visibility.Visible;
-            bool? result = renameWindow.ShowDialog();
+            bool? result = editWindow.ShowDialog();
 
             if (result == true)
             {
                 string currentFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Packages", "Microsoft.MinecraftUWP_8wekyb3d8bbwe", "LocalState", "games", "com.mojang");
-                string newFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Profiles", renameWindow.NewName);
+                string newFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Profiles", editWindow.NewName);
 
                 // Check if the current folder path exists
                 if (Directory.Exists(currentFolderPath))
@@ -292,7 +292,7 @@ namespace StarZLauncher.Classes
                     // Check if the new folder name already exists in the "Profiles" directory
                     if (Directory.Exists(newFolderPath))
                     {
-                        string modifiedNewName = GetUniqueFolderName(renameWindow.NewName!);
+                        string modifiedNewName = GetUniqueFolderName(editWindow.NewName!);
                         newFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StarZ Launcher", "Profiles", modifiedNewName);
                     }
 

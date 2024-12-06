@@ -34,12 +34,12 @@ namespace StarZLauncher.Classes
 
             try
             {
-                DLLsManager.LoadDefaultDLL();
-                LogManager.Log("Default DLL loaded and ready for injection.", logFileName);
+                ModsManager.LoadDefaultMod();
+                LogManager.Log("Default Mod loaded and ready to use.", logFileName);
             }
             catch (Exception ex)
             {
-                LogManager.Log($"Error loading default DLL: {ex.Message}", logFileName);
+                LogManager.Log($"Error loading default Mod: {ex.Message}", logFileName);
             }
 
             try
@@ -54,12 +54,12 @@ namespace StarZLauncher.Classes
 
             try
             {
-                DLLsManager.LoadDLLs();
-                LogManager.Log("Loaded stored DLLs.", logFileName);
+                ModsManager.LoadMods();
+                LogManager.Log("Loaded stored Mods.", logFileName);
             }
             catch (Exception ex)
             {
-                LogManager.Log($"Error loading DLLs: {ex.Message}", logFileName);
+                LogManager.Log($"Error loading Mods: {ex.Message}", logFileName);
             }
 
             try
