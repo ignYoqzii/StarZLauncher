@@ -53,13 +53,13 @@ namespace StarZLauncher.Classes
                 string versionFolderPath = Path.Combine(installationPath, $"Minecraft {version}");
                 bool isInstalled = Directory.Exists(versionFolderPath);
 
-                Border border = CreateVersionBorder(i, version, currentVersion, isInstalled, out TextBlock textBlock, out Button button, out ProgressBar progressBar);
+                Border border = CreateVersionBorder(i, version, currentVersion, isInstalled, out TextBlock textBlock, out TextBlock speedTextBlock, out Button button, out ProgressBar progressBar);
 
                 versionControls.Add((textBlock, button));
 
                 button.Click += async (s, e) =>
                 {
-                    await DownloadVersionAsync(version, progressBar);
+                    await DownloadVersionAsync(version, progressBar, speedTextBlock);
                 };
 
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(80) });
@@ -75,8 +75,7 @@ namespace StarZLauncher.Classes
             UpdateVersionControls(currentVersion);
         }
 
-        private static Border CreateVersionBorder(int index, string version, string currentVersion, bool isInstalled,
-                                                   out TextBlock textBlock, out Button button, out ProgressBar progressBar)
+        private static Border CreateVersionBorder(int index, string version, string currentVersion, bool isInstalled, out TextBlock textBlock, out TextBlock speedTextBlock, out Button button, out ProgressBar progressBar)
         {
             string displayVersion = version;
             if (version == currentVersion)
@@ -106,6 +105,7 @@ namespace StarZLauncher.Classes
             innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             innerGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
 
+            // Create the version text block
             textBlock = new TextBlock
             {
                 Text = displayVersion,
@@ -116,6 +116,7 @@ namespace StarZLauncher.Classes
                 FontWeight = FontWeights.Medium
             };
 
+            // Create the action button
             button = new Button
             {
                 Foreground = new SolidColorBrush(Colors.AliceBlue),
@@ -130,30 +131,47 @@ namespace StarZLauncher.Classes
                 Content = version == currentVersion ? "Uninstall" : isInstalled ? "Switch" : "Install"
             };
 
+            // Create the progress bar
             progressBar = new ProgressBar
             {
                 Height = 7,
-                Margin = new Thickness(10, 5, 10, 7),
+                Margin = new Thickness(10, 5, 60, 7),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Bottom,
                 Visibility = Visibility.Collapsed
             };
 
+            // Create a new TextBlock next to the progress bar to display download speed
+            speedTextBlock = new TextBlock
+            {
+                Text = "00.00 MB/s",
+                Margin = new Thickness(665, 0, 10, 6),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                FontFamily = new FontFamily("Outfit"),
+                FontSize = 9,
+                FontWeight = FontWeights.Medium,
+                Visibility = Visibility.Collapsed
+            };
+
             // Dynamic styles for the color values
             border.Style = (Style)(index % 2 == 0 ? border.FindResource("MinecraftVersionsListPrimaryBorderBackgroundColor") : border.FindResource("MinecraftVersionsListSecondaryBorderBackgroundColor"));
-
             textBlock.Style = (Style)textBlock.FindResource("MinecraftVersionsListTextBlockColor");
-
+            speedTextBlock.Style = (Style)textBlock.FindResource("MinecraftVersionsListTextBlockColor");
             button.Style = (Style)button.FindResource("DefaultDownloadButtons");
-
             progressBar.Style = (Style)progressBar.FindResource("MinecraftVersionsListProgressBarColor");
 
+            // Add elements to the grid
             innerGrid.Children.Add(textBlock);
             innerGrid.Children.Add(button);
+            innerGrid.Children.Add(progressBar);
+            innerGrid.Children.Add(speedTextBlock);
+
+            // Position the elements in the grid
             Grid.SetColumn(textBlock, 0);
             Grid.SetColumn(button, 1);
             Grid.SetColumnSpan(progressBar, 2);
-            innerGrid.Children.Add(progressBar);
+            Grid.SetColumnSpan(speedTextBlock, 2);
 
             border.Child = innerGrid;
 
@@ -208,13 +226,10 @@ namespace StarZLauncher.Classes
             UpdateVersionControls(currentVersion);
         }
 
-        private static async Task DownloadVersionAsync(string version, ProgressBar progressBar)
+        private static async Task DownloadVersionAsync(string version, ProgressBar progressBar, TextBlock speedTextBlock)
         {
-
-            if (isRunning) // check if installation is already in progress or not
-            {
+            if (isRunning) // Prevent re-entrant calls
                 return;
-            }
 
             string downloadUrl = $"https://github.com/bernarddesfosse/onix_compatible_appx/releases/download/{version}/{version}.appx";
             string folderPath = ConfigManager.GetMinecraftInstallationPath();
@@ -222,10 +237,50 @@ namespace StarZLauncher.Classes
             string zipFilePath = Path.Combine(versionFolderPath, $"{version}.zip");
 
             isRunning = true;
-            // Ensure the directory exists or handle the version switch/uninstall case
+
+            try
+            {
+                // Ensure the directory exists or handle the version switch/uninstall case
+                bool continuation = await CheckIfVersionExist(versionFolderPath, version);
+                if (!continuation)
+                {
+                    isRunning = false;
+                    return; // Stop and do not start the download process
+                }
+
+                // Log download start
+                string logFileName = "MinecraftDownload.txt";
+                LogManager.Log($"Starting download of Minecraft version {version} from {downloadUrl}.", logFileName);
+
+                // Show the progress bar and speed textblock
+                progressBar.Visibility = Visibility.Visible;
+                speedTextBlock.Visibility = Visibility.Visible;
+
+                // Download the file
+                await DownloadFileAsync(downloadUrl, zipFilePath, progressBar, speedTextBlock, logFileName);
+
+                // Install the downloaded package
+                await InstallMinecraftPackage(versionFolderPath, zipFilePath);
+            }
+            catch (Exception ex)
+            {
+                LogManager.Log($"Error during download: {ex.Message}", "MinecraftDownload.txt"); // Download part is only where it can throw an exception in this case
+                StarZMessageBox.ShowDialog($"Failed to download Minecraft version {version}. Please check your Internet connection or try again later.", "Error", false);
+                isRunning = false;
+                // Hide the progress bar and speed textblock
+                progressBar.Visibility = Visibility.Collapsed;
+                speedTextBlock.Visibility = Visibility.Collapsed;
+                // Delete the folder and its files or subdirectories since the installation failed
+                Directory.Delete(versionFolderPath, true);
+            }
+        }
+
+        private static async Task<bool> CheckIfVersionExist(string versionFolderPath, string version)
+        {
             if (!Directory.Exists(versionFolderPath))
             {
                 Directory.CreateDirectory(versionFolderPath);
+                return true;
             }
             else
             {
@@ -242,8 +297,7 @@ namespace StarZLauncher.Classes
                         await RefreshVersions();
                         VersionHelper.LoadInstalledMinecraftVersion();
                     }
-                    isRunning = false;
-                    return;
+                    return false;
                 }
                 else
                 {
@@ -252,30 +306,112 @@ namespace StarZLauncher.Classes
                     if (result == true)
                     {
                         await SwitchMinecraftVersionAsync(versionFolderPath);
-                        isRunning = false;
                     }
                     else if (result == false)
                     {
                         await DeleteVersionAsync(versionFolderPath);
                         await RefreshVersions();
                         VersionHelper.LoadInstalledMinecraftVersion();
-                        isRunning = false;
                     }
-                    return;
+                    return false;
+                }
+            }
+        }
+
+        private static async Task DownloadFileAsync(string url, string filePath, ProgressBar progressBar, TextBlock speedTextBlock, string logFileName)
+        {
+            using HttpClient client = new();
+
+            // Send a request to get file size
+            using var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+
+            // Ensure the HTTP response is successful
+            response.EnsureSuccessStatusCode();
+
+            // Validate content length
+            long? totalBytes = response.Content.Headers.ContentLength;
+            if (!totalBytes.HasValue || totalBytes.Value <= 0)
+            {
+                throw new InvalidOperationException("Invalid or missing content length in the HTTP response.");
+            }
+
+            progressBar.Maximum = totalBytes.Value;
+
+            // Validate content stream
+            using var contentStream = await response.Content.ReadAsStreamAsync();
+            if (contentStream == null || !contentStream.CanRead)
+            {
+                throw new IOException("Unable to read content stream from the HTTP response.");
+            }
+
+            // Prepare the file for writing
+            using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            using var bufferedContentStream = new BufferedStream(contentStream, 8192);
+            using var bufferedFileStream = new BufferedStream(fileStream, 8192);
+
+            var buffer = new byte[1048576]; // 1MB buffer
+            long totalReadBytes = 0;
+            int bytesRead;
+            int progressUpdateInterval = 10;
+            int progressCounter = 0;
+
+            DateTime startTime = DateTime.Now; // Start time for speed calculation
+
+            int speedUpdateInterval = 1000; // Update every 1000 iterations
+            int speedUpdateCounter = 0;
+
+            while ((bytesRead = await bufferedContentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                // Write the buffer to the file
+                await bufferedFileStream.WriteAsync(buffer, 0, bytesRead);
+                totalReadBytes += bytesRead;
+
+                // Update progress at intervals
+                if (++progressCounter % progressUpdateInterval == 0)
+                {
+                    progressBar.Value = totalReadBytes;
+
+                    if (totalBytes.HasValue && totalReadBytes > totalBytes.Value)
+                    {
+                        throw new IOException("Downloaded file size exceeds the expected content length.");
+                    }
+                }
+
+                // Update speed at intervals
+                if (++speedUpdateCounter % speedUpdateInterval == 0)
+                {
+                    // Calculate download speed
+                    TimeSpan elapsedTime = DateTime.Now - startTime;
+                    if (elapsedTime.TotalSeconds > 0)
+                    {
+                        double speed = (totalReadBytes) / elapsedTime.TotalSeconds; // bytes per second
+                        speedTextBlock.Text = $"{speed / (1024 * 1024):F2} MB/s"; // Convert speed to MB/s
+                    }
                 }
             }
 
-            // Download and install the new version
-            progressBar.Visibility = Visibility.Visible;
+            // Final validation: Check if the total read bytes match the expected content length
+            if (totalReadBytes != totalBytes.Value)
+            {
+                throw new IOException("Downloaded file size does not match the expected content length.");
+            }
 
-            using WebClient client = new();
-            client.DownloadProgressChanged += (s, e) => progressBar.Value = e.ProgressPercentage;
+            LogManager.Log("Download completed successfully.", logFileName);
 
-            await client.DownloadFileTaskAsync(downloadUrl, zipFilePath);
+            // Ensure the file is properly flushed and closed
+            await bufferedFileStream.FlushAsync();
+            await fileStream.FlushAsync();
 
+            // Check the final file size on disk
+            long finalFileSize = new FileInfo(filePath).Length;
+            if (finalFileSize != totalBytes.Value)
+            {
+                throw new IOException($"Final file size on disk ({finalFileSize} bytes) does not match expected size ({totalBytes.Value} bytes).");
+            }
+
+            // Collapse the progress bar and speed text
             progressBar.Visibility = Visibility.Collapsed;
-
-            await InstallMinecraftPackage(versionFolderPath, zipFilePath);
+            speedTextBlock.Visibility = Visibility.Collapsed;
         }
 
         private static async Task UnregisterAndDeleteVersionAsync(string versionFolderPath)
@@ -332,7 +468,7 @@ namespace StarZLauncher.Classes
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     InstallStatusText!.Foreground = Brushes.Green;
-                    InstallStatusText.Text = $"Registering and finalizing Minecraft setup...";
+                    InstallStatusText.Text = $"Registering new version and finalizing Minecraft setup...";
                 });
 
                 string packagePath = Path.Combine(versionFolderPath, "AppxManifest.xml");
@@ -388,7 +524,7 @@ namespace StarZLauncher.Classes
                     InstallStatusText.Text = "Registering and finalizing Minecraft installation...";
                 });
 
-                string manifestPath = System.IO.Path.Combine(versionFolderPath, "AppxManifest.xml");
+                string manifestPath = Path.Combine(versionFolderPath, "AppxManifest.xml");
                 PackageHelper.RegisterAppPackage(manifestPath);
 
                 // Delete the initial zip file if it still exists
