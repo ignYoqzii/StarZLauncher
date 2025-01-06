@@ -16,7 +16,7 @@ You are allowed to:
 
 You are not permitted to:
 
-- Distribute, redistribute, or sell modified versions of the launcher in any form of media.
+- Distribute, redistribute, or sell modified versions of the launcher in any form of media. (Permissions accorded to Lumina (Luna) Project)
 - Use the StarZ name in a manner that implies an official association on websites, Discord servers, or other platforms, or claim to be an official representative.
 - Assert ownership of the project in any public or private setting, including Discord servers and other forms of media.
 
