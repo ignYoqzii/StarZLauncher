@@ -22,7 +22,7 @@
 
 We want to extend our heartfelt thanks to everyone who has supported and used StarZ Launcher over the years. Your feedback, contributions, and enthusiasm have been invaluable to the project.
 
-While the launcher itself will no longer receive updates, we encourage you to continue using it to benefit from all its existing and long-term features. Despite the end of developement, StarZ Launcher will still keep working in the long run.
+While the launcher itself will no longer receive updates, we encourage you to continue using it to benefit from all its existing and long-term features. Despite the end of developement, StarZ Launcher will still keep working in the long run. Project Lumina uses our files to build their launcher, so if you are willing to keep using StarZ Launcher, but disappointed by the lack of updates, check them out! https://projectlumina.org
 
 Thank you for being a part of this journey.
 
