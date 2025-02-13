@@ -75,7 +75,7 @@ namespace StarZLauncher.Classes
         private static async Task<string> GetGameVersionFromJson(string packageVersion)
         {
             // URL of the GitHub raw JSON file
-            string url = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/MinecraftVersionsMapping.json";
+            string url = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncherUtils/refs/heads/main/MinecraftVersionsMapping.json";
 
             using (var httpClient = new HttpClient())
             {

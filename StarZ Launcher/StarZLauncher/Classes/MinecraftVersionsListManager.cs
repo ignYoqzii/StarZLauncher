@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
+using System.Xml;
 using static StarZLauncher.Windows.MainWindow;
 
 namespace StarZLauncher.Classes
@@ -28,7 +29,7 @@ namespace StarZLauncher.Classes
 
         public static async Task LoadVersionsAsync()
         {
-            string versionsUrl = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/MinecraftVersions.txt";
+            string versionsUrl = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncherUtils/refs/heads/main/MinecraftVersions.txt";
             using HttpClient client = new();
             string versions = await client.GetStringAsync(versionsUrl);
             versionList = versions.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -517,6 +518,9 @@ namespace StarZLauncher.Classes
                     File.Delete(signature);
                 }
 
+                string manifestPath = Path.Combine(versionFolderPath, "AppxManifest.xml");
+
+
                 // Register the app using sideloading method
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -524,7 +528,6 @@ namespace StarZLauncher.Classes
                     InstallStatusText.Text = "Registering and finalizing Minecraft installation...";
                 });
 
-                string manifestPath = Path.Combine(versionFolderPath, "AppxManifest.xml");
                 PackageHelper.RegisterAppPackage(manifestPath);
 
                 // Delete the initial zip file if it still exists

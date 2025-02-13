@@ -14,7 +14,7 @@ namespace StarZLauncher.Classes
         public static string? VersionNumber { get; private set; }
 
         private const string VERSION_FILE_PATH = @"StarZ Launcher\LauncherVersion.txt";
-        private const string VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncher/main/LauncherVersion.txt";
+        private const string VERSION_URL = "https://raw.githubusercontent.com/ignYoqzii/StarZLauncherUtils/refs/heads/main/LauncherVersion.txt";
         private const string DOWNLOAD_URL = "https://github.com/ignYoqzii/StarZLauncher/releases/download/{0}/StarZLauncher.exe";
 
         public static async void CheckForUpdates()
